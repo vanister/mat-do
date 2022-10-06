@@ -1,0 +1,8 @@
+# folders
+/build
+/coverage
+
+# files
+.DS_Store
+## draw.io shadow copy
+.$mat*
