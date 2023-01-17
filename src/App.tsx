@@ -5,7 +5,7 @@ import Create from './components/create/Create';
 import NotFound from './components/NotFound';
 import Home from './components/home/Home';
 
-function App() {
+export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
@@ -17,5 +17,3 @@ function App() {
     </Routes>
   );
 }
-
-export default App;
