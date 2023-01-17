@@ -8,6 +8,7 @@
   - TODO: QR Code format/resolution
 - Base64 encoded hash fragment with basic data
 - MongoDb for datastore
+- Generate random short path or have user input themselves
 
 ## Design Tools
 
