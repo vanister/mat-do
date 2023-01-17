@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "hediet.vscode-drawio",
+    "dsznajder.es7-react-js-snippets",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "firsttris.vscode-jest-runner"
+  ]
+}
