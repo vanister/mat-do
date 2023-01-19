@@ -1,5 +1,3 @@
-import { createContext } from 'react';
-
 export type User = {
   id: string;
   name: string;
@@ -11,5 +9,3 @@ export type AuthContextValue = {
   signin: (username: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 };
-
-export const AuthContext = createContext<AuthContextValue>(null);
