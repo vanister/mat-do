@@ -11,7 +11,7 @@ export type AuthProviderProps = {
 export default function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User>();
-  const userManager = useMemo(() => new UserManager(localStorage), []);
+  const userManager = useMemo(() => new UserManager(sessionStorage), []);
 
   useEffect(() => {
     const loggedInUser = userManager.init();

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import Title from '../Title';
+
+import './Login.scss';
 
 export default function Login() {
   const [username, setUsername] = useState<string>(null);
@@ -24,25 +27,35 @@ export default function Login() {
 
   return (
     <section className="login">
-      <h2>Login</h2>
+      <Title>Login</Title>
       <main className="login-content">
         <form
           className="login-form"
           onSubmit={(e) => handleSubmit(e, username, password)}
         >
-          <input
-            type="text"
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-          />
-          <input
-            type="password"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-          />
-          <button type="submit">Login</button>
+          <label aria-label="Username">
+            <input
+              placeholder="Username"
+              className="login-field"
+              type="text"
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+            />
+          </label>
+          <label aria-label="Password">
+            <input
+              placeholder="Password"
+              className="login-field"
+              type="password"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+            />
+          </label>
+          <button className="login-submit-button" type="submit">
+            Login
+          </button>
         </form>
       </main>
     </section>

@@ -1,2 +1,10 @@
 .login {
+  .login-form {
+    display: flex;
+    flex-direction: column;
+
+    .login-field {
+      margin-bottom: 0.5rem;
+    }
+  }
 }
