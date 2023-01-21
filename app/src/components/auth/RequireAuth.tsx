@@ -1,17 +1,24 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth0 } from '@auth0/auth0-react';
+import Loading from '../Loading';
 
 export type RequireAuthProps = {
   children: React.ReactElement;
 };
 
 export default function RequireAuth({ children }: RequireAuthProps) {
-  const auth = useAuth();
-  const location = useLocation();
+  const { isAuthenticated, user, isLoading, loginWithRedirect } = useAuth0();
 
-  if (!auth?.user) {
-    return <Navigate to="/login" replace state={{ from: location }} />;
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!isAuthenticated || !user) {
+    loginWithRedirect({
+      authorizationParams: { redirect_uri: window.location.href },
+    });
+
+    return <Loading />;
   }
 
   return children;
