@@ -1,6 +1,5 @@
-import type { JestConfigWithTsJest } from 'ts-jest';
-
-const jestConfig: JestConfigWithTsJest = {
+/** @type {import('ts-jest').JestConfigWithTsJest} */
+module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   transform: {
@@ -12,5 +11,3 @@ const jestConfig: JestConfigWithTsJest = {
     ],
   },
 };
-
-export default jestConfig;
