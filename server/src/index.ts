@@ -1,5 +1,9 @@
+require('dotenv').config();
+
 import express, { json } from 'express';
 import scan from './routes/scan';
+
+// todo - connect to mongo
 
 const app = express();
 
