@@ -1,7 +1,7 @@
 import { Dispatch } from 'react';
 import { CreateAction } from './reducer';
 
-type CreateDispatch = Dispatch<CreateAction>;
+export type CreateDispatch = Dispatch<CreateAction>;
 
 export const CREATE_INIT = 'CREATE_INIT';
 export const CREATE_GENERATING = 'CREATE_GENERATING';
@@ -14,29 +14,37 @@ export function init(dispatch: CreateDispatch) {
   return dispatch({ type: CREATE_INIT });
 }
 
-export function generate(dispatch: CreateDispatch, dataUri: string = null) {
-  if (!dataUri) {
+export function generate(dispatch: CreateDispatch) {
+  return function (dataUri: string = null) {
+    if (!dataUri) {
+      dispatch({
+        type: CREATE_GENERATING,
+        payload: { created: false, dataUri: null }
+      });
+      return;
+    }
+
     dispatch({
-      type: CREATE_GENERATING,
-      payload: { created: false, dataUri: null }
+      type: CREATE_GENERATED,
+      payload: { created: true, dataUri }
     });
-    return;
-  }
-
-  dispatch({
-    type: CREATE_GENERATED,
-    payload: { created: true, dataUri }
-  });
+  };
 }
 
-export function failed(dispatch: CreateDispatch, error: string) {
-  dispatch({ type: CREATE_FAILED, payload: { error } });
+export function failed(dispatch: CreateDispatch) {
+  return function (error: string) {
+    dispatch({ type: CREATE_FAILED, payload: { error } });
+  };
 }
 
-export function updateName(dispatch: CreateDispatch, name: string) {
-  dispatch({ type: CREATE_UPDATE_NAME, payload: { name } });
+export function updateName(dispatch: CreateDispatch) {
+  return function (name: string) {
+    dispatch({ type: CREATE_UPDATE_NAME, payload: { name } });
+  };
 }
 
-export function updateDesc(dispatch: CreateDispatch, desc: string) {
-  dispatch({ type: CREATE_UPDATE_DESC, payload: { desc } });
+export function updateDesc(dispatch: CreateDispatch) {
+  return function (desc: string) {
+    dispatch({ type: CREATE_UPDATE_DESC, payload: { desc } });
+  };
 }

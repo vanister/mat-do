@@ -19,6 +19,7 @@ const initialState: CreateState = {
 export default function Create() {
   const [state, dispatch] = useReducer(createReducer, initialState);
   const { name, desc, created: qrCreated, id, dataUri } = state;
+  const generateQrCode = generate(dispatch);
 
   const handleQrCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +30,7 @@ export default function Create() {
 
     try {
       // create the qr code image from the data
-      generate(dispatch);
+      generateQrCode();
 
       // todo - move into utilities and return a json string
       const item: Item = {
@@ -44,10 +45,10 @@ export default function Create() {
         scale: 10
       });
 
-      generate(dispatch, dataUri);
+      generateQrCode(dataUri);
     } catch (error) {
       console.error('Error generating QR Code:', error);
-      failed(dispatch, 'Error generating QR Code');
+      failed(dispatch)('Error generating QR Code');
     }
   };
 
@@ -70,7 +71,7 @@ export default function Create() {
               type="text"
               value={name}
               maxLength={60}
-              onChange={(e) => updateName(dispatch, e.target.value)}
+              onChange={(e) => updateName(dispatch)(e.target.value)}
             />
           </div>
           <div className="form-field">
@@ -81,7 +82,7 @@ export default function Create() {
               type="text"
               value={desc}
               maxLength={140}
-              onChange={(e) => updateDesc(dispatch, e.target.value)}
+              onChange={(e) => updateDesc(dispatch)(e.target.value)}
             />
           </div>
           <div className="form-buttons">
