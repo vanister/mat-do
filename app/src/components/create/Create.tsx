@@ -1,45 +1,58 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
 import { toDataURL } from 'qrcode';
+import { v4 as uuid } from 'uuid';
 import Title from '../Title';
+import QrCodeImage from '../common/QrCodeImage';
 
 import './Create.scss';
+import { createReducer } from './reducer';
+import { failed, generate, init, updateDesc, updateName } from './actions';
+import { CreateState, Item } from './create-types';
+
+const initialState: CreateState = {
+  created: false,
+  name: '',
+  desc: '',
+  id: uuid()
+};
 
 export default function Create() {
-  // todo - useReducer
-  const [name, setName] = useState<string>('');
-  const [desc, setDesc] = useState<string>('');
-  const [qrDataUrl, setQrDataUrl] = useState<string>();
-  const [qrCreated, setQrCreated] = useState(false);
+  const [state, dispatch] = useReducer(createReducer, initialState);
+  const { name, desc, created: qrCreated, id, dataUri } = state;
 
-  const handleQrCreate = async (e: React.FormEvent, data: string) => {
+  const handleQrCreate = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!data) {
+    if (!name) {
       return;
     }
 
     try {
       // create the qr code image from the data
-      setQrCreated(false);
+      generate(dispatch);
+
       // todo - move into utilities and return a json string
-      const dataUrl = await toDataURL(data, {
+      const item: Item = {
+        id,
+        name,
+        desc
+      };
+
+      const dataUri = await toDataURL(JSON.stringify(item), {
         errorCorrectionLevel: 'H',
         type: 'image/jpeg',
-        scale: 10,
+        scale: 10
       });
 
-      setQrDataUrl(dataUrl);
-      setQrCreated(true);
+      generate(dispatch, dataUri);
     } catch (error) {
       console.error('Error generating QR Code:', error);
-      setQrCreated(false);
+      failed(dispatch, 'Error generating QR Code');
     }
   };
 
   const handleClearClick = () => {
-    setQrCreated(false);
-    setQrDataUrl('');
-    setName('');
+    init(dispatch);
   };
 
   return (
@@ -47,13 +60,8 @@ export default function Create() {
       <Title>Create an Item</Title>
       <section className="create-page-content">
         {/* todo - make qr code image component */}
-        {qrCreated && <img className="qrImage" src={qrDataUrl} alt="QR Code" />}
-        <form
-          className="qr-code-form"
-          onSubmit={(e) => {
-            handleQrCreate(e, name);
-          }}
-        >
+        {qrCreated && <QrCodeImage dataUri={dataUri} />}
+        <form className="qr-code-form" onSubmit={handleQrCreate}>
           <div className="form-field">
             <label htmlFor="qrData">Name:</label>
             <input
@@ -62,7 +70,7 @@ export default function Create() {
               type="text"
               value={name}
               maxLength={60}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) => updateName(dispatch, e.target.value)}
             />
           </div>
           <div className="form-field">
@@ -73,7 +81,7 @@ export default function Create() {
               type="text"
               value={desc}
               maxLength={140}
-              onChange={(e) => setDesc(e.target.value)}
+              onChange={(e) => updateDesc(dispatch, e.target.value)}
             />
           </div>
           <div className="form-buttons">
