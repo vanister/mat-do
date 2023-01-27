@@ -1,0 +1,31 @@
+.create-page {
+  .create-page-content {
+    display: flex;
+    flex-direction: column;
+
+    .qrImage {
+      max-width: 400px;
+    }
+
+    .qr-code-form {
+      padding: 0.5rem 0;
+
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 0.5rem;
+
+        input {
+          max-width: 500px;
+        }
+      }
+
+      .form-buttons {
+        #createButton {
+          margin-right: 0.25rem;
+        }
+      }
+    }
+  }
+}
