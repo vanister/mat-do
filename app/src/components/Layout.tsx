@@ -7,7 +7,8 @@ export default function Layout() {
   return (
     <div className="layout-content">
       <header>
-        <h1>Main Layout Header</h1>
+        <h1>Mất đồ</h1>
+        <nav>Home | Create | logout</nav>
       </header>
       <main className="main-content">
         <Outlet />

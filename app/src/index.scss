@@ -3,6 +3,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  font-size: large;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -12,10 +13,19 @@ code {
     monospace;
 }
 
+button {
+  height: 2.5rem;
+}
+
+input[type='text'] {
+  line-height: 1.5rem;
+}
+
 #root {
   display: flex;
+  flex-direction: column;
   margin: 0 auto;
   padding: 0 1rem;
   max-width: 1024px;
-  min-width: 420px;
+  min-width: 320px;
 }
