@@ -19,7 +19,7 @@ export default function Create() {
   const [state, dispatch] = useReducer(createReducer, initialState);
   const { name, desc, created: qrCreated, dataUri } = state;
   const itemService = useItemService();
-  const qrcode = generate(dispatch);
+  const generateAction = generate(dispatch);
 
   const handleQrCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,13 +29,12 @@ export default function Create() {
     }
 
     try {
-      // create the qr code image from the data
-      qrcode();
+      generateAction();
 
       const { id } = await itemService.post(name, desc);
       const dataUri = await generateDataUri(id);
 
-      qrcode(id, dataUri);
+      generateAction(id, dataUri);
     } catch (error) {
       console.error('Error generating QR Code:', error);
       failed(dispatch)('Error generating QR Code');
