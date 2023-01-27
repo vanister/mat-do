@@ -1,9 +1,16 @@
 import axios from 'axios';
-import { useMemo } from 'react';
 import { ItemService } from '../services/ItemService';
 
-export function useItemService() {
-  const service = useMemo(() => new ItemService(axios), []);
+let itemService: ItemService;
 
-  return service;
+/**
+ * Gets a singleton instance of the `ItemService`.
+ */
+export function useItemService() {
+  // todo - should this ItemService instance be stored in `useMemo`?
+  if (!itemService) {
+    itemService = new ItemService(axios);
+  }
+
+  return itemService;
 }
