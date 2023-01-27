@@ -12,3 +12,8 @@ export type CreateState = {
   dataUri?: string;
   error?: string;
 };
+
+export type CreateAction = {
+  type: string;
+  payload?: Partial<CreateState>;
+};

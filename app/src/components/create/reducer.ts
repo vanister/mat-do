@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { CreateState } from './create-types';
+import { CreateAction, CreateState } from './create-types';
 import {
   CREATE_GENERATED,
   CREATE_GENERATING,
@@ -7,11 +7,6 @@ import {
   CREATE_UPDATE_DESC,
   CREATE_UPDATE_NAME
 } from './actions';
-
-export type CreateAction = {
-  type: string;
-  payload?: Partial<CreateState>;
-};
 
 export function createReducer(
   state: CreateState = null,

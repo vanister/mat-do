@@ -1,5 +1,5 @@
 import { Dispatch } from 'react';
-import { CreateAction } from './reducer';
+import { CreateAction } from './create-types';
 
 export type CreateDispatch = Dispatch<CreateAction>;
 
