@@ -1,25 +1,25 @@
 import React, { useReducer } from 'react';
-import { toDataURL } from 'qrcode';
-import { v4 as uuid } from 'uuid';
 import Title from '../Title';
 import QrCodeImage from '../common/QrCodeImage';
-
-import './Create.scss';
 import { createReducer } from './reducer';
 import { failed, generate, init, updateDesc, updateName } from './actions';
-import { CreateState, Item } from './create-types';
+import { CreateState } from './create-types';
+import { generateDataUri } from '../../utilities/qrcode-generator';
+
+import './Create.scss';
+import { useItemService } from '../../hooks/useItemService';
 
 const initialState: CreateState = {
   created: false,
   name: '',
-  desc: '',
-  id: uuid()
+  desc: ''
 };
 
 export default function Create() {
   const [state, dispatch] = useReducer(createReducer, initialState);
-  const { name, desc, created: qrCreated, id, dataUri } = state;
-  const generateQrCode = generate(dispatch);
+  const { name, desc, created: qrCreated, dataUri } = state;
+  const itemService = useItemService();
+  const qrcode = generate(dispatch);
 
   const handleQrCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,22 +30,12 @@ export default function Create() {
 
     try {
       // create the qr code image from the data
-      generateQrCode();
+      qrcode();
 
-      // todo - move into utilities and return a json string
-      const item: Item = {
-        id,
-        name,
-        desc
-      };
+      const { id } = await itemService.post(name, desc);
+      const dataUri = await generateDataUri(id);
 
-      const dataUri = await toDataURL(id, {
-        errorCorrectionLevel: 'H',
-        type: 'image/jpeg',
-        scale: 10
-      });
-
-      generateQrCode(dataUri);
+      qrcode(id, dataUri);
     } catch (error) {
       console.error('Error generating QR Code:', error);
       failed(dispatch)('Error generating QR Code');

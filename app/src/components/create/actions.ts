@@ -17,18 +17,18 @@ export function init(dispatch: CreateDispatch) {
 }
 
 export function generate(dispatch: CreateDispatch) {
-  return function (dataUri: string = null) {
+  return function (id?: string, dataUri: string = null) {
     if (!dataUri) {
       dispatch({
         type: CREATE_GENERATING,
-        payload: { created: false, dataUri: null }
+        payload: { created: false, dataUri: null, id: null }
       });
       return;
     }
 
     dispatch({
       type: CREATE_GENERATED,
-      payload: { created: true, dataUri }
+      payload: { created: true, dataUri, id }
     });
   };
 }
