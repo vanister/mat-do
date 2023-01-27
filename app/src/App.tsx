@@ -9,13 +9,7 @@ import RequireAuth from './components/auth/RequireAuth';
 export default function App() {
   return (
     <Routes>
-      <Route
-        element={
-          <RequireAuth>
-            <Layout />
-          </RequireAuth>
-        }
-      >
+      <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<Create />} />
         <Route path="*" element={<NotFound />} />
