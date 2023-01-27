@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid';
 import { CreateAction, CreateState } from './create-types';
 import {
   CREATE_GENERATED,
@@ -14,7 +13,7 @@ export function createReducer(
 ): CreateState {
   switch (action.type) {
     case CREATE_INIT:
-      return { created: false, name: '', desc: '', id: uuid() };
+      return { created: false, name: '', desc: '' };
 
     case CREATE_GENERATING:
     case CREATE_GENERATED:
