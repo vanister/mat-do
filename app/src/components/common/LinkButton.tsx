@@ -7,6 +7,9 @@ export type LinkButtonProps = {
   children: React.ReactNode;
 };
 
+/**
+ * A button styled to look like an anchor tag.
+ */
 export default function LinkButton({ children, type }: LinkButtonProps) {
   return (
     <button className="link-button" type={type ?? 'button'}>
