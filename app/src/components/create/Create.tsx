@@ -39,7 +39,7 @@ export default function Create() {
         desc
       };
 
-      const dataUri = await toDataURL(JSON.stringify(item), {
+      const dataUri = await toDataURL(id, {
         errorCorrectionLevel: 'H',
         type: 'image/jpeg',
         scale: 10
@@ -53,7 +53,7 @@ export default function Create() {
   };
 
   const handleClearClick = () => {
-    init(dispatch);
+    init(dispatch)();
   };
 
   return (

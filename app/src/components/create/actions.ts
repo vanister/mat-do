@@ -11,7 +11,9 @@ export const CREATE_UPDATE_NAME = 'CREATE_UPDATE_NAME';
 export const CREATE_UPDATE_DESC = 'CREATE_UPDATE_DESC';
 
 export function init(dispatch: CreateDispatch) {
-  return dispatch({ type: CREATE_INIT });
+  return function () {
+    return dispatch({ type: CREATE_INIT });
+  };
 }
 
 export function generate(dispatch: CreateDispatch) {
