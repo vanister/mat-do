@@ -1,5 +1,6 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
+import LinkButton from './common/LinkButton';
 
 import './Layout.scss';
 
@@ -8,7 +9,11 @@ export default function Layout() {
     <div className="layout-content">
       <header>
         <h1>Mất đồ</h1>
-        <nav>Home | Create | logout</nav>
+        <nav>
+          <NavLink to="/">Home</NavLink> |{' '}
+          <NavLink to="/create">Create</NavLink> |{' '}
+          <LinkButton>Logout</LinkButton>
+        </nav>
       </header>
       <main className="main-content">
         <Outlet />
