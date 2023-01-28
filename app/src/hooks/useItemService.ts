@@ -11,7 +11,7 @@ export function useItemService(baseUrl?: string) {
   if (!itemService) {
     itemService = new ItemService(
       axios,
-      baseUrl ?? process.env.REACT_APP_API_BASE
+      baseUrl ?? process.env.REACT_APP_API_BASE_URL
     );
   }
 
