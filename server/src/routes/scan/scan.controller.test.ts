@@ -16,10 +16,14 @@ describe('Scan Controller', () => {
       sendStatus: jest.fn(),
     };
 
+    const mockUuid = {
+      validate: jest.fn().mockReturnValue(true),
+    };
+
     let action: (req: Request, res: Response) => void;
 
     beforeEach(() => {
-      action = post();
+      action = post({ validate: mockUuid.validate });
       jest.clearAllMocks();
     });
 
@@ -31,6 +35,7 @@ describe('Scan Controller', () => {
 
     test('should respond with a 400 when scan data is missing', () => {
       const request = {};
+      mockUuid.validate.mockReturnValueOnce(false);
 
       action(request as Request, mockResponse as Response);
 

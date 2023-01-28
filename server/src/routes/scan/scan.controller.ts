@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
-import { v4 as uuid, validate } from 'uuid';
-import { ScanData } from './scan-types';
+import { PostDependencies, ScanData } from './scan-types';
 
-export function post() {
+export function post({ validate }: PostDependencies) {
   return function (
     request: Request<any, string, ScanData>,
     response: Response<string>
