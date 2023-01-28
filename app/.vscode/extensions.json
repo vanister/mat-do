@@ -2,7 +2,6 @@
   "recommendations": [
     "dsznajder.es7-react-js-snippets",
     "dbaeumer.vscode-eslint",
-    "firsttris.vscode-jest-runner",
     "esbenp.prettier-vscode"
   ]
 }
