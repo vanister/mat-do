@@ -1,5 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
-
+import { beforeEach, describe, expect, test } from '@jest/globals';
 import { generateDataUri, QrCodeOptions } from './qrcode-generator';
 import { toDataURL } from 'qrcode';
 

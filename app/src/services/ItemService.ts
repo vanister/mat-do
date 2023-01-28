@@ -10,15 +10,18 @@ export class ItemService {
   /**
    * Creates a new item by sending a POST request to the server.
    *
-   * @param name The name of the item.
-   * @param description The description of the item.
-   * @returns A complete `Item` with a populated `id`.
+   * @param item The item to create on the server.
+   * @returns Aa `Item` with a populated `id`.
    */
-  async post(data: { name: string; description?: string }): Promise<Item> {
-    return {
-      id: 'item-uuid',
-      name: 'Lightsaber',
-      description: `Luke's green lightsaber`
-    };
+  async post(item: Item): Promise<Item> {
+    try {
+      const id = await this.axios.post<any, string, Item>(this.baseUrl, item);
+
+      // fill in the `id` and return a new item with it
+      return { ...item, id };
+    } catch (error) {
+      // log?
+      throw error;
+    }
   }
 }

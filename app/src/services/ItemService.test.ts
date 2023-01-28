@@ -1,3 +1,4 @@
+import { describe, expect, test, beforeEach } from '@jest/globals';
 import { AxiosStatic } from 'axios';
 import { ItemService } from './ItemService';
 
@@ -15,6 +16,11 @@ describe('ItemService', () => {
       post: jest.fn()
     };
 
+    const data = {
+      name: 'Lightsaber',
+      descirption: `Luke's green lightsaber`
+    };
+
     let service: ItemService;
 
     beforeEach(() => {
@@ -22,16 +28,20 @@ describe('ItemService', () => {
     });
 
     test(`should POST with a required 'name' field`, async () => {
-      const data = {
-        name: 'Lightsaber',
-        descirption: `Luke's green lightsaber`
-      };
+      await service.post(data);
+
+      expect(mockAxios.post).toHaveBeenCalledWith(
+        baseUrl,
+        expect.objectContaining({ name: 'Lightsaber' })
+      );
+    });
+
+    test(`should return an Item with its 'id' set`, async () => {
+      (mockAxios.post as jest.Mock).mockResolvedValueOnce('an-item-id-uuid');
 
       const item = await service.post(data);
 
-      expect(mockAxios.post).toHaveBeenCalledWith(
-        expect.objectContaining({ name: 'Lightsaber' })
-      );
+      expect(item).toBeDefined();
     });
   });
 });
