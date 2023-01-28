@@ -1,9 +1,9 @@
 import { toDataURL } from 'qrcode';
 
 export type QrCodeOptions = {
-  errorCorrection: 'H' | 'M' | 'L';
-  scale: number;
   type: 'image/jpeg' | 'image/png';
+  errorCorrection?: 'H' | 'M' | 'L';
+  scale?: number;
 };
 
 export async function generateDataUri(data: string, options?: QrCodeOptions) {
