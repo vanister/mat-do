@@ -1,9 +1,9 @@
-import { Router, Request, Response } from 'express';
-import { ScanData } from './scan-types';
+import { Router } from 'express';
+import { validate } from 'uuid';
 import { post } from './scan.controller';
 
 const router = Router();
 
-router.post('/', post());
+router.post('/', post({ validate }));
 
 export default router;

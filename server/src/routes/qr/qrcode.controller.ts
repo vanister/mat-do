@@ -3,7 +3,7 @@ import { Item, PostDependencies } from './qr-types';
 
 export function post({ uuid, logger }: PostDependencies) {
   return async function (
-    request: Request<any, string, Item>,
+    request: Request<unknown, string, Item>,
     response: Response<string>
   ): Promise<void> {
     const item = request.body;
@@ -24,6 +24,7 @@ export function post({ uuid, logger }: PostDependencies) {
   };
 }
 
+// todo - move to utilties
 function validateItem(item: Item, isNew = false): string | null {
   if (!item) {
     return 'Item is null or undefined';
