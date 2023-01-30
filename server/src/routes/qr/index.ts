@@ -4,6 +4,6 @@ import { post } from './qrcode.controller';
 
 const router = Router();
 
-router.post('/', post({ uuid: v4 }));
+router.post('/', post({ uuid: v4, logger: console.log }));
 
 export default router;
