@@ -6,6 +6,11 @@
     .qr-code-form {
       padding: 0.5rem 0;
 
+      .form-errors {
+        color: red;
+        margin-bottom: 0.5rem;
+      }
+
       .form-field {
         display: flex;
         flex-direction: column;

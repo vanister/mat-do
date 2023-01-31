@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Item, PostDependencies } from './qr-types';
+import { validateItem } from './utilties';
 
 export function post({ uuid, logger }: PostDependencies) {
   return async function (
@@ -22,21 +23,4 @@ export function post({ uuid, logger }: PostDependencies) {
     response.status(200);
     response.send(id);
   };
-}
-
-// todo - move to utilties
-function validateItem(item: Item, isNew = false): string | null {
-  if (!item) {
-    return 'Item is null or undefined';
-  }
-
-  if (!isNew && !item.id) {
-    return 'Item id is required';
-  }
-
-  if (!item.name) {
-    return 'Item name is required';
-  }
-
-  return null;
 }

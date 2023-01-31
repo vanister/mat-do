@@ -1,10 +1,11 @@
 export type CreateState = {
   created: boolean;
   name: string;
-  desc: string;
+  description: string;
   id?: string;
   dataUri?: string;
   error?: string;
+  loading?: boolean;
 };
 
 export type CreateAction = {

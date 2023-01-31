@@ -2,24 +2,21 @@ import React, { useReducer } from 'react';
 import Title from '../Title';
 import QrCodeImage from '../common/QrCodeImage';
 import { createReducer } from './reducer';
-import { failed, generate, init, updateDesc, updateName } from './actions';
+import { generate, init, updateDescription, updateName } from './actions';
 import { CreateState } from './create-types';
-import { generateDataUri } from '../../utilities/qrcode-generator';
 
 import './Create.scss';
-import { useItemService } from '../../hooks/useItemService';
 
 const initialState: CreateState = {
   created: false,
   name: '',
-  desc: ''
+  description: ''
 };
 
 export default function Create() {
   const [state, dispatch] = useReducer(createReducer, initialState);
-  const { name, desc, created: qrCreated, dataUri } = state;
-  const itemService = useItemService();
-  const generateAction = generate(dispatch);
+  const { error, name, description: desc, created: qrCreated, dataUri } = state;
+  const generateQrCode = generate(dispatch);
 
   const handleQrCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,21 +25,11 @@ export default function Create() {
       return;
     }
 
-    try {
-      generateAction();
-
-      const { id } = await itemService.post(name, desc);
-      const dataUri = await generateDataUri(id);
-
-      generateAction(id, dataUri);
-    } catch (error) {
-      console.error('Error generating QR Code:', error);
-      failed(dispatch)('Error generating QR Code');
-    }
+    await generateQrCode(name, desc);
   };
 
   const handleClearClick = () => {
-    init(dispatch)();
+    dispatch(init);
   };
 
   return (
@@ -52,6 +39,7 @@ export default function Create() {
         {/* todo - make qr code image component */}
         {qrCreated && <QrCodeImage dataUri={dataUri} />}
         <form className="qr-code-form" onSubmit={handleQrCreate}>
+          {error && <div className="form-errors">{error}</div>}
           <div className="form-field">
             <label htmlFor="qrData">Name:</label>
             <input
@@ -60,7 +48,7 @@ export default function Create() {
               type="text"
               value={name}
               maxLength={60}
-              onChange={(e) => updateName(dispatch)(e.target.value)}
+              onChange={(e) => dispatch(updateName(e.target.value))}
             />
           </div>
           <div className="form-field">
@@ -71,7 +59,7 @@ export default function Create() {
               type="text"
               value={desc}
               maxLength={140}
-              onChange={(e) => updateDesc(dispatch)(e.target.value)}
+              onChange={(e) => dispatch(updateDescription(e.target.value))}
             />
           </div>
           <div className="form-buttons">

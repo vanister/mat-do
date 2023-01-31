@@ -1,12 +1,12 @@
 import { Schema, model, Types } from 'mongoose';
 
-export type Scan = {
+export type ScanDbo = {
   scannedAt: Date;
   description: string;
   coordinates?: string;
 };
 
-export type Item = {
+export type ItemDbo = {
   _id: string;
   userId: string;
   name: string;
@@ -14,7 +14,7 @@ export type Item = {
   scanned: number;
   createdAt: string;
   found: boolean;
-  scans: Scan[];
+  scans: ScanDbo[];
 };
 
 const scan = {
@@ -23,7 +23,7 @@ const scan = {
   coordinates: String,
 };
 
-const itemSchema = new Schema<Item>({
+const itemSchema = new Schema<ItemDbo>({
   _id: Types.ObjectId,
   userId: { type: String, required: true },
   name: { type: String, required: true },
@@ -34,4 +34,4 @@ const itemSchema = new Schema<Item>({
   scans: [scan],
 });
 
-export const ItemModel = model<Item>('Item', itemSchema);
+export const ItemEntity = model<ItemDbo>('Item', itemSchema);
