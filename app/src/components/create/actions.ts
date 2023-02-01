@@ -1,6 +1,6 @@
 import { Dispatch } from 'react';
 import { CreateAction } from './create-types';
-import { useItemService } from '../../hooks/useItemService';
+import { useItemService } from '../../services';
 import { generateDataUri } from '../../utilities/qrcode-generator';
 
 export type CreateDispatch = Dispatch<CreateAction>;

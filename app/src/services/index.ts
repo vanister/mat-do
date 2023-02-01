@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ItemService } from '../services/ItemService';
+import { ItemService } from './ItemService';
 
 let itemService: ItemService;
 
