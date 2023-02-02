@@ -10,11 +10,11 @@ export type ItemDbo = {
   _id: string;
   userId: string;
   name: string;
+  createdAt: Date;
   contact?: string;
-  scanned: number;
-  createdAt: string;
-  found: boolean;
-  scans: ScanDbo[];
+  scanned?: number;
+  found?: boolean;
+  scans?: ScanDbo[];
 };
 
 const scan = {
@@ -27,9 +27,9 @@ const itemSchema = new Schema<ItemDbo>({
   _id: Types.ObjectId,
   userId: { type: String, required: true },
   name: { type: String, required: true },
+  createdAt: { type: Date, required: true },
   contact: String,
   scanned: Number,
-  createdAt: Date,
   found: Boolean,
   scans: [scan],
 });
