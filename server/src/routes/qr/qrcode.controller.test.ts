@@ -2,6 +2,9 @@ import { describe, expect, test, beforeEach } from '@jest/globals';
 import { Item } from '../../models/item';
 import { PostDependencies } from './qr-types';
 import { list, post } from './qrcode.controller';
+import { ItemService } from '../../services/item.service';
+
+jest.mock('../../services/item.service');
 
 describe('QrCodeController', () => {
   const testId = 'some-generic-item-id-uuid';
@@ -53,8 +56,12 @@ describe('QrCodeController', () => {
   });
 
   describe('WHEN getting a list of items', () => {
+    const mockItemService: ItemService = (ItemService as any).mock.instances[0];
     const request = { params: { userId: 'rey-skywalker-lightsaber' } };
-    const action: (req: any, res: any) => Promise<void> = list();
+
+    const action: (req: any, res: any) => Promise<void> = list({
+      itemService: mockItemService,
+    });
 
     beforeEach(() => {
       jest.clearAllMocks();
