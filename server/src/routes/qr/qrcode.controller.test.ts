@@ -1,6 +1,7 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
-import { Item, PostDependencies } from './qr-types';
-import { post } from './qrcode.controller';
+import { Item } from '../../models/item';
+import { PostDependencies } from './qr-types';
+import { list, post } from './qrcode.controller';
 
 describe('QrCodeController', () => {
   const testId = 'some-generic-item-id-uuid';
@@ -9,19 +10,21 @@ describe('QrCodeController', () => {
     logger: jest.fn(),
   };
 
+  const response = {
+    status: jest.fn(),
+    send: jest.fn(),
+    sendStatus: jest.fn(),
+  };
+
   describe('WHEN posting', () => {
     const item: Item = {
       name: 'Lightsaber',
       description: 'Green lightsaber',
+      userId: 'user-1',
+      createdAt: new Date('2023-02-01'),
     };
 
     const request = { body: item };
-
-    const response = {
-      status: jest.fn(),
-      send: jest.fn(),
-      sendStatus: jest.fn(),
-    };
 
     let action: (req: any, res: any) => Promise<void>;
 
@@ -46,6 +49,31 @@ describe('QrCodeController', () => {
 
       expect(response.status).toHaveBeenCalledWith(200);
       expect(response.send).toHaveBeenCalledWith(testId);
+    });
+  });
+
+  describe('WHEN getting a list of items', () => {
+    const request = { params: { userId: 'rey-skywalker-lightsaber' } };
+    const action: (req: any, res: any) => Promise<void> = list();
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    test('should return 400 if missing userId', async () => {
+      const request = { params: { userId: null } };
+
+      await action(request, response);
+
+      expect(response.sendStatus).toHaveBeenCalledWith(400);
+    });
+
+    test('should return 404 if no items are found', async () => {
+      const request = { params: { userId: 'not-found-user-id' } };
+
+      await action(request, response);
+
+      expect(response.sendStatus).toHaveBeenCalledWith(404);
     });
   });
 });

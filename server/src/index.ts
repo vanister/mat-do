@@ -3,28 +3,19 @@ require('dotenv').config();
 import express, { json } from 'express';
 import scanRouter from './routes/scan';
 import qrRouter from './routes/qr';
-import { connect } from 'mongoose';
+import { createConnection } from 'mongoose';
+import { ItemService } from './services/item.service';
+import { itemModelFactory } from './models/item';
+import { registerService } from './services/service-injector';
 
 const app = express();
+const port = process.env.PORT || 4000;
+const connection = createConnection(process.env.MATDO_MONGO_CONN_STR);
 
-// const {
-//   MATDO_MONGO_CONN_STR,
-//   MATDO_MONGO_SERVER,
-//   MATDO_MONGO_DB,
-//   MATDO_MONGO_UN,
-//   MATDO_MONGO_PW,
-// } = process.env;
+// todo - move to service setup module
+const itemModel = itemModelFactory(connection);
 
-// // use the full connection string if one is set
-// if (MATDO_MONGO_CONN_STR) {
-//   connect(MATDO_MONGO_CONN_STR);
-// } else {
-//   connect(MATDO_MONGO_SERVER, {
-//     dbName: MATDO_MONGO_DB,
-//     user: MATDO_MONGO_UN,
-//     pass: MATDO_MONGO_PW,
-//   });
-// }
+registerService(ItemService.NAME, new ItemService(itemModel));
 
 // we accept only application/json data
 app.use(json());
@@ -36,4 +27,8 @@ app.use('/qr', qrRouter);
 // 404
 app.all('*', (req, res) => {
   res.status(404).send('Not found');
+});
+
+app.listen(port, () => {
+  console.log(`Mat-do is listening on port: ${port}`);
 });
