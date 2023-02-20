@@ -31,14 +31,7 @@ export function generate(dispatch: CreateDispatch) {
 
     try {
       dispatch({
-        type: CREATE_POSTING_REQUEST,
-        payload: {
-          error: null,
-          loading: true,
-          created: false,
-          dataUri: null,
-          id: null
-        }
+        type: CREATE_POSTING_REQUEST
       });
 
       const { id } = await itemService.post({ name, description });
@@ -49,17 +42,13 @@ export function generate(dispatch: CreateDispatch) {
 
       dispatch({
         type: CREATE_GENERATED,
-        payload: { created: true, dataUri, id }
+        payload: { dataUri, id }
       });
     } catch (error) {
       dispatch({
         type: CREATE_FAILED,
         payload: {
-          error: error?.message,
-          loading: false,
-          created: null,
-          id: null,
-          dataUri: null
+          error: error?.message
         }
       });
     }
