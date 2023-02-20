@@ -1,12 +1,13 @@
 import { CreateAction, CreateState } from './create-types';
 import {
-  CREATE_FAILED,
-  CREATE_GENERATED,
-  CREATE_GENERATING,
-  CREATE_INIT,
-  CREATE_POSTING_REQUEST,
-  CREATE_UPDATE_DESC,
-  CREATE_UPDATE_NAME
+  FAILED,
+  GENERATED,
+  GENERATING,
+  INIT,
+  POSTING_REQUEST,
+  UPDATE_DESC,
+  UPDATE_NAME,
+  VALIDATION_ERROR
 } from './actions';
 
 export function createReducer(
@@ -16,10 +17,10 @@ export function createReducer(
   const { type, payload } = action;
 
   switch (type) {
-    case CREATE_INIT:
-      return { created: false, name: '', description: '' };
+    case INIT:
+      return { name: '', description: '' };
 
-    case CREATE_POSTING_REQUEST:
+    case POSTING_REQUEST:
       return {
         ...state,
         error: null,
@@ -29,10 +30,10 @@ export function createReducer(
         id: null
       };
 
-    case CREATE_GENERATING:
+    case GENERATING:
       return { ...state, loading: true };
 
-    case CREATE_GENERATED:
+    case GENERATED:
       return {
         ...state,
         dataUri: payload.dataUri,
@@ -41,13 +42,14 @@ export function createReducer(
         created: true
       };
 
-    case CREATE_UPDATE_DESC:
+    case UPDATE_DESC:
       return { ...state, description: payload.description };
 
-    case CREATE_UPDATE_NAME:
+    case UPDATE_NAME:
       return { ...state, name: payload.name };
 
-    case CREATE_FAILED:
+    case VALIDATION_ERROR:
+    case FAILED:
       return {
         ...state,
         error: payload.error,

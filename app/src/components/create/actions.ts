@@ -1,27 +1,30 @@
-import { Dispatch } from 'react';
-import { CreateAction } from './create-types';
+import { CreateDispatch } from './create-types';
 import { useItemService } from '../../services';
 import { generateDataUri } from '../../utilities/qrcode-generator';
 
-export type CreateDispatch = Dispatch<CreateAction>;
+export const INIT = 'INIT';
+export const POSTING_REQUEST = 'POSTING_REQUEST';
+export const GENERATING = 'GENERATING';
+export const GENERATED = 'GENERATED';
+export const FAILED = 'FAILED';
+export const UPDATE_NAME = 'UPDATE_NAME';
+export const UPDATE_DESC = 'UPDATE_DESC';
+export const VALIDATION_ERROR = 'VALIDATION_ERROR';
 
-export const CREATE_INIT = 'CREATE_INIT';
-export const CREATE_POSTING_REQUEST = 'CREATE_POSTING_REQUEST';
-export const CREATE_GENERATING = 'CREATE_GENERATING';
-export const CREATE_GENERATED = 'CREATE_GENERATED';
-export const CREATE_FAILED = 'CREATE_FAILED';
-export const CREATE_UPDATE_NAME = 'CREATE_UPDATE_NAME';
-export const CREATE_UPDATE_DESC = 'CREATE_UPDATE_DESC';
+export const init = { type: INIT };
 
-export const init = { type: CREATE_INIT };
+export const validationFailed = (error: string) => ({
+  type: VALIDATION_ERROR,
+  payload: { error }
+});
 
 export const updateName = (name: string) => ({
-  type: CREATE_UPDATE_NAME,
+  type: UPDATE_NAME,
   payload: { name }
 });
 
 export const updateDescription = (description: string) => ({
-  type: CREATE_UPDATE_DESC,
+  type: UPDATE_DESC,
   payload: { description }
 });
 
@@ -31,22 +34,22 @@ export function generate(dispatch: CreateDispatch) {
 
     try {
       dispatch({
-        type: CREATE_POSTING_REQUEST
+        type: POSTING_REQUEST
       });
 
       const { id } = await itemService.post({ name, description });
 
-      dispatch({ type: CREATE_GENERATING });
+      dispatch({ type: GENERATING });
 
       const dataUri = await generateDataUri(id);
 
       dispatch({
-        type: CREATE_GENERATED,
+        type: GENERATED,
         payload: { dataUri, id }
       });
     } catch (error) {
       dispatch({
-        type: CREATE_FAILED,
+        type: FAILED,
         payload: {
           error: error?.message
         }

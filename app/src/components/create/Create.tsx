@@ -2,7 +2,13 @@ import React, { useReducer } from 'react';
 import Title from '../Title';
 import QrCodeImage from '../common/QrCodeImage';
 import { createReducer } from './reducer';
-import { generate, init, updateDescription, updateName } from './actions';
+import {
+  generate,
+  init,
+  updateDescription,
+  updateName,
+  validationFailed
+} from './actions';
 import { CreateState } from './create-types';
 
 import './Create.scss';
@@ -22,6 +28,7 @@ export default function Create() {
     e.preventDefault();
 
     if (!name) {
+      dispatch(validationFailed('A name is required'));
       return;
     }
 
@@ -36,7 +43,6 @@ export default function Create() {
     <div className="create-page">
       <Title>Create an Item</Title>
       <section className="create-page-content">
-        {/* todo - make qr code image component */}
         {qrCreated && <QrCodeImage dataUri={dataUri} />}
         <form className="qr-code-form" onSubmit={handleQrCreate}>
           {error && <div className="form-errors">{error}</div>}
