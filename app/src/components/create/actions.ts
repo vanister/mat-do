@@ -1,5 +1,5 @@
 import { CreateDispatch } from './create-types';
-import { useItemService } from '../../services';
+import { getItemService } from '../../services';
 import { generateDataUri } from '../../utilities/qrcode-generator';
 
 export const INIT = 'INIT';
@@ -30,7 +30,7 @@ export const updateDescription = (description: string) => ({
 
 export function generate(dispatch: CreateDispatch) {
   return async function (name: string, description?: string) {
-    const itemService = useItemService();
+    const itemService = getItemService();
 
     try {
       dispatch({
