@@ -1,9 +1,0 @@
-{
-  "recommendations": [
-    "mongodb.mongodb-vscode",
-    "firsttris.vscode-jest-runner",
-    "ms-azuretools.vscode-docker",
-    "andys8.jest-snippets",
-    "esbenp.prettier-vscode"
-  ]
-}

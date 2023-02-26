@@ -7,3 +7,5 @@ playground.ts
 build/
 node_modules/
 coverage/
+bin/
+obj/
