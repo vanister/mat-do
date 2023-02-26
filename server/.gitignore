@@ -1,9 +1,7 @@
 # files
 .DS_Store
-.env*
+appSettings.Local.json
 
 # folders
-build/
-coverage/
 bin/
 obj/
