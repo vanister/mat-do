@@ -1,6 +1,6 @@
 # files
 .DS_Store
-appSettings.Local.json
+appsettings.local.json
 
 # folders
 bin/
