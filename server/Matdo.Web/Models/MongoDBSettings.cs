@@ -2,12 +2,8 @@ namespace Matdo.Web.Models
 {
     public class MongoDBSettings
     {
-        private readonly IConfiguration configuration;
-
         public MongoDBSettings(IConfiguration configuration)
         {
-            this.configuration = configuration;
-
             configuration.GetSection("MongoDB").Bind(this);
         }
 

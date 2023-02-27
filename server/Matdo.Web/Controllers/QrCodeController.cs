@@ -7,9 +7,18 @@ namespace Matdo.Web.Controllers;
 [Route("qr")]
 public class QrCodeController : ControllerBase
 {
+    private readonly MongoDBSettings dbSettings;
+
+    public QrCodeController(MongoDBSettings settings)
+    {
+        dbSettings = settings;
+    }
+
     [HttpGet]
     public IActionResult Get()
     {
+        Console.WriteLine(dbSettings);
+
         return Ok("hello world");
     }
 
