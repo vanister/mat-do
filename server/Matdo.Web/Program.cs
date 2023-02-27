@@ -1,18 +1,16 @@
 using Matdo.Web;
 
 var builder = WebApplication.CreateBuilder(args);
-var services = builder.Services;
-var configuration = builder.Configuration;
 
-// register services with the DI container
-Services.RegisterServices(services, configuration);
-Services.RegisterRepositories(services, configuration);
-Services.RegisterMiscellaneous(services, configuration);
+builder.SetupMongoDb();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddServices();
+builder.Services.AddRepositories();
 
 var app = builder.Build();
 
