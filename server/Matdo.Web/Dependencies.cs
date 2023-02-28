@@ -1,4 +1,5 @@
 using Matdo.Web.Repositories;
+using Matdo.Web.Services;
 
 namespace Matdo.Web
 {
@@ -6,7 +7,7 @@ namespace Matdo.Web
     {
         public static void AddServices(this IServiceCollection services)
         {
-
+            services.AddTransient<IItemService, ItemService>();
         }
 
         public static void AddRepositories(this IServiceCollection services)
