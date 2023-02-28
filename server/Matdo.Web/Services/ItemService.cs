@@ -1,27 +1,27 @@
 using Matdo.Web.Models;
 using Matdo.Web.Repositories;
 
-namespace Matdo.Web.Services
+namespace Matdo.Web.Services;
+
+public interface IItemService
 {
-    public interface IItemService
+    Task<IEnumerable<Item>> List(string userId);
+}
+
+public class ItemService : IItemService
+{
+    private readonly IItemRepository itemRepository;
+
+    public ItemService(IItemRepository itemRepository)
     {
-        Task<IEnumerable<Item>> List(string userId);
+        this.itemRepository = itemRepository;
     }
 
-    public class ItemService : IItemService
+    public async Task<IEnumerable<Item>> List(string userId)
     {
-        private readonly IItemRepository itemRepository;
+        var items = await itemRepository.ListByUserId(userId);
 
-        public ItemService(IItemRepository itemRepository)
-        {
-            this.itemRepository = itemRepository;
-        }
-
-        public async Task<IEnumerable<Item>> List(string userId)
-        {
-            var items = await itemRepository.ListByUserId(userId);
-
-            return items;
-        }
+        return items;
     }
 }
+

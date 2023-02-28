@@ -2,33 +2,32 @@ using Matdo.Web.Models;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
-namespace Matdo.Web
+namespace Matdo.Web;
+
+public static class Mongo
 {
-    public static class Mongo
+    public static void SetupMongoDb(this WebApplicationBuilder builder)
     {
-        public static void SetupMongoDb(this WebApplicationBuilder builder)
+        var services = builder.Services;
+        var configuration = builder.Configuration;
+        var camelCaseConvention = new ConventionPack { new CamelCaseElementNameConvention() };
+
+        ConventionRegistry.Register("CamelCase", camelCaseConvention, type => true);
+
+        services.AddSingleton<MongoDBSettings>((_) =>
         {
-            var services = builder.Services;
-            var configuration = builder.Configuration;
-            var camelCaseConvention = new ConventionPack { new CamelCaseElementNameConvention() };
+            var settings = new MongoDBSettings(configuration);
 
-            ConventionRegistry.Register("CamelCase", camelCaseConvention, type => true);
+            return settings;
+        });
 
-            services.AddSingleton<MongoDBSettings>((_) =>
-            {
-                var settings = new MongoDBSettings(configuration);
+        services.AddSingleton<IMongoDatabase>((serviceProvider) =>
+        {
+            var settings = serviceProvider.GetService<MongoDBSettings>()!;
+            var client = new MongoClient(settings.ConnectionString);
+            var database = client.GetDatabase(settings.Database);
 
-                return settings;
-            });
-
-            services.AddSingleton<IMongoDatabase>((serviceProvider) =>
-            {
-                var settings = serviceProvider.GetService<MongoDBSettings>()!;
-                var client = new MongoClient(settings.ConnectionString);
-                var database = client.GetDatabase(settings.Database);
-
-                return database;
-            });
-        }
+            return database;
+        });
     }
 }
