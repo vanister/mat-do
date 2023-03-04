@@ -20,7 +20,7 @@ public class ItemController : ControllerBase
     [Route("/list")]
     public async Task<IActionResult> ListByUserId(string userId)
     {
-        var items = await itemService.List(userId);
+        var items = await itemService.ListAsync(userId);
 
         return Ok(items);
     }

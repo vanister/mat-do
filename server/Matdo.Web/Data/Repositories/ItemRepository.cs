@@ -1,4 +1,5 @@
 using Matdo.Web.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 
@@ -6,8 +7,10 @@ namespace Matdo.Web.Repositories;
 
 public interface IItemRepository
 {
-    Task<IEnumerable<Item>> ListByUserId(string userId);
-
+    Task<IEnumerable<Item>> ListByUserIdAsync(string userId);
+    Task<Item> GetByIdAsync(string id);
+    Task<Item> CreateAsync(Item item);
+    Task UpdateAsync(Item item);
 }
 
 public class ItemRepository : IItemRepository
@@ -23,13 +26,33 @@ public class ItemRepository : IItemRepository
         this.settings = settings;
     }
 
-    public IMongoQueryable<Item> ItemCollection =>
-        this.mongoDatabase.GetCollection<Item>(settings.Collection).AsQueryable();
+    public IMongoQueryable<Item> QueryableItemCollection =>
+        mongoDatabase.GetCollection<Item>(settings.Collection).AsQueryable();
 
-    public async Task<IEnumerable<Item>> ListByUserId(string userId)
+    public IMongoCollection<Item> ItemCollection => mongoDatabase.GetCollection<Item>(settings.Collection);
+
+    public async Task<IEnumerable<Item>> ListByUserIdAsync(string userId) =>
+        await QueryableItemCollection.Where(i => i.UserId == userId).ToListAsync();
+
+    public async Task<Item> GetByIdAsync(string id)
     {
-        var items = await ItemCollection.Where(i => i.UserId == userId).ToListAsync();
+        var objId = new ObjectId(id);
+        var item = await QueryableItemCollection.FirstOrDefaultAsync(item => item.Id == objId);
 
-        return items;
+        return item;
+    }
+
+    public async Task<Item> CreateAsync(Item item)
+    {
+        await ItemCollection.InsertOneAsync(item);
+
+        return item;
+    }
+
+    public async Task UpdateAsync(Item item)
+    {
+        var filter = Builders<Item>.Filter.Eq(i => i.Id, item.Id);
+
+        await ItemCollection.ReplaceOneAsync(filter, item);
     }
 }
