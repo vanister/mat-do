@@ -8,7 +8,7 @@ namespace Matdo.Web.Repositories;
 public interface IItemRepository
 {
     Task<IEnumerable<Item>> ListByUserIdAsync(string userId);
-    Task<Item> GetByIdAsync(string id);
+    Task<Item?> GetByIdAsync(string id);
     Task<Item> GetByIdAsync(ObjectId id);
     Task<Item> CreateAsync(Item item);
     Task UpdateAsync(Item item);
@@ -35,9 +35,13 @@ public class ItemRepository : IItemRepository
     public async Task<IEnumerable<Item>> ListByUserIdAsync(string userId) =>
         await QueryableItemCollection.Where(i => i.UserId == userId).ToListAsync();
 
-    public async Task<Item> GetByIdAsync(string id)
+    public async Task<Item?> GetByIdAsync(string id)
     {
-        var objId = new ObjectId(id);
+        if (!ObjectId.TryParse(id, out var objId))
+        {
+            return null;
+        }
+
         var item = await GetByIdAsync(objId);
 
         return item;

@@ -9,7 +9,7 @@ public interface IItemService
 {
     Task<IEnumerable<Item>> ListAsync(string userId);
     Task<Item> CreateAsync(Item item);
-    Task<Item> GetAsync(string id);
+    Task<Item?> GetAsync(string id);
     Task<bool> UpdateAsync(Item item);
 }
 
@@ -29,7 +29,7 @@ public class ItemService : IItemService
         return items ?? new Item[0];
     }
 
-    public async Task<Item> GetAsync(string id)
+    public async Task<Item?> GetAsync(string id)
     {
         var item = await itemRepository.GetByIdAsync(id);
 
