@@ -2,6 +2,7 @@ using Matdo.Web.Exception;
 using Matdo.Web.Models;
 using Matdo.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 
 namespace Matdo.Web.Controllers;
 
@@ -18,7 +19,7 @@ public class ItemController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/list")]
+    [Route("list")]
     public async Task<IActionResult> ListByUserId(string userId)
     {
         var items = await itemService.ListAsync(userId);
@@ -27,7 +28,7 @@ public class ItemController : ControllerBase
     }
 
     [HttpGet]
-    [Route("/{id}")]
+    [Route("{id}")]
     public async Task<IActionResult> Get([FromRoute] string id)
     {
         var item = await itemService.GetAsync(id);
@@ -48,7 +49,7 @@ public class ItemController : ControllerBase
             return BadRequest("Item cannot be null");
         }
 
-        if (item.Id != null)
+        if (item.Id != ObjectId.Empty)
         {
             return BadRequest("Id cannot be set");
         }
@@ -64,7 +65,7 @@ public class ItemController : ControllerBase
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] Item item)
     {
-        if (item.Id == null)
+        if (item.Id == ObjectId.Empty)
         {
             return BadRequest("Id is missing");
         }
