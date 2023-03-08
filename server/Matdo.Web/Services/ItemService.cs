@@ -1,6 +1,7 @@
 using Matdo.Web.Exception;
 using Matdo.Web.Models;
 using Matdo.Web.Repositories;
+using Matdo.Web.Utilties;
 
 namespace Matdo.Web.Services;
 
@@ -9,7 +10,7 @@ public interface IItemService
     Task<IEnumerable<Item>> ListAsync(string userId);
     Task<Item> CreateAsync(Item item);
     Task<Item> GetAsync(string id);
-    Task UpdateAsync(Item item);
+    Task<bool> UpdateAsync(Item item);
 }
 
 public class ItemService : IItemService
@@ -25,29 +26,39 @@ public class ItemService : IItemService
     {
         var items = await itemRepository.ListByUserIdAsync(userId);
 
-        return items;
+        return items ?? new Item[0];
     }
 
     public async Task<Item> GetAsync(string id)
     {
         var item = await itemRepository.GetByIdAsync(id);
 
-        if (item == null)
-        {
-            throw new NotFoundException();
-        }
-
         return item;
     }
 
     public async Task<Item> CreateAsync(Item item)
     {
-        throw new NotImplementedException();
+        var newItem = item.Clone();
+
+        newItem.CreatedAt = DateTime.Now;
+        newItem = await itemRepository.CreateAsync(item);
+
+        return newItem;
     }
 
-    public async Task UpdateAsync(Item item)
+    public async Task<bool> UpdateAsync(Item item)
     {
-        throw new NotImplementedException();
+        var existingItem = await itemRepository.GetByIdAsync(item.Id);
+
+        if (existingItem == null)
+        {
+            return false;
+        }
+
+        // replace with whatever was sent in
+        await itemRepository.UpdateAsync(item);
+
+        return true;
     }
 }
 

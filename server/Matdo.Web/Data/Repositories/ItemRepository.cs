@@ -9,6 +9,7 @@ public interface IItemRepository
 {
     Task<IEnumerable<Item>> ListByUserIdAsync(string userId);
     Task<Item> GetByIdAsync(string id);
+    Task<Item> GetByIdAsync(ObjectId id);
     Task<Item> CreateAsync(Item item);
     Task UpdateAsync(Item item);
 }
@@ -37,7 +38,14 @@ public class ItemRepository : IItemRepository
     public async Task<Item> GetByIdAsync(string id)
     {
         var objId = new ObjectId(id);
-        var item = await QueryableItemCollection.FirstOrDefaultAsync(item => item.Id == objId);
+        var item = await GetByIdAsync(objId);
+
+        return item;
+    }
+
+    public async Task<Item> GetByIdAsync(ObjectId id)
+    {
+        var item = await QueryableItemCollection.FirstOrDefaultAsync(item => item.Id == id);
 
         return item;
     }

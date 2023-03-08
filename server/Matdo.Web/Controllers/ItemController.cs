@@ -1,3 +1,4 @@
+using Matdo.Web.Exception;
 using Matdo.Web.Models;
 using Matdo.Web.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -29,20 +30,52 @@ public class ItemController : ControllerBase
     [Route("/{id}")]
     public async Task<IActionResult> Get([FromRoute] string id)
     {
-        throw new NotImplementedException();
+        var item = await itemService.GetAsync(id);
+
+        if (item == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(item);
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] Item item)
     {
-        throw new NotImplementedException();
+        if (item == null)
+        {
+            return BadRequest("Item cannot be null");
+        }
+
+        if (item.Id != null)
+        {
+            return BadRequest("Id cannot be set");
+        }
+
+        await itemService.CreateAsync(item);
+        // the Id field should now be populated
+        var id = item.Id;
+
+        return Created($"/items/{id}", id);
+
     }
 
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] Item item)
     {
-        // todo - verify userId and item existence
+        if (item.Id == null)
+        {
+            return BadRequest("Id is missing");
+        }
 
-        throw new NotImplementedException();
+        var updated = await itemService.UpdateAsync(item);
+
+        if (!updated)
+        {
+            return BadRequest("Unable to update the item");
+        }
+
+        return Ok();
     }
 }

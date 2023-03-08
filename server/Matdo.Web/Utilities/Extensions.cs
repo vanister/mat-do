@@ -6,6 +6,11 @@ public static class Extensions
 {
     public static T Clone<T>(this T original, bool deep = false) where T : class
     {
+        if (deep)
+        {
+            throw new NotImplementedException();
+        }
+
         var type = typeof(T);
         var cloned = Activator.CreateInstance<T>();
 
