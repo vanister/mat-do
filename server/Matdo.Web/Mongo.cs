@@ -6,7 +6,7 @@ namespace Matdo.Web;
 
 public static class Mongo
 {
-    public static void SetupMongoDb(this WebApplicationBuilder builder)
+    public static void AddMongoDb(this WebApplicationBuilder builder)
     {
         var services = builder.Services;
         var configuration = builder.Configuration;
@@ -16,7 +16,7 @@ public static class Mongo
 
         services.AddSingleton<MongoDBSettings>((_) =>
         {
-            var settings = new MongoDBSettings(configuration);
+            var settings = MongoDBSettings.FromConfiguration(configuration);
 
             return settings;
         });
