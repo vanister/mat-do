@@ -20,17 +20,18 @@ public class ItemController : ControllerBase
 
     [HttpGet]
     [Route("list")]
-    public async Task<IActionResult> ListByUserId(string userId)
+    public async Task<IActionResult> ListByUserId()
     {
-        var items = await itemService.ListAsync(userId);
+        var items = await itemService.ListAsync();
 
         return Ok(items);
     }
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<IActionResult> Get([FromRoute] string id)
+    public async Task<IActionResult> Get([FromRoute] string id, string userId)
     {
+        // TODO - get user id from token
         var item = await itemService.GetAsync(id);
 
         if (item == null)

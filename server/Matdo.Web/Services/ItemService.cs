@@ -7,7 +7,7 @@ namespace Matdo.Web.Services;
 
 public interface IItemService
 {
-    Task<IEnumerable<Item>> ListAsync(string userId);
+    Task<IEnumerable<Item>> ListAsync();
     Task<Item> CreateAsync(Item item);
     Task<Item?> GetAsync(string id);
     Task<bool> UpdateAsync(Item item);
@@ -22,8 +22,10 @@ public class ItemService : IItemService
         this.itemRepository = itemRepository;
     }
 
-    public async Task<IEnumerable<Item>> ListAsync(string userId)
+    public async Task<IEnumerable<Item>> ListAsync()
     {
+        // TODO - get user id from token
+        var userId = "abc123";
         var items = await itemRepository.ListByUserIdAsync(userId);
 
         return items ?? new Item[0];
