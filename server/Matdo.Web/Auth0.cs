@@ -12,6 +12,8 @@ public static class Auth0
         var configuration = builder.Configuration;
         var settings = Auth0Settings.FromConfiguration(configuration);
 
+        services.AddSingleton<Auth0Settings>((_) => settings);
+
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
