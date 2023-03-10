@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import LinkButton from './common/LinkButton';
+import LinkButton from '../components/common/LinkButton';
 
 import './PublicLayout.scss';
 
