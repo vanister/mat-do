@@ -7,6 +7,8 @@ public static class Dependencies
 {
     public static void AddServices(this IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
+
         services.AddTransient<IItemService, ItemService>();
     }
 

@@ -1,5 +1,4 @@
 using Matdo.Web;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,7 @@
 using Matdo.Web.Exception;
 using Matdo.Web.Models;
 using Matdo.Web.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 
@@ -8,6 +9,7 @@ namespace Matdo.Web.Controllers;
 
 // TODO - this controller should be protected
 [ApiController]
+[Authorize]
 [Route("items")]
 public class ItemController : ControllerBase
 {
