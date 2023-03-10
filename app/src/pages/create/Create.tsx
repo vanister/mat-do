@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
-import Title from '../Title';
-import QrCodeImage from '../common/QrCodeImage';
+import Title from '../../components/Title';
+import QrCodeImage from '../../components/common/QrCodeImage';
 import { createReducer } from './reducer';
 import {
   generate,

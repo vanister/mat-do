@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import Layout from './components/Layout';
-import Create from './components/create/Create';
-import NotFound from './components/NotFound';
-import Home from './components/home/Home';
+import Layout from './pages/Layout';
+import Create from './pages/create/Create';
+import NotFound from './pages/NotFound';
+import Home from './pages/home/Home';
 import RequireAuth from './components/auth/RequireAuth';
-import PublicLayout from './components/PublicLayout';
-import Scan from './components/scan/Scan';
+import PublicLayout from './pages/PublicLayout';
+import Scan from './pages/scan/Scan';
 
 export default function App() {
   return (
