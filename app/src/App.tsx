@@ -12,11 +12,17 @@ export default function App() {
   return (
     <Routes>
       <Route element={<PublicLayout />}>
+        <Route path="/" element={<Home />} />
         <Route path="/scan" element={<Scan />} />
       </Route>
-      {/* todo - require auth on everything but the scan route */}
-      <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
+      <Route
+        element={
+          <RequireAuth>
+            <Layout />
+          </RequireAuth>
+        }
+      >
+        {/* <Route path="/dashboard" element={<Home />} /> */}
         <Route path="/create" element={<Create />} />
         <Route path="*" element={<NotFound />} />
       </Route>

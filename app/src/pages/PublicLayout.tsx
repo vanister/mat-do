@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import LinkButton from '../components/common/LinkButton';
+import LoginButton from '../components/auth/LoginButton';
 
 import './PublicLayout.scss';
 
@@ -10,10 +10,7 @@ export default function PublicLayout() {
       <header>
         <h1>Mất đồ</h1>
         <nav>
-          {/* auth links */}
-          {/* <NavLink to="/">Home</NavLink> |{' '}
-          <NavLink to="/create">Create</NavLink> |{' '} */}
-          <LinkButton>Login</LinkButton>
+          <LoginButton />
         </nav>
       </header>
       <main className="main-content">

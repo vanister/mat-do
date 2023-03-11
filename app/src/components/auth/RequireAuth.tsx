@@ -13,9 +13,9 @@ export default function RequireAuth({ children }: RequireAuthProps) {
     return <Loading />;
   }
 
-  if (!isAuthenticated || !user) {
+  if (!(isAuthenticated || user)) {
     loginWithRedirect({
-      authorizationParams: { redirect_uri: window.location.href },
+      authorizationParams: { redirect_uri: window.location.href }
     });
 
     return <Loading />;
