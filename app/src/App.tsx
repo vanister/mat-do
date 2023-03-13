@@ -7,6 +7,7 @@ import Home from './pages/home/Home';
 import RequireAuth from './components/auth/RequireAuth';
 import PublicLayout from './pages/PublicLayout';
 import Scan from './pages/scan/Scan';
+import Dashboard from './pages/dashboard/Dashboard';
 
 export default function App() {
   return (
@@ -22,7 +23,7 @@ export default function App() {
           </RequireAuth>
         }
       >
-        {/* <Route path="/dashboard" element={<Home />} /> */}
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create" element={<Create />} />
         <Route path="*" element={<NotFound />} />
       </Route>
