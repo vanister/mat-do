@@ -15,7 +15,7 @@ export class ItemService {
    */
   async create(item: Item): Promise<Item> {
     try {
-      const id = await this.send<string>('/items', 'POST', item);
+      const id = await this.sendRequest<string>('/items', 'POST', item);
 
       // fill in the `id` and return a new item with it
       return { ...item, id };
@@ -26,12 +26,12 @@ export class ItemService {
   }
 
   async list(): Promise<Item[]> {
-    const items = await this.send<Item[]>('/items');
+    const items = await this.sendRequest<Item[]>('/items');
 
     return items;
   }
 
-  async send<T>(
+  async sendRequest<T>(
     url: string,
     method: Method = 'GET',
     data?: any,
