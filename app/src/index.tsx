@@ -6,8 +6,6 @@ import App from './App';
 
 import './index.scss';
 
-configure(sessionStorage);
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
