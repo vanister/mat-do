@@ -1,8 +1,9 @@
 import { CreateAction, CreateState } from './create-types';
 import {
+  ACCESS_TOKEN,
   FAILED,
-  GENERATED,
-  GENERATING,
+  GENERATED_QR_CODE,
+  GENERATING_QR_CODE,
   INIT,
   POSTING_REQUEST,
   UPDATE_DESC,
@@ -24,21 +25,21 @@ export function createReducer(
       return {
         ...state,
         error: null,
-        loading: true,
+        isLoading: true,
         created: false,
         dataUri: null,
         id: null
       };
 
-    case GENERATING:
-      return { ...state, loading: true };
+    case GENERATING_QR_CODE:
+      return { ...state, isLoading: true };
 
-    case GENERATED:
+    case GENERATED_QR_CODE:
       return {
         ...state,
         dataUri: payload.dataUri,
         id: payload.id,
-        loading: false,
+        isLoading: false,
         created: true
       };
 
@@ -48,12 +49,15 @@ export function createReducer(
     case UPDATE_NAME:
       return { ...state, name: payload.name };
 
+    case ACCESS_TOKEN:
+      return { ...state, accessToken: payload.accessToken };
+
     case VALIDATION_ERROR:
     case FAILED:
       return {
         ...state,
         error: payload.error,
-        loading: false,
+        isLoading: false,
         created: null,
         id: null,
         dataUri: null
