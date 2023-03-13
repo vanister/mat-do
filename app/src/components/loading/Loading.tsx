@@ -1,5 +1,13 @@
 import React from 'react';
 
-export default function Loading(props) {
-  return <div {...props}>Loading...</div>;
+import './Loading.scss';
+
+export type LoadingProps = {
+  text?: string;
+}
+
+export default function Loading(props: LoadingProps) {
+  const text = props.text ?? 'Loading...';
+
+  return <div className='loading-indicator'>{text}</div>;
 }
