@@ -6,6 +6,8 @@ import App from './App';
 
 import './index.scss';
 
+configure(sessionStorage);
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
@@ -13,11 +15,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
+      {/* todo - move into an AuthProvider */}
       <Auth0Provider
         domain={process.env.REACT_APP_AUTH_DOMAIN}
         clientId={process.env.REACT_APP_AUTH_CLIENT_ID}
         authorizationParams={{
-          redirect_uri: window.location.origin
+          audience: process.env.REACT_APP_AUTH_AUDIENCE,
+          redirect_uri: process.env.REACT_APP_AUTH_CALLBACK_URI
         }}
       >
         <App />
