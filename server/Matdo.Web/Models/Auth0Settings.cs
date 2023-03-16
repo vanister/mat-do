@@ -13,6 +13,6 @@ public class Auth0Settings
 
     public string Audience { get; set; } = "Audience is missing";
     public string Authority { get; set; } = "Authority is missing";
-    public string Prefix { get; set; } = "Prefix is missing";
-    public string Delimiter { get; set; } = "Delimiter is missing";
+    public string Prefix { get; set; }
+    public string Delimiter { get; set; }
 }
