@@ -34,8 +34,7 @@ public class Auth0ApiContext : IApiContext
 
         if (settings.Prefix == null)
         {
-            // TODO - create an exception for missing settings
-            throw new FormatException("Prefix is required");
+            throw new MissingSettingException("Prefix");
         }
 
         var parts = Subject.Split(settings.Delimiter);

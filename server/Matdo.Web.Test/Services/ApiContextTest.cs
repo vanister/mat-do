@@ -23,7 +23,7 @@ public class ApiContextTest
 
     [TestMethod]
     [ExpectedException(typeof(InvalidUserIdException))]
-    public void GetUserId_Should_Fail_Parsing_Without_Prefix()
+    public void GetUserId_Should_Throw_When_Prefix_Is_Missing()
     {
         var userId = "abc123";
         var context = CreateApiContextMock(userId);
@@ -34,11 +34,21 @@ public class ApiContextTest
 
     [TestMethod]
     [ExpectedException(typeof(InvalidUserIdException))]
-    public void GetUserId_Should_Fail_Parsing_With_Bad_Prefix()
+    public void GetUserId_Should_Throw_When_Prefix_Is_Bad()
     {
         var userId = "sith|abc123";
         var context = CreateApiContextMock(userId);
         var apiContext = SetupApiContext(context.Object);
+
+        var result = apiContext.GetUserId();
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(MissingSettingException))]
+    public void GetUserId_Should_Throw_When_Prefix_Is_Null()
+    {
+        var settings = new Auth0Settings();
+        var apiContext = SetupApiContext(settings: settings);
 
         var result = apiContext.GetUserId();
     }
