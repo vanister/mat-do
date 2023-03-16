@@ -26,8 +26,8 @@ public class ApiContextTest
     public void GetUserId_Should_Throw_When_Prefix_Is_Missing()
     {
         var userId = "abc123";
-        var context = CreateApiContextMock(userId);
-        var apiContext = SetupApiContext(context.Object);
+        var context = CreateHttpContextAccessorMock(userId);
+        var apiContext = SetupApiContext(accessor: context.Object);
 
         var result = apiContext.GetUserId();
     }
@@ -37,8 +37,8 @@ public class ApiContextTest
     public void GetUserId_Should_Throw_When_Prefix_Is_Bad()
     {
         var userId = "sith|abc123";
-        var context = CreateApiContextMock(userId);
-        var apiContext = SetupApiContext(context.Object);
+        var context = CreateHttpContextAccessorMock(userId);
+        var apiContext = SetupApiContext(accessor: context.Object);
 
         var result = apiContext.GetUserId();
     }
@@ -63,13 +63,13 @@ public class ApiContextTest
             Delimiter = "|"
         };
 
-        var mockAssessor = accessor ?? CreateApiContextMock().Object;
+        var mockAssessor = accessor ?? CreateHttpContextAccessorMock().Object;
         var apiContext = new Auth0ApiContext(mockAssessor, mockSettings);
 
         return apiContext;
     }
 
-    private Mock<IHttpContextAccessor> CreateApiContextMock(string auth0UserId = "auth0|abc123")
+    private Mock<IHttpContextAccessor> CreateHttpContextAccessorMock(string auth0UserId = "auth0|abc123")
     {
         var mockUser = new Mock<ClaimsPrincipal>();
         mockUser.Setup(x => x.FindFirst(ClaimTypes.NameIdentifier)).Returns(new Claim(ClaimTypes.NameIdentifier, auth0UserId));
