@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Matdo.Web.Exception;
+using Matdo.Web.Models;
 
 namespace Matdo.Web.Services;
 
@@ -8,16 +9,15 @@ public interface IApiContext
     string? GetUserId();
 }
 
-public class ApiContext : IApiContext
+public class Auth0ApiContext : IApiContext
 {
-    private const string auth0Prefix = "auth0";
-    private const string idDelimiter = "|";
-
     private readonly IHttpContextAccessor httpContextAccessor;
+    private readonly Auth0Settings settings;
 
-    public ApiContext(IHttpContextAccessor httpContextAccessor)
+    public Auth0ApiContext(IHttpContextAccessor httpContextAccessor, Auth0Settings settings)
     {
         this.httpContextAccessor = httpContextAccessor;
+        this.settings = settings;
     }
 
     private HttpContext Context => httpContextAccessor.HttpContext!;
@@ -32,15 +32,20 @@ public class ApiContext : IApiContext
             return null;
         }
 
-        var parts = Subject.Split('|');
+        if (settings.Prefix == null)
+        {
+            // TODO - create an exception for missing settings
+            throw new FormatException("Prefix is required");
+        }
 
-        // if there are two pieces, and the piece on the left is the prefix, then take the right piece
-        if (parts.Length < 2 || parts[0] != auth0Prefix)
+        var parts = Subject.Split(settings.Delimiter);
+        var hasPrefix = !string.IsNullOrEmpty(settings.Prefix);
+
+        if (hasPrefix && parts[0] != settings.Prefix)
         {
             throw new InvalidUserIdException();
         }
 
-        return parts[1];
-
+        return hasPrefix ? parts[1] : parts[0];
     }
 }
