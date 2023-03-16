@@ -4,7 +4,7 @@ namespace Matdo.Web.Test.Services;
 public class ItemServiceTest
 {
     [TestMethod]
-    public async Task ListAsync_Should_Succeed()
+    public void ListAsync_Should_Succeed()
     {
         Assert.Fail("todo");
     }
