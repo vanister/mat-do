@@ -9,7 +9,9 @@ public static class Dependencies
     {
         services.AddHttpContextAccessor();
 
-        services.AddTransient<IItemService, ItemService>();
+        services
+            .AddTransient<IItemService, ItemService>()
+            .AddTransient<IApiContext, ApiContext>();
     }
 
     public static void AddRepositories(this IServiceCollection services)
