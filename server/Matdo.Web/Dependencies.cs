@@ -11,7 +11,7 @@ public static class Dependencies
 
         services
             .AddTransient<IItemService, ItemService>()
-            .AddTransient<IApiContext, ApiContext>();
+            .AddTransient<IApiContext, Auth0ApiContext>();
     }
 
     public static void AddRepositories(this IServiceCollection services)
