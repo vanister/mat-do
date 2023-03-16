@@ -1,4 +1,3 @@
-using Matdo.Web.Exception;
 using Matdo.Web.Models;
 using Matdo.Web.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -31,7 +30,7 @@ public class ItemController : ControllerBase
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<IActionResult> Get([FromRoute] string id, string userId)
+    public async Task<IActionResult> Get([FromRoute] string id)
     {
         // TODO - get user id from token
         var item = await itemService.GetAsync(id);
