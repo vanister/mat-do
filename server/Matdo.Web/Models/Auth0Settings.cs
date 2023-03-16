@@ -11,6 +11,8 @@ public class Auth0Settings
         return instance;
     }
 
-    public string Audience { get; set; } = "set-in-appsettings.json";
-    public string Authority { get; set; } = "set-in-appsettings.json";
+    public string Audience { get; set; } = "Audience is missing";
+    public string Authority { get; set; } = "Authority is missing";
+    public string Prefix { get; set; } = "Prefix is missing";
+    public string Delimiter { get; set; } = "Delimiter is missing";
 }
