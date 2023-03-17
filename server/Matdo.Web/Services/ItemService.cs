@@ -1,4 +1,3 @@
-using Matdo.Web.Exception;
 using Matdo.Web.Models;
 using Matdo.Web.Repositories;
 using Matdo.Web.Utilties;

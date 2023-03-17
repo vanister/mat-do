@@ -1,5 +1,5 @@
 
-using Matdo.Web.Models;
+using Matdo.Web.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Matdo.Web;

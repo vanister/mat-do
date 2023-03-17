@@ -1,4 +1,5 @@
 using Matdo.Web.Models;
+using Matdo.Web.Settings;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;

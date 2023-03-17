@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Matdo.Web.Exception;
-using Matdo.Web.Models;
+using Matdo.Web.Settings;
 
 namespace Matdo.Web.Services;
 

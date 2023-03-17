@@ -1,4 +1,4 @@
-namespace Matdo.Web.Models;
+namespace Matdo.Web.Settings;
 
 public class Auth0Settings
 {

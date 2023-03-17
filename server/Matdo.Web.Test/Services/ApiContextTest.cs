@@ -1,6 +1,6 @@
 using System.Security.Claims;
 using Matdo.Web.Exception;
-using Matdo.Web.Models;
+using Matdo.Web.Settings;
 using Matdo.Web.Services;
 using Microsoft.AspNetCore.Http;
 using Moq;

@@ -1,4 +1,4 @@
-using Matdo.Web.Models;
+using Matdo.Web.Settings;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
