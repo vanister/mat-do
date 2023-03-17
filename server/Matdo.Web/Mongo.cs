@@ -6,6 +6,10 @@ namespace Matdo.Web;
 
 public static class Mongo
 {
+    /// <summary>
+    /// Adds MongDB related confirations to the pipeline.
+    /// </summary>
+    /// <param name="builder">The builder to use.</param>
     public static void AddMongoDb(this WebApplicationBuilder builder)
     {
         var services = builder.Services;

@@ -6,6 +6,10 @@ namespace Matdo.Web;
 
 public static class Auth0
 {
+    /// <summary>
+    /// Adds Auth0 related configuaration to the pipeline.
+    /// </summary>
+    /// <param name="builder">The builder to use.</param>
     public static void AddAuth0(this WebApplicationBuilder builder)
     {
         var services = builder.Services;
