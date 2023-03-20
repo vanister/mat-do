@@ -16,10 +16,12 @@ public class ItemServiceTest
         Assert.IsNotNull(service);
     }
 
-    private IItemService SetupService(IItemRepository? itemRepo = null)
+    private IItemService SetupService(IItemRepository? itemRepo = null, IApiContext? context = null)
     {
         var mockItemRepo = itemRepo ?? CreateItemRepoMock().Object;
-        var service = new ItemService(mockItemRepo);
+        var mockApiContext = context ?? new Mock<IApiContext>().Object;
+
+        var service = new ItemService(mockItemRepo, mockApiContext);
 
         return service;
     }

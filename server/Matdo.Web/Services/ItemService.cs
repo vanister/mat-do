@@ -12,20 +12,20 @@ public interface IItemService
     Task<bool> UpdateAsync(Item item);
 }
 
-public class ItemService : IItemService
+public class ItemService : ServiceBase, IItemService
 {
     private readonly IItemRepository itemRepository;
 
-    public ItemService(IItemRepository itemRepository)
+    public ItemService(
+        IItemRepository itemRepository,
+        IApiContext apiContext) : base(apiContext)
     {
         this.itemRepository = itemRepository;
     }
 
     public async Task<IEnumerable<Item>> ListAsync()
     {
-        // TODO - get user id from token
-        var userId = "abc123";
-        var items = await itemRepository.ListByUserIdAsync(userId);
+        var items = await itemRepository.ListByUserIdAsync(UserId);
 
         return items ?? new Item[0];
     }
@@ -39,6 +39,11 @@ public class ItemService : IItemService
 
     public async Task<Item> CreateAsync(Item item)
     {
+        if (item.UserId != UserId)
+        {
+            throw new InvalidStateException("UserId does not match");
+        }
+
         var newItem = item.Clone();
 
         newItem.CreatedAt = DateTime.Now;
