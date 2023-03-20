@@ -6,7 +6,7 @@ namespace Matdo.Web.Services;
 
 public interface IApiContext
 {
-    string? GetUserId();
+    string GetUserId();
 }
 
 public class Auth0ApiContext : IApiContext
@@ -24,12 +24,11 @@ public class Auth0ApiContext : IApiContext
 
     private string? Subject => Context.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-    public string? GetUserId()
+    public string GetUserId()
     {
-        // user id is the part of the subject following the provider prefix
         if (Subject == null)
         {
-            return null;
+            throw new InvalidStateException("Subject claim is missing");
         }
 
         if (settings.Prefix == null)
@@ -37,6 +36,7 @@ public class Auth0ApiContext : IApiContext
             throw new MissingSettingException("Prefix");
         }
 
+        // user id is the part of the subject following the provider prefix
         var parts = Subject.Split(settings.Delimiter);
         var hasPrefix = !string.IsNullOrEmpty(settings.Prefix);
 

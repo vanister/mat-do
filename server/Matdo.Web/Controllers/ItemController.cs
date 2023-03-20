@@ -56,11 +56,18 @@ public class ItemController : ControllerBase
             return BadRequest("Id cannot be set");
         }
 
-        await itemService.CreateAsync(item);
-        // the Id field should now be populated
-        var id = item.Id;
+        try
+        {
+            await itemService.CreateAsync(item);
+            // the Id field should now be populated
+            var id = item.Id;
 
-        return Created($"/items/{id}", id);
+            return Created($"/items/{id}", id);
+        }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest(ex.Message);
+        }
 
     }
 
@@ -79,6 +86,6 @@ public class ItemController : ControllerBase
             return BadRequest("Unable to update the item");
         }
 
-        return Ok();
+        return NoContent();
     }
 }
