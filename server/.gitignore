@@ -1,6 +1,7 @@
 # files
 .DS_Store
 appsettings.*.json
+*.paw
 
 # folders
 bin/
