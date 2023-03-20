@@ -3,7 +3,6 @@ import Title from '../../components/Title';
 import QrCodeImage from '../../components/common/QrCodeImage';
 import { createReducer } from './reducer';
 import {
-  ACCESS_TOKEN,
   generate,
   init,
   updateAccessToken,
@@ -34,7 +33,7 @@ export default function Create() {
     });
   }, [getAccessTokenSilently]);
 
-  const handleQrCreate = async (e: React.FormEvent) => {
+  async function handleQrCreate(e: React.FormEvent) {
     e.preventDefault();
 
     if (!name) {
@@ -43,11 +42,11 @@ export default function Create() {
     }
 
     await generateQrCode(accessToken, name, desc);
-  };
+  }
 
-  const handleClearClick = () => {
+  async function handleClearClick() {
     dispatch(init);
-  };
+  }
 
   return (
     <div className="create-page">
