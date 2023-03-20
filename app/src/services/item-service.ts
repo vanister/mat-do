@@ -1,7 +1,7 @@
 import axios, { Method } from 'axios';
 import { Item } from './services-types';
 
-export interface ItemsApi {
+export interface ItemService {
   /**
    * Gets a list of Items belonging to the current authenticated user.
    */
@@ -20,11 +20,11 @@ export type ItemsApiOptions = {
   path?: string;
 };
 
-export function itemsApi({
+export function itemService({
   accessToken,
   path = '/items',
   baseUrl = process.env.REACT_APP_API_BASE_URL
-}: ItemsApiOptions): ItemsApi {
+}: ItemsApiOptions): ItemService {
   async function list(): Promise<Item[]> {
     const items = await sendRequest<Item[]>('/');
 

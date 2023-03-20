@@ -1,7 +1,7 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
 import axios from 'axios';
 
-import { ItemsApi, itemsApi } from './items-api';
+import { ItemService, itemService } from './item-service';
 
 jest.mock('axios', () => ({
   request: jest.fn()
@@ -13,7 +13,7 @@ describe('ItemService', () => {
   const accessToken = 'some.base64encoded.string';
 
   test('should create an instance', () => {
-    const api = itemsApi({ accessToken, baseUrl, path });
+    const api = itemService({ accessToken, baseUrl, path });
 
     expect(api).toBeDefined();
   });
@@ -26,10 +26,10 @@ describe('ItemService', () => {
       descirption: `Luke's green lightsaber`
     };
 
-    let api: ItemsApi;
+    let api: ItemService;
 
     beforeEach(() => {
-      api = itemsApi({ accessToken, baseUrl, path });
+      api = itemService({ accessToken, baseUrl, path });
     });
 
     test(`should POST with a required 'name' field`, async () => {

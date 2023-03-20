@@ -1,6 +1,6 @@
 import { CreateDispatch } from './create-types';
 import { generateDataUri } from '../../utilities/qrcode-generator';
-import { itemsApi } from '../../services/items-api';
+import { itemService } from '../../services/item-service';
 
 export const INIT = 'INIT';
 export const POSTING_REQUEST = 'POSTING_REQUEST';
@@ -40,12 +40,12 @@ export function generate(dispatch: CreateDispatch) {
     name: string,
     description?: string
   ) {
-    const api = itemsApi({ accessToken });
+    const service = itemService({ accessToken });
 
     try {
       dispatch({ type: POSTING_REQUEST });
 
-      const { id } = await api.create({ name, description });
+      const { id } = await service.create({ name, description });
 
       dispatch({ type: GENERATING_QR_CODE });
 
