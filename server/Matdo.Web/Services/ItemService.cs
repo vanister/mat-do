@@ -32,7 +32,7 @@ public class ItemService : ServiceBase, IItemService
 
     public async Task<Item?> GetAsync(string id)
     {
-        var item = await itemRepository.GetByIdAsync(id);
+        var item = await itemRepository.GetByIdAsync(UserId, id);
 
         return item;
     }
@@ -54,7 +54,12 @@ public class ItemService : ServiceBase, IItemService
 
     public async Task<bool> UpdateAsync(Item item)
     {
-        var existingItem = await itemRepository.GetByIdAsync(item.Id);
+        if (item.UserId != UserId)
+        {
+            throw new InvalidStateException("UserId does not match");
+        }
+
+        var existingItem = await itemRepository.GetByIdAsync(UserId, item.Id);
 
         if (existingItem == null)
         {

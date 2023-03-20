@@ -32,7 +32,6 @@ public class ItemController : ControllerBase
     [Route("{id}")]
     public async Task<IActionResult> Get([FromRoute] string id)
     {
-        // TODO - get user id from token
         var item = await itemService.GetAsync(id);
 
         if (item == null)
@@ -79,13 +78,20 @@ public class ItemController : ControllerBase
             return BadRequest("Id is missing");
         }
 
-        var updated = await itemService.UpdateAsync(item);
-
-        if (!updated)
+        try
         {
-            return BadRequest("Unable to update the item");
-        }
+            var updated = await itemService.UpdateAsync(item);
 
-        return NoContent();
+            if (!updated)
+            {
+                return BadRequest("Unable to update the item");
+            }
+
+            return NoContent();
+        }
+        catch (InvalidStateException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 }
