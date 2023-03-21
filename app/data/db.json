@@ -1,0 +1,61 @@
+{
+  "items": [
+    {
+      "id": 1,
+      "_id": {
+        "$oid": "63dc07d7080ea139afe02f8c"
+      },
+      "userId": "WHVY414vlQdbmPL94xcg7xjGbSg1KwTk",
+      "name": "Lightsable - gold",
+      "createdAt": {
+        "$date": "2023-02-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 2,
+      "_id": {
+        "$oid": "63dc07d7080ea139afe02f93"
+      },
+      "userId": "WHVY414vlQdbmPL94xcg7xjGbSg1KwTk",
+      "createdAt": {
+        "$date": "2023-02-01T00:00:00Z"
+      },
+      "name": "Lightsable - pink"
+    },
+    {
+      "id": 3,
+      "_id": {
+        "$oid": "63dc07d7080ea139afe02f8d"
+      },
+      "userId": "WHVY414vlQdbmPL94xcg7xjGbSg1KwTk",
+      "name": "Lightsable - blue",
+      "description": "Rey's lightsaber",
+      "createdAt": {
+        "$date": "2023-02-01T00:00:00Z"
+      }
+    },
+    {
+      "id": 4,
+      "_id": {
+        "$oid": "63dc07d7080ea139afe02f90"
+      },
+      "userId": "WHVY414vlQdbmPL94xcg7xjGbSg1KwTk",
+      "createdAt": {
+        "$date": "2023-02-01T00:00:00Z"
+      },
+      "name": "Lightsable - orange",
+      "description": "Darth Vader's light saber"
+    },
+    {
+      "id": 5,
+      "_id": {
+        "$oid": "63dc07d7080ea139afe02f92"
+      },
+      "userId": "WHVY414vlQdbmPL94xcg7xjGbSg1KwTk",
+      "name": "Lightsable - purple",
+      "createdAt": {
+        "$date": "2023-02-01T00:00:00Z"
+      }
+    }
+  ]
+}
