@@ -53,6 +53,19 @@ public class ApiContextTest
         var result = apiContext.GetUserId();
     }
 
+    [TestMethod]
+    public void GetUserId_Should_Get_Without_Prefix()
+    {
+        var userId = "useridwithoutprefix@clients";
+        var settings = new Auth0Settings { Prefix = "", Delimiter = "|" };
+        var accessor = CreateHttpContextAccessorMock(userId);
+        var apiContext = SetupApiContext(accessor.Object, settings);
+
+        var result = apiContext.GetUserId();
+
+        Assert.AreEqual(userId, result);
+    }
+
     private IApiContext SetupApiContext(
         IHttpContextAccessor? accessor = null,
         Auth0Settings? settings = null)
