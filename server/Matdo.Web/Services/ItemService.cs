@@ -62,7 +62,7 @@ public class ItemService : ServiceBase, IItemService
             throw new InvalidStateException("UserId does not match");
         }
 
-        var itemExists = await itemRepository.ItemExists(UserId, item.Id);
+        var itemExists = await itemRepository.ItemExists(UserId, item.Id!);
 
         if (!itemExists)
         {
