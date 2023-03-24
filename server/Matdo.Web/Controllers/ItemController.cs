@@ -2,11 +2,9 @@ using Matdo.Web.Models;
 using Matdo.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 
 namespace Matdo.Web.Controllers;
 
-// TODO - this controller should be protected
 [ApiController]
 [Authorize]
 [Route("items")]
@@ -43,23 +41,22 @@ public class ItemController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Item item)
+    public async Task<IActionResult> Create([FromBody] ItemDto item)
     {
         if (item == null)
         {
             return BadRequest("Item cannot be null");
         }
 
-        if (item.Id != ObjectId.Empty)
+        if (!string.IsNullOrEmpty(item.Id))
         {
             return BadRequest("Id cannot be set");
         }
 
         try
         {
-            await itemService.CreateAsync(item);
-            // the Id field should now be populated
-            var id = item.Id;
+            var newItem = await itemService.CreateAsync(item);
+            var id = newItem.Id;
 
             return Created($"/items/{id}", id);
         }
@@ -67,13 +64,12 @@ public class ItemController : ControllerBase
         {
             return BadRequest(ex.Message);
         }
-
     }
 
     [HttpPut]
-    public async Task<IActionResult> Update([FromBody] Item item)
+    public async Task<IActionResult> Update([FromBody] ItemDto item)
     {
-        if (item.Id == ObjectId.Empty)
+        if (string.IsNullOrEmpty(item.Id))
         {
             return BadRequest("Id is missing");
         }

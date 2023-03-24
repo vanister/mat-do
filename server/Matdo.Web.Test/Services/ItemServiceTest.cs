@@ -1,4 +1,5 @@
 using Matdo.Web.Models;
+using Matdo.Web.Models.Mongo;
 using Matdo.Web.Repositories;
 using Matdo.Web.Services;
 using Moq;
@@ -26,10 +27,10 @@ public class ItemServiceTest
         return service;
     }
 
-    private Mock<IItemRepository> CreateItemRepoMock()
+    private Mock<IItemRepository> CreateItemRepoMock(string newId = "new-item-id")
     {
         var mockItemRepo = new Mock<IItemRepository>();
-        mockItemRepo.Setup(x => x.CreateAsync(It.IsAny<Item>())).ReturnsAsync(new Item());
+        mockItemRepo.Setup(x => x.CreateAsync(It.IsAny<Item>())).ReturnsAsync(newId);
 
         return mockItemRepo;
     }

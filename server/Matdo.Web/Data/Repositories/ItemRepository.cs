@@ -1,4 +1,5 @@
 using Matdo.Web.Models;
+using Matdo.Web.Models.Mongo;
 using Matdo.Web.Settings;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -11,8 +12,9 @@ public interface IItemRepository
     Task<IEnumerable<Item>> ListByUserIdAsync(string userId);
     Task<Item?> GetByIdAsync(string userId, string id);
     Task<Item> GetByIdAsync(string userId, ObjectId id);
-    Task<Item> CreateAsync(Item item);
+    Task<string> CreateAsync(Item item);
     Task UpdateAsync(Item item);
+    Task<bool> ItemExists(string userId, string id);
 }
 
 public class ItemRepository : IItemRepository
@@ -56,11 +58,11 @@ public class ItemRepository : IItemRepository
         return item;
     }
 
-    public async Task<Item> CreateAsync(Item item)
+    public async Task<string> CreateAsync(Item item)
     {
         await ItemCollection.InsertOneAsync(item);
 
-        return item;
+        return item.Id.ToString();
     }
 
     public async Task UpdateAsync(Item item)
@@ -70,5 +72,13 @@ public class ItemRepository : IItemRepository
             & builder.Eq(i => i.UserId, item.UserId);
 
         await ItemCollection.ReplaceOneAsync(filter, item);
+    }
+
+    public async Task<bool> ItemExists(string userId, string id)
+    {
+        var exists = await QueryableItemCollection
+            .AnyAsync((item) => item.UserId == userId && item.Id.ToString() == id);
+
+        return exists;
     }
 }

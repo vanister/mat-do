@@ -6,10 +6,10 @@ namespace Matdo.Web.Services;
 
 public interface IItemService
 {
-    Task<IEnumerable<Item>> ListAsync();
-    Task<Item> CreateAsync(Item item);
-    Task<Item?> GetAsync(string id);
-    Task<bool> UpdateAsync(Item item);
+    Task<IEnumerable<ItemDto>> ListAsync();
+    Task<ItemDto> CreateAsync(ItemDto item);
+    Task<ItemDto?> GetAsync(string id);
+    Task<bool> UpdateAsync(ItemDto item);
 }
 
 public class ItemService : ServiceBase, IItemService
@@ -23,51 +23,54 @@ public class ItemService : ServiceBase, IItemService
         this.itemRepository = itemRepository;
     }
 
-    public async Task<IEnumerable<Item>> ListAsync()
+    public async Task<IEnumerable<ItemDto>> ListAsync()
     {
         var items = await itemRepository.ListByUserIdAsync(UserId);
 
-        return items ?? new Item[0];
+        return items.Select(i => i.ToItemDto()) ?? new ItemDto[0];
     }
 
-    public async Task<Item?> GetAsync(string id)
+    public async Task<ItemDto?> GetAsync(string id)
     {
         var item = await itemRepository.GetByIdAsync(UserId, id);
 
-        return item;
+        return item?.ToItemDto();
     }
 
-    public async Task<Item> CreateAsync(Item item)
+    public async Task<ItemDto> CreateAsync(ItemDto itemDto)
     {
-        if (item.UserId != UserId)
+        // todo - move userid verification into action filter 
+        if (itemDto.UserId != UserId)
         {
             throw new InvalidStateException("UserId does not match");
         }
 
-        var newItem = item.Clone();
+        var item = itemDto.ToItem();
+        item.CreatedAt = DateTime.Now;
 
-        newItem.CreatedAt = DateTime.Now;
-        newItem = await itemRepository.CreateAsync(item);
+        var id = await itemRepository.CreateAsync(item);
+        var newItem = item.ToItemDto();
 
         return newItem;
     }
 
-    public async Task<bool> UpdateAsync(Item item)
+    public async Task<bool> UpdateAsync(ItemDto item)
     {
+        // todo - move userid verification into action filter 
         if (item.UserId != UserId)
         {
             throw new InvalidStateException("UserId does not match");
         }
 
-        var existingItem = await itemRepository.GetByIdAsync(UserId, item.Id);
+        var itemExists = await itemRepository.ItemExists(UserId, item.Id);
 
-        if (existingItem == null)
+        if (!itemExists)
         {
             return false;
         }
 
         // replace with whatever was sent in
-        await itemRepository.UpdateAsync(item);
+        await itemRepository.UpdateAsync(item.ToItem());
 
         return true;
     }

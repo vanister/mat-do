@@ -14,6 +14,8 @@ public class Auth0ApiContext : IApiContext
     private readonly IHttpContextAccessor httpContextAccessor;
     private readonly Auth0Settings settings;
 
+    private string userId = string.Empty;
+
     public Auth0ApiContext(IHttpContextAccessor httpContextAccessor, Auth0Settings settings)
     {
         this.httpContextAccessor = httpContextAccessor;
@@ -26,6 +28,12 @@ public class Auth0ApiContext : IApiContext
 
     public string GetUserId()
     {
+        // don't parse multiple times if we don't have to
+        if (!string.IsNullOrEmpty(userId))
+        {
+            return userId;
+        }
+
         if (Subject == null)
         {
             throw new InvalidStateException("Subject claim is missing");
@@ -45,6 +53,9 @@ public class Auth0ApiContext : IApiContext
             throw new InvalidUserIdException();
         }
 
-        return hasPrefix ? parts[1] : parts[0];
+        // store the parsed user id 
+        userId = hasPrefix ? parts[1] : parts[0];
+
+        return userId;
     }
 }
