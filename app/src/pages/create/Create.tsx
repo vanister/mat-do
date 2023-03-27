@@ -1,19 +1,18 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import Title from '../../components/Title';
 import QrCodeImage from '../../components/common/QrCodeImage';
 import { createReducer } from './reducer';
 import {
   generate,
   init,
-  updateAccessToken,
   updateDescription,
   updateName,
   validationFailed
 } from './actions';
 import { CreateState } from './create-types';
-import { useAuth0 } from '@auth0/auth0-react';
 
 import './Create.scss';
+import { useItemService } from '../../hooks/useItemService';
 
 const initialState: CreateState = {
   created: false,
@@ -22,16 +21,10 @@ const initialState: CreateState = {
 };
 
 export default function Create() {
-  const { getAccessTokenSilently } = useAuth0();
   const [state, dispatch] = useReducer(createReducer, initialState);
-  const { error, name, description: desc, created: qrCreated, dataUri, accessToken } = state;
-  const generateQrCode = generate(dispatch);
-
-  useEffect(() => {
-    getAccessTokenSilently().then(token => {
-      dispatch(updateAccessToken(token));
-    });
-  }, [getAccessTokenSilently]);
+  const { error, name, description: desc, created: qrCreated, dataUri } = state;
+  const itemService = useItemService();
+  const generateQrCode = generate(dispatch, itemService);
 
   async function handleQrCreate(e: React.FormEvent) {
     e.preventDefault();
@@ -41,7 +34,7 @@ export default function Create() {
       return;
     }
 
-    await generateQrCode(accessToken, name, desc);
+    await generateQrCode(name, desc);
   }
 
   async function handleClearClick() {

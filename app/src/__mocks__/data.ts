@@ -1,4 +1,4 @@
-import { Item } from '../services/services-types';
+import { Item } from '../models/item';
 
 export const items: Item[] = [
   { id: 'light-saber-guid-0', name: 'Lightsable - gold' },

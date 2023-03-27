@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { AppSettingsProvider } from './AppSettingsContext';
 import App from './App';
 
 import './index.scss';
@@ -22,7 +23,9 @@ root.render(
           redirect_uri: process.env.REACT_APP_AUTH_CALLBACK_URI
         }}
       >
-        <App />
+        <AppSettingsProvider>
+          <App />
+        </AppSettingsProvider>
       </Auth0Provider>
     </BrowserRouter>
   </React.StrictMode>

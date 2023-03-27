@@ -1,6 +1,6 @@
 import { CreateDispatch } from './create-types';
 import { generateDataUri } from '../../utilities/qrcode-generator';
-import { itemService } from '../../services/item-service';
+import { ItemService } from '../../hooks/useItemService';
 
 export const INIT = 'INIT';
 export const POSTING_REQUEST = 'POSTING_REQUEST';
@@ -10,7 +10,6 @@ export const FAILED = 'FAILED';
 export const UPDATE_NAME = 'UPDATE_NAME';
 export const UPDATE_DESC = 'UPDATE_DESC';
 export const VALIDATION_ERROR = 'VALIDATION_ERROR';
-export const ACCESS_TOKEN = 'ACCESS_TOKEN';
 
 export const init = { type: INIT };
 
@@ -29,33 +28,21 @@ export const updateDescription = (description: string) => ({
   payload: { description }
 });
 
-export const updateAccessToken = (accessToken: string) => ({
-  type: ACCESS_TOKEN,
-  payload: { accessToken }
-});
-
-export function generate(dispatch: CreateDispatch) {
-  return async function (
-    accessToken: string,
-    name: string,
-    description?: string
-  ) {
-    const path = '/items';
-    const baseUrl = process.env.REACT_APP_API_BASE_URL;
-    const service = itemService({ accessToken });
-
+export function generate(dispatch: CreateDispatch, service: ItemService) {
+  return async function (name: string, description?: string) {
     try {
       dispatch({ type: POSTING_REQUEST });
 
-      const itemId = await service.create({ name, description });
+      const item = await service.create({ name, description });
+      const itemUrl = service.convertToUrl(item);
 
       dispatch({ type: GENERATING_QR_CODE });
 
-      const dataUri = await generateDataUri(`${baseUrl}${path}/${itemId}`);
+      const dataUri = await generateDataUri(itemUrl);
 
       dispatch({
         type: GENERATED_QR_CODE,
-        payload: { dataUri, id: itemId }
+        payload: { dataUri, id: item.id }
       });
     } catch (error) {
       dispatch({
