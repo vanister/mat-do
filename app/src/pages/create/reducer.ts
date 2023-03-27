@@ -1,6 +1,5 @@
 import { CreateAction, CreateState } from './create-types';
 import {
-  ACCESS_TOKEN,
   FAILED,
   GENERATED_QR_CODE,
   GENERATING_QR_CODE,
@@ -48,9 +47,6 @@ export function createReducer(
 
     case UPDATE_NAME:
       return { ...state, name: payload.name };
-
-    case ACCESS_TOKEN:
-      return { ...state, accessToken: payload.accessToken };
 
     case VALIDATION_ERROR:
     case FAILED:
