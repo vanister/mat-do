@@ -40,20 +40,22 @@ export function generate(dispatch: CreateDispatch) {
     name: string,
     description?: string
   ) {
+    const path = '/items';
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
     const service = itemService({ accessToken });
 
     try {
       dispatch({ type: POSTING_REQUEST });
 
-      const { id } = await service.create({ name, description });
+      const itemId = await service.create({ name, description });
 
       dispatch({ type: GENERATING_QR_CODE });
 
-      const dataUri = await generateDataUri(id);
+      const dataUri = await generateDataUri(`${baseUrl}${path}/${itemId}`);
 
       dispatch({
         type: GENERATED_QR_CODE,
-        payload: { dataUri, id }
+        payload: { dataUri, id: itemId }
       });
     } catch (error) {
       dispatch({

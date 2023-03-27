@@ -1,4 +1,4 @@
-import axios, { Method } from 'axios';
+import axios, { AxiosResponse, Method } from 'axios';
 import { Item } from './services-types';
 
 export interface ItemService {
@@ -11,7 +11,7 @@ export interface ItemService {
    *
    * @param item The item to create on the server.
    */
-  create(item: Item): Promise<Item>;
+  create(item: Item): Promise<string>;
 }
 
 export type ItemsApiOptions = {
@@ -26,20 +26,22 @@ export function itemService({
   baseUrl = process.env.REACT_APP_API_BASE_URL
 }: ItemsApiOptions): ItemService {
   async function list(): Promise<Item[]> {
-    const items = await sendRequest<Item[]>('/');
+    const response = await sendRequest<Item[]>('/');
 
-    return items;
+    return response.data;
   }
 
-  async function create(item: Item): Promise<Item> {
+  async function create(item: Item): Promise<string> {
     try {
-      const id = await sendRequest<string>('/', 'POST', item);
+      const response = await sendRequest<string>('/', 'POST', item);
+      // create the a url string with the path the the new item
+      const id = response.data;
 
-      // fill in the `id` and return a new item with it
-      return { ...item, id };
+      return id;
     } catch (error) {
       console.error(error);
-      // throw error;
+
+      throw error;
     }
   }
 
@@ -49,7 +51,7 @@ export function itemService({
     method: Method = 'GET',
     data?: any,
     additionalHeaders: { [name: string]: string } = {}
-  ): Promise<T> {
+  ): Promise<AxiosResponse<T>> {
     const headers = {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
@@ -66,10 +68,11 @@ export function itemService({
         headers
       });
 
-      return response?.data;
+      return response;
     } catch (error) {
       console.error(error);
-      // throw error;
+
+      throw error;
     }
   }
 
