@@ -39,6 +39,11 @@ public class ItemService : ServiceBase, IItemService
 
     public async Task<ItemDto> CreateAsync(ItemDto itemDto)
     {
+        if (itemDto.UserId != UserId)
+        {
+            throw new InvalidStateException("UserId does not match");
+        }
+
         var item = itemDto.ToItem();
         item.UserId = UserId;
         item.CreatedAt = DateTime.Now;
