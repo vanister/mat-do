@@ -39,16 +39,11 @@ public class ItemService : ServiceBase, IItemService
 
     public async Task<ItemDto> CreateAsync(ItemDto itemDto)
     {
-        // todo - move userid verification into action filter 
-        if (itemDto.UserId != UserId)
-        {
-            throw new InvalidStateException("UserId does not match");
-        }
-
         var item = itemDto.ToItem();
+        item.UserId = UserId;
         item.CreatedAt = DateTime.Now;
 
-        var id = await itemRepository.CreateAsync(item);
+        await itemRepository.CreateAsync(item);
         var newItem = item.ToItemDto();
 
         return newItem;
