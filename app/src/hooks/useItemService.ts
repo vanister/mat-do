@@ -8,6 +8,20 @@ export interface ItemService {
   isReady: boolean;
 
   /**
+   * Gets and item by its id.
+   *
+   * @param id The Id of the item to get.
+   */
+  get(id: string): Promise<Item>;
+
+  /**
+   * Updates the given item.
+   *
+   * @param item The item to update.
+   */
+  update(item: Item): Promise<void>;
+
+  /**
    * Gets a list of Items belonging to the current authenticated user.
    */
   list(): Promise<Item[]>;
@@ -41,23 +55,31 @@ export function useItemService(): ItemService {
   }, [getAccessTokenSilently]);
 
   async function list(): Promise<Item[]> {
-    const response = await sendRequest<Item[]>('/');
+    const { data } = await sendRequest<Item[]>('/');
 
-    return response.data;
+    return data;
   }
 
   async function create(item: Item): Promise<Item> {
-    try {
-      const itemWithUserId = { ...item, userId: user.sub };
-      const response = await sendRequest<string>('/', 'POST', itemWithUserId);
-      const id = response.data;
+    const itemWithUserId = { ...item, userId: user.sub };
+    const { data } = await sendRequest<string>('/', 'POST', itemWithUserId);
+    const id = data;
 
-      return { ...item, id };
-    } catch (error) {
-      console.error(error);
+    return { ...item, id };
+  }
 
-      throw error;
+  async function get(id: string): Promise<Item> {
+    const { data } = await sendRequest<Item>(`/${id}`);
+
+    return data;
+  }
+
+  async function update(item: Item): Promise<void> {
+    if (!item.id) {
+      throw new Error('Id is required');
     }
+
+    await sendRequest<void>('/', 'PUT', item);
   }
 
   async function sendRequest<T>(
@@ -100,6 +122,8 @@ export function useItemService(): ItemService {
 
   return {
     isReady: !isLoading,
+    get,
+    update,
     list,
     create,
     convertToUrl
