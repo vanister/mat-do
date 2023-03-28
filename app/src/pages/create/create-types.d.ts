@@ -6,7 +6,6 @@ export type CreateState = {
   dataUri?: string;
   error?: string;
   isLoading?: boolean;
-  accessToken?: string;
 };
 
 export type CreateAction = {
