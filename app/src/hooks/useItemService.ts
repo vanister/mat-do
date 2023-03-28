@@ -5,8 +5,6 @@ import { useAppSettings } from '../AppSettingsContext';
 import { Item } from '../models/item';
 
 export interface ItemService {
-  isReady: boolean;
-
   /**
    * Gets and item by its id.
    *
@@ -45,7 +43,7 @@ export interface ItemService {
 export function useItemService(): ItemService {
   const path = '/items';
   const { baseUrl } = useAppSettings();
-  const { isLoading, user, getAccessTokenSilently } = useAuth0();
+  const { user, getAccessTokenSilently } = useAuth0();
   const [accessToken, setAccessToken] = useState<string>();
 
   useEffect(() => {
@@ -121,7 +119,6 @@ export function useItemService(): ItemService {
   }
 
   return {
-    isReady: !isLoading,
     get,
     update,
     list,
