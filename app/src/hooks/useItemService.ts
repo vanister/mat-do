@@ -5,6 +5,8 @@ import { useAppSettings } from '../AppSettingsContext';
 import { Item } from '../models/item';
 
 export interface ItemService {
+  path: string;
+
   /**
    * Gets and item by its id.
    *
@@ -30,14 +32,6 @@ export interface ItemService {
    * @param item The item to create on the server.
    */
   create(item: Item): Promise<Item>;
-
-  /**
-   * Converts a given Item to an absolute URL string.
-   * This is useful when generating QR code data.
-   *
-   * @param item The item to convert to a url.
-   */
-  convertToUrl(item: Item): string;
 }
 
 export function useItemService(): ItemService {
@@ -110,19 +104,11 @@ export function useItemService(): ItemService {
     }
   }
 
-  function convertToUrl(item: Item): string {
-    if (!item) {
-      throw new Error('item is null');
-    }
-
-    return `${window.location.origin}${path}/${item.id}`;
-  }
-
   return {
+    path,
     get,
     update,
     list,
-    create,
-    convertToUrl
+    create
   };
 }
