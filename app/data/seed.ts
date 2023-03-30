@@ -22,6 +22,6 @@ const items = Array.from(Array(numberOfItems)).map((_, idx) => {
 
 console.log('writing items to:', dbJsonPath);
 
-writeFileSync(dbJsonPath, JSON.stringify(items, null, 2));
+writeFileSync(dbJsonPath, JSON.stringify({ items }, null, 2));
 
 console.log('done!');
