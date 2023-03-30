@@ -16,7 +16,7 @@ const items = Array.from(Array(numberOfItems)).map((_, idx) => {
     userId,
     name: `Item ${id}`,
     description: `Item ${id} description`,
-    createdAt: new Date().toUTCString()
+    createdAt: new Date().toISOString()
   };
 });
 
