@@ -4,9 +4,12 @@
   "private": true,
   "scripts": {
     "start": "react-scripts start",
+    "start:local": "concurrently npm:json-server npm:start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "json-server": "json-server --watch ./data/db.json",
+    "seed": "ts-node --project ./data/tsconfig.json ./data/seed.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -47,7 +50,9 @@
     "@types/qrcode": "^1.5.0",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
+    "concurrently": "^8.0.1",
     "json-server": "^0.17.2",
-    "react-scripts": "5.0.1"
+    "react-scripts": "5.0.1",
+    "ts-node": "^10.9.1"
   }
 }
