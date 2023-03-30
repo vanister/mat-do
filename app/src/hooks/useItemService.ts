@@ -1,8 +1,8 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import axios, { AxiosResponse, Method } from 'axios';
 import { useEffect, useState } from 'react';
-import { useAppSettings } from '../AppSettingsContext';
 import { Item } from '../models/item';
+import { useAppSettings } from './useAppSettings';
 
 export interface ItemService {
   path: string;

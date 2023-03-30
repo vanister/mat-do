@@ -1,4 +1,4 @@
-import React, { createContext, ReactElement, useContext } from 'react';
+import React, { createContext, ReactElement } from 'react';
 
 export type AppSettingsProviderProps = {
   children: ReactElement
@@ -8,7 +8,7 @@ export type AppSettings = {
   baseUrl: string;
 }
 
-const AppSettingsContext = createContext<AppSettings>({
+export const AppSettingsContext = createContext<AppSettings>({
   baseUrl: null
 });
 
@@ -20,14 +20,4 @@ export function AppSettingsProvider({ children }: AppSettingsProviderProps) {
       {children}
     </AppSettingsContext.Provider>
   );
-}
-
-export function useAppSettings(): AppSettings {
-  const settings = useContext(AppSettingsContext);
-
-  if (!settings) {
-    throw new Error('AppSettings is null');
-  }
-
-  return settings;
 }
