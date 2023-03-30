@@ -1,7 +1,7 @@
 import { CreateDispatch } from './create-types';
 import { generateDataUri } from '../../utilities/qrcode-generator';
 import { ItemService } from '../../hooks/useItemService';
-import { convertToItemUrl } from '../../utilities/item-util';
+import { toScannableItemUrl } from '../../utilities/item-util';
 
 export const INIT = 'INIT';
 export const POSTING_REQUEST = 'POSTING_REQUEST';
@@ -35,11 +35,11 @@ export function generate(dispatch: CreateDispatch, service: ItemService) {
       dispatch({ type: POSTING_REQUEST });
 
       const item = await service.create({ name, description });
-      const itemUrl = convertToItemUrl(item);
+      const qrData = toScannableItemUrl(item);
 
       dispatch({ type: GENERATING_QR_CODE });
 
-      const dataUri = await generateDataUri(itemUrl);
+      const dataUri = await generateDataUri(qrData);
 
       dispatch({
         type: GENERATED_QR_CODE,

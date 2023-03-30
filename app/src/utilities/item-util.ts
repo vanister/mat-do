@@ -7,7 +7,7 @@ import { toBase64 } from './base64-util';
  *
  * @param item The item to convert to a url.
  */
-export function convertToItemUrl(item: Item, path = '/items'): string {
+export function toScannableItemUrl(item: Item, path = '/scan'): string {
   if (!item) {
     throw new Error('item is null');
   }
