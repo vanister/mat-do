@@ -1,7 +1,8 @@
 {
   "recommendations": [
-    "dsznajder.es7-react-js-snippets",
     "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode"
+    "esbenp.prettier-vscode",
+    "mongodb.mongodb-vscode",
+    "dsznajder.es7-react-js-snippets"
   ]
 }
