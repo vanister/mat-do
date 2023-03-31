@@ -29,6 +29,13 @@ export const updateDescription = (description: string) => ({
   payload: { description }
 });
 
+/**
+ * Creates a new Item record in the db and then generates a
+ * QR code with an embedded url to the item for scanning.
+ *
+ * @param dispatch The action dispatcher.
+ * @param service The ItemService to use.
+ */
 export function generate(dispatch: CreateDispatch, service: ItemService) {
   return async function (name: string, description?: string) {
     try {
