@@ -14,7 +14,7 @@ export default function App() {
     <Routes>
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/scan" element={<Scan />} />
+        <Route path="/scan/:id" element={<Scan />} />
       </Route>
       <Route
         element={
