@@ -1,8 +1,7 @@
-import { useAuth0 } from '@auth0/auth0-react';
 import axios, { AxiosResponse, Method } from 'axios';
-import { useEffect, useState } from 'react';
 import { Item } from '../../models/item';
 import { useAppSettings } from '../../hooks/useAppSettings';
+import { useUserAccessToken } from '../../hooks/useUserAccessToken';
 
 export interface ItemService {
   path: string;
@@ -37,14 +36,7 @@ export interface ItemService {
 export function useItemService(): ItemService {
   const path = '/items';
   const { baseUrl } = useAppSettings();
-  const { user, getAccessTokenSilently } = useAuth0();
-  const [accessToken, setAccessToken] = useState<string>();
-
-  useEffect(() => {
-    getAccessTokenSilently().then((token) => {
-      setAccessToken(token);
-    });
-  }, [getAccessTokenSilently]);
+  const { user, accessToken } = useUserAccessToken();
 
   async function list(): Promise<Item[]> {
     const { data } = await sendRequest<Item[]>('/');

@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Item } from '../models/item';
 import { getScanItemInfo } from '../utilities/item-util';
 
-export default function useScannedInfo() {
+export function useScannedInfo() {
   const { hash } = useLocation();
 
   const item = useMemo<Partial<Item>>(() => {
