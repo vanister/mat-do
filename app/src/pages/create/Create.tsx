@@ -12,7 +12,7 @@ import {
 import { CreateState } from './create-types';
 
 import './Create.scss';
-import { useItemService } from '../../hooks/useItemService';
+import { useItemService } from '../../services/hooks/useItemService';
 
 const initialState: CreateState = {
   created: false,

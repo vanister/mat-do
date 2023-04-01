@@ -12,7 +12,7 @@ server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
 server.use((req, res, next) => {
-  if (req.method === 'POST') {
+  if (req.path.startsWith('/items') && req.method === 'POST') {
     req.body.createdAt = new Date().toISOString();
   }
 
