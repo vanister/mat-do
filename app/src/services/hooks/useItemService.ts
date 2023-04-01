@@ -1,11 +1,8 @@
-import axios, { AxiosResponse, Method } from 'axios';
 import { Item } from '../../models/item';
-import { useAppSettings } from '../../hooks/useAppSettings';
-import { useUserAccessToken } from '../../hooks/useUserAccessToken';
+import { sendRequest } from '../../utilities/api';
+import { useServiceDeps } from '../useServiceDeps';
 
 export interface ItemService {
-  path: string;
-
   /**
    * Gets and item by its id.
    *
@@ -34,26 +31,35 @@ export interface ItemService {
 }
 
 export function useItemService(): ItemService {
-  const path = '/items';
-  const { baseUrl } = useAppSettings();
-  const { user, accessToken } = useUserAccessToken();
+  const { user, accessToken, baseUrl } = useServiceDeps();
+  const baseOptions = { accessToken, baseUrl };
 
   async function list(): Promise<Item[]> {
-    const { data } = await sendRequest<Item[]>('/');
+    const { data } = await sendRequest<Item[]>({
+      url: '/items',
+      ...baseOptions
+    });
 
     return data;
   }
 
   async function create(item: Item): Promise<Item> {
     const itemWithUserId = { ...item, userId: user.sub };
-    const { data } = await sendRequest<string>('/', 'POST', itemWithUserId);
-    const id = data;
+    const { data: id } = await sendRequest<string>({
+      url: '/items',
+      method: 'POST',
+      data: itemWithUserId,
+      ...baseOptions
+    });
 
     return { ...item, id };
   }
 
   async function get(id: string): Promise<Item> {
-    const { data } = await sendRequest<Item>(`/${id}`);
+    const { data } = await sendRequest<Item>({
+      url: `/items/${id}`,
+      ...baseOptions
+    });
 
     return data;
   }
@@ -63,41 +69,15 @@ export function useItemService(): ItemService {
       throw new Error('Id is required');
     }
 
-    await sendRequest<void>('/', 'PUT', item);
-  }
-
-  async function sendRequest<T>(
-    url: string,
-    method: Method = 'GET',
-    data?: any,
-    additionalHeaders: { [name: string]: string } = {}
-  ): Promise<AxiosResponse<T>> {
-    const headers = {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-      Accepts: 'application/json',
-      ...additionalHeaders
-    };
-
-    try {
-      const response = await axios.request<T>({
-        method,
-        baseURL: `${baseUrl}${path}`,
-        url,
-        data,
-        headers
-      });
-
-      return response;
-    } catch (error) {
-      console.error(error);
-
-      throw error;
-    }
+    await sendRequest<void>({
+      url: '/items',
+      method: 'PUT',
+      data: item,
+      ...baseOptions
+    });
   }
 
   return {
-    path,
     get,
     update,
     list,
