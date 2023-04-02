@@ -1,6 +1,6 @@
 import { Item } from '../../models/item';
 import { sendRequest } from '../../utilities/api';
-import { useServiceDeps } from '../useServiceDeps';
+import { useServiceDeps } from '../useServiceDependencies';
 
 export interface ItemService {
   /**
