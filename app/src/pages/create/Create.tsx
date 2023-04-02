@@ -49,32 +49,33 @@ export default function Create() {
         <form className="qr-code-form" onSubmit={handleQrCreate}>
           {error && <div className="form-errors">{error}</div>}
           <div className="form-field">
-            <label htmlFor="qrData">Name:</label>
+            <label className="field-title" htmlFor="itemName">Name:</label>
             <input
-              id="qrData"
+              id="itemName"
               placeholder="Qr Code text..."
               type="text"
               value={name}
               maxLength={60}
+              required
               onChange={(e) => dispatch(updateName(e.target.value))}
             />
           </div>
           <div className="form-field">
-            <label htmlFor="qrDesc">Description:</label>
+            <label className="field-title" htmlFor="itemDesc">Description:</label>
             <input
-              id="qrDesc"
+              id="itemDesc"
               placeholder="Description of the item..."
               type="text"
               value={desc}
-              maxLength={140}
+              maxLength={200}
               onChange={(e) => dispatch(updateDescription(e.target.value))}
             />
           </div>
-          <div className="form-buttons">
+          <div className="actions">
             <button id="createButton" type="submit">
               Create
             </button>
-            <button type="button" id="clearButton" onClick={handleClearClick}>
+            <button id="clearButton" type="button" onClick={handleClearClick}>
               Clear
             </button>
           </div>
