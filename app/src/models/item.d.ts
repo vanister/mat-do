@@ -4,13 +4,13 @@ export type Item = {
   userId?: string;
   description?: string;
   scanned?: number;
-  scans?: Scan[];
+  scans?: ScannedItem[];
 };
 
-export type Scan = {
+export type ScannedItem = {
   scannedAt: string;
   comments: string;
-  coordinates: ItemCoordinates;
+  coordinates?: ItemCoordinates;
 };
 
 export type ItemCoordinates = {
