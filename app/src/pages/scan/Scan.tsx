@@ -15,7 +15,6 @@ export default function Scan() {
   const { id: itemId } = useParams<{ id: string }>();
   const item = useScannedInfo();
   const scanService = useScanService();
-  const formValid = !!comments || (useCurrentLocation && !!itemCoordinates);
 
   useEffect(() => {
     if (useCurrentLocation) {
@@ -88,6 +87,7 @@ export default function Scan() {
             <textarea
               placeholder="Brief description of where you found it..."
               id="commentField"
+              required
               rows={4}
               maxLength={200}
               value={comments}
@@ -96,7 +96,7 @@ export default function Scan() {
           </div>
         </div>
         <div className="actions">
-          <button type="submit" disabled={!formValid}>Submit</button>
+          <button type="submit" disabled={!comments}>Submit</button>
         </div>
       </form>
     </div>
