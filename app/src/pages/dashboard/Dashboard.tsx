@@ -3,7 +3,8 @@ import { Item } from '../../models/item';
 import { useItemService } from '../../hooks/services/useItemService';
 
 import './Dashboard.scss';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
+import Title from '../../components/Title';
 
 export type FilterParams = {
   page: string,
@@ -24,16 +25,21 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-page">
-      {items?.map(item => (
-        <div key={item.id} className="list-item">
-          <p>
-            {item.name}
-          </p>
-          <p>
-            {item.description}
-          </p>
+      <Title>Dashboard</Title>
+      <div className="list-container">
+        <div className="item-list">
+          {items?.map(({ id, name, description }) => (
+            <div key={id} className="item">
+              <p className='item-name'>
+                <NavLink to={`/item/${id}`}>{name}</NavLink>
+              </p>
+              <p className='item-desc'>
+                {description}
+              </p>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   )
 }

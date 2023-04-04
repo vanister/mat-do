@@ -1,0 +1,30 @@
+.dashboard-page {
+  .list-container {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    max-width: 400px;
+    min-width: 200px;
+
+    .item-list {
+      display: flex;
+      flex-direction: column;
+
+      & div.item:first-child {
+        border-top: solid #000 0.5px;
+      }
+
+      .item {
+        border-bottom: solid #000 0.5px;
+
+        .item-name {
+          margin: 0.5rem 0;
+        }
+
+        .item-desc {
+          margin: 0.5rem 0;
+          font-size: smaller;
+        }
+      }
+    }
+  }
+}
