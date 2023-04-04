@@ -1,8 +1,6 @@
 import axios, { AxiosResponse, Method } from 'axios';
 
 export type RequestOptions = {
-  url: string;
-  accessToken: string;
   data?: any;
   method?: Method;
   baseUrl?: string;
@@ -11,10 +9,11 @@ export type RequestOptions = {
 };
 
 export async function sendRequest<T>(
-  options: RequestOptions
+  url: string,
+  accessToken: string,
+  options: RequestOptions = {}
 ): Promise<AxiosResponse<T>> {
-  const { accessToken, data, url, additionalHeaders, method, baseUrl, params } =
-    options;
+  const { data, additionalHeaders, method, baseUrl, params } = options;
 
   const headers = {
     Authorization: `Bearer ${accessToken}`,

@@ -42,31 +42,23 @@ export function useItemService(): ItemService {
   const { user, accessToken } = useServiceDeps();
 
   async function list(filters: PagingFilter): Promise<Item[]> {
-    const { data } = await sendRequest<Item[]>({
-      url: '/items',
-      accessToken
-    });
+    const { data } = await sendRequest<Item[]>('/items', accessToken);
 
     return data;
   }
 
   async function create(item: Partial<Item>): Promise<Item> {
     const itemWithUserId = { ...item, userId: user.sub };
-    const { data: id } = await sendRequest<string>({
-      url: '/items',
+    const { data: id } = await sendRequest<string>('/items', accessToken, {
       method: 'POST',
-      data: itemWithUserId,
-      accessToken
+      data: itemWithUserId
     });
 
     return { ...itemWithUserId, id } as Item;
   }
 
   async function get(id: string): Promise<Item> {
-    const { data } = await sendRequest<Item>({
-      url: `/items/${id}`,
-      accessToken
-    });
+    const { data } = await sendRequest<Item>(`/items/${id}`, accessToken);
 
     return data;
   }
@@ -76,11 +68,9 @@ export function useItemService(): ItemService {
       throw new Error('Id is required');
     }
 
-    await sendRequest<void>({
-      url: '/items',
+    await sendRequest<void>('/items', accessToken, {
       method: 'PUT',
-      data: item,
-      accessToken
+      data: item
     });
   }
 

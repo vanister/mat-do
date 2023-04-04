@@ -11,18 +11,15 @@ export function useScanService(): ScanService {
   const { accessToken } = useServiceDeps();
 
   async function sendScan(scan: ScannedItem): Promise<void> {
-    await sendRequest<void>({
-      url: '/scan',
+    await sendRequest<void>('/scan', accessToken, {
       method: 'POST',
-      data: scan,
-      accessToken
+      data: scan
     });
   }
 
   async function getByItemId(itemId: string): Promise<ScannedItem[]> {
-    const { data } = await sendRequest<ScannedItem[]>({
-      url: '/scan',
-      accessToken
+    const { data } = await sendRequest<ScannedItem[]>('/scan', accessToken, {
+      params: { itemId }
     });
 
     return data;

@@ -3,7 +3,7 @@ import { ScanService, useScanService } from './useScanService';
 import { useServiceDeps } from './useServiceDependencies';
 import { sendRequest } from '../../utilities/api';
 
-jest.mock('../useServiceDependencies', () => ({
+jest.mock('./useServiceDependencies', () => ({
   useServiceDeps: jest.fn()
 }));
 

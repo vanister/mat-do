@@ -9,6 +9,7 @@ jest.mock('axios', () => ({
 describe('API Utility', () => {
   const mockAxiosRequest = axios.request as jest.Mock;
   const accessToken = 'base64encodedaccesstoken';
+  const baseUrl = 'http://localhost:3000/unittest';
 
   beforeEach(() => {
     mockAxiosRequest.mockClear();
@@ -21,10 +22,7 @@ describe('API Utility', () => {
       Accepts: 'application/json'
     };
 
-    await sendRequest({
-      url: '/unittest',
-      accessToken
-    });
+    await sendRequest('/unittest', accessToken);
 
     expect(mockAxiosRequest).toHaveBeenCalledWith(
       expect.objectContaining({ headers: expectedHeaders })
@@ -37,10 +35,38 @@ describe('API Utility', () => {
       itemId: 'item-guid-string'
     };
 
-    await sendRequest({ url: '/unittest/params', accessToken, params });
+    await sendRequest('/unittest/params', accessToken, { params });
 
     expect(mockAxiosRequest).toHaveBeenCalledWith(
       expect.objectContaining({ params })
     );
+  });
+
+  describe('WHEN sending requests with default values', () => {
+    const originalEnvs = { ...process.env };
+
+    beforeEach(() => {
+      process.env = { REACT_APP_API_BASE_URL: `${baseUrl}/defaults` } as any;
+    });
+
+    afterEach(() => {
+      process.env = originalEnvs;
+    });
+
+    test('should default to GET method', async () => {
+      await sendRequest('/default/method', accessToken);
+
+      expect(mockAxiosRequest).toHaveBeenCalledWith(
+        expect.objectContaining({ method: 'GET' })
+      );
+    });
+
+    test('should default to process.env.REACT_APP_API_BASE_URL for baseUrl', async () => {
+      await sendRequest('/unittest/env', accessToken);
+
+      expect(mockAxiosRequest).toHaveBeenCalledWith(
+        expect.objectContaining({ baseURL: `${baseUrl}/defaults` })
+      );
+    });
   });
 });
