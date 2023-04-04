@@ -1,7 +1,7 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
 import { ScanService, useScanService } from './useScanService';
 import { useServiceDeps } from './useServiceDependencies';
-import { sendRequest } from '../../utilities/api';
+import { sendRequest } from '../utilities/api';
 
 jest.mock('./useServiceDependencies', () => ({
   useServiceDeps: jest.fn()

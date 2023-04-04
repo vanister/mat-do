@@ -1,4 +1,4 @@
-import { useUserAccessToken } from '../../hooks/useUserAccessToken';
+import { useUserAccessToken } from '../hooks/useUserAccessToken';
 
 /** A hook that returns common dependencies between services. */
 export function useServiceDeps() {

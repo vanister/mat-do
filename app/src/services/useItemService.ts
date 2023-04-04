@@ -1,5 +1,5 @@
-import { Item } from '../../models/item';
-import { sendRequest } from '../../utilities/api';
+import { Item } from '../models/item';
+import { sendRequest } from '../utilities/api';
 import { useServiceDeps } from './useServiceDependencies';
 
 export type PagingFilter = {
