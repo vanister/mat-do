@@ -1,5 +1,5 @@
-import { ScannedItem } from '../models/scan';
-import { sendRequest } from '../utilities/api';
+import { ScannedItem } from '../../models/scan';
+import { sendRequest } from '../../utilities/api';
 import { useServiceDeps } from './useServiceDependencies';
 
 export interface ScanService {

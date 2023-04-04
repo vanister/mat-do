@@ -4,7 +4,7 @@ import Title from '../../components/Title';
 import { useScannedInfo } from '../../hooks/useScannedInfo';
 import { ItemCoordinates, ScannedItem } from '../../models/scan';
 import { getCurrentLocation } from '../../utilities/geolocation-util';
-import { useScanService } from '../../services/hooks/useScanService';
+import { useScanService } from '../../hooks/services/hooks/useScanService';
 
 import './Scan.scss';
 
