@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import { useScannedInfo } from '../../hooks/useScannedInfo';
 import { ItemCoordinates, ScannedItem } from '../../models/scan';
@@ -13,6 +13,7 @@ export default function Scan() {
   const [comments, setComments] = useState<string>();
   const [itemCoordinates, setItemCoordinates] = useState<ItemCoordinates>()
   const { id: itemId } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const item = useScannedInfo();
   const scanService = useScanService();
 
@@ -42,6 +43,8 @@ export default function Scan() {
     };
 
     await scanService.scan(scan);
+
+    navigate("/thankyou", { replace: true });
   }
 
   async function handleUseCurrentLocationChange(e: React.ChangeEvent<HTMLInputElement>) {

@@ -12,6 +12,7 @@ export default function Layout() {
         <h1>Mất đồ</h1>
         <div className='nav-menu'>
           <NavMenu>
+            <NavLink to="/home">Home</NavLink>
             <NavLink to="/dashboard">Dashboard</NavLink>
             <NavLink to="/create">Create</NavLink>
             <LogoutButton />

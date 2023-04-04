@@ -15,7 +15,8 @@ export default function PublicLayout() {
       <header>
         <h1>Mất đồ</h1>
         <NavMenu>
-          <NavLink to={'/dashboard'}>Dashboard</NavLink>
+          <NavLink to="/">Home</NavLink>
+          <NavLink to="/dashboard">Dashboard</NavLink>
           {!isLoading && (isAuthenticated ? <LogoutButton /> : <LoginButton />)}
         </NavMenu>
       </header>
