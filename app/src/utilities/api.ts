@@ -6,13 +6,14 @@ export type RequestOptions = {
   data?: any;
   method?: Method;
   baseUrl?: string;
-  additionalHeaders?: { [name: string]: string };
+  additionalHeaders?: Record<string, string>;
+  params?: Record<string, string | number>;
 };
 
 export async function sendRequest<T>(
   options: RequestOptions
 ): Promise<AxiosResponse<T>> {
-  const { accessToken, data, url, additionalHeaders, method, baseUrl } =
+  const { accessToken, data, url, additionalHeaders, method, baseUrl, params } =
     options;
 
   const headers = {
@@ -25,10 +26,11 @@ export async function sendRequest<T>(
   try {
     const response = await axios.request<T>({
       method: method || 'GET',
-      baseURL: baseUrl || '',
+      baseURL: baseUrl || process.env.REACT_APP_API_BASE_URL,
       url,
       data,
-      headers
+      headers,
+      params
     });
 
     return response;

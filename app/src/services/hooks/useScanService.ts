@@ -1,23 +1,32 @@
-import { ScannedItem } from '../../models/item';
+import { ScannedItem } from '../../models/scan';
 import { sendRequest } from '../../utilities/api';
-import { useServiceDeps } from '../useServiceDependencies';
+import { useServiceDeps } from './useServiceDependencies';
 
 export interface ScanService {
-  sendScan(itemId: string, scan: ScannedItem): Promise<void>;
+  sendScan(scan: ScannedItem): Promise<void>;
+  getByItemId(itemId: string): Promise<ScannedItem[]>;
 }
 
 export function useScanService(): ScanService {
-  const { accessToken, baseUrl } = useServiceDeps();
+  const { accessToken } = useServiceDeps();
 
-  async function sendScan(itemId: string, scan: ScannedItem): Promise<void> {
+  async function sendScan(scan: ScannedItem): Promise<void> {
     await sendRequest<void>({
       url: '/scan',
-      method: 'PUT',
+      method: 'POST',
       data: scan,
-      accessToken,
-      baseUrl
+      accessToken
     });
   }
 
-  return { sendScan };
+  async function getByItemId(itemId: string): Promise<ScannedItem[]> {
+    const { data } = await sendRequest<ScannedItem[]>({
+      url: '/scan',
+      accessToken
+    });
+
+    return data;
+  }
+
+  return { sendScan, getByItemId };
 }

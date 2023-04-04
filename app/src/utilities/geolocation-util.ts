@@ -1,4 +1,4 @@
-import { ItemCoordinates } from '../models/item';
+import { ItemCoordinates } from '../models/scan';
 
 export function checkGeolocationSupport(): boolean {
   return 'geolocation' in navigator;

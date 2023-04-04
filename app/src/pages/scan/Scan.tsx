@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import { useScannedInfo } from '../../hooks/useScannedInfo';
-import { ItemCoordinates, ScannedItem } from '../../models/item';
+import { ItemCoordinates, ScannedItem } from '../../models/scan';
 import { getCurrentLocation } from '../../utilities/geolocation-util';
 import { useScanService } from '../../services/hooks/useScanService';
 
@@ -23,7 +23,7 @@ export default function Scan() {
         .then(coords => {
           setItemCoordinates(coords);
         })
-        .catch(error => {
+        .catch(() => {
           alert("Unable to access current location.");
           setUseCurrentLocation(false);
         });
@@ -36,12 +36,13 @@ export default function Scan() {
     e.preventDefault();
 
     const scan: ScannedItem = {
+      itemId,
       comments,
       coordinates: itemCoordinates,
-      scannedAt: new Date().toISOString()
+      scannedAt: new Date().toISOString(),
     };
 
-    await scanService.sendScan(itemId, scan);
+    await scanService.sendScan(scan);
   }
 
   async function handleUseCurrentLocationChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -55,7 +56,7 @@ export default function Scan() {
   return (
     <div className="scan-page">
       <Title>Scanned Item</Title>
-
+      {/* todo - consider making this a common form to share with create form */}
       <form id="commentForm" onSubmit={handleCommentFormSubmit}>
         <div className="form-field">
           <label className="field-title">Name</label>

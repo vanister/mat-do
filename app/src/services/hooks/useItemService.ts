@@ -1,6 +1,12 @@
 import { Item } from '../../models/item';
 import { sendRequest } from '../../utilities/api';
-import { useServiceDeps } from '../useServiceDependencies';
+import { useServiceDeps } from './useServiceDependencies';
+
+export type PagingFilter = {
+  size: number;
+  page: number;
+  total: number;
+};
 
 export interface ItemService {
   /**
@@ -19,46 +25,47 @@ export interface ItemService {
 
   /**
    * Gets a list of Items belonging to the current authenticated user.
+   *
+   * @param filters The paging filters.
    */
-  list(): Promise<Item[]>;
+  list(filters: Partial<PagingFilter>): Promise<Item[]>;
 
   /**
    * Creates a new item by sending a POST request to the server.
    *
    * @param item The item to create on the server.
    */
-  create(item: Item): Promise<Item>;
+  create(item: Partial<Item>): Promise<Item>;
 }
 
 export function useItemService(): ItemService {
-  const { user, accessToken, baseUrl } = useServiceDeps();
-  const baseOptions = { accessToken, baseUrl };
+  const { user, accessToken } = useServiceDeps();
 
-  async function list(): Promise<Item[]> {
+  async function list(filters: PagingFilter): Promise<Item[]> {
     const { data } = await sendRequest<Item[]>({
       url: '/items',
-      ...baseOptions
+      accessToken
     });
 
     return data;
   }
 
-  async function create(item: Item): Promise<Item> {
+  async function create(item: Partial<Item>): Promise<Item> {
     const itemWithUserId = { ...item, userId: user.sub };
     const { data: id } = await sendRequest<string>({
       url: '/items',
       method: 'POST',
       data: itemWithUserId,
-      ...baseOptions
+      accessToken
     });
 
-    return { ...item, id };
+    return { ...itemWithUserId, id } as Item;
   }
 
   async function get(id: string): Promise<Item> {
     const { data } = await sendRequest<Item>({
       url: `/items/${id}`,
-      ...baseOptions
+      accessToken
     });
 
     return data;
@@ -73,7 +80,7 @@ export function useItemService(): ItemService {
       url: '/items',
       method: 'PUT',
       data: item,
-      ...baseOptions
+      accessToken
     });
   }
 
