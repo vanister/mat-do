@@ -3,14 +3,14 @@ import { sendRequest } from '../../utilities/api';
 import { useServiceDeps } from './useServiceDependencies';
 
 export interface ScanService {
-  sendScan(scan: ScannedItem): Promise<void>;
+  scan(scan: ScannedItem): Promise<void>;
   getByItemId(itemId: string): Promise<ScannedItem[]>;
 }
 
 export function useScanService(): ScanService {
   const { accessToken } = useServiceDeps();
 
-  async function sendScan(scan: ScannedItem): Promise<void> {
+  async function scan(scan: ScannedItem): Promise<void> {
     await sendRequest<void>('/scan', accessToken, {
       method: 'POST',
       data: scan
@@ -25,5 +25,5 @@ export function useScanService(): ScanService {
     return data;
   }
 
-  return { sendScan, getByItemId };
+  return { scan, getByItemId };
 }

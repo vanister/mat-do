@@ -4,7 +4,7 @@ import Title from '../../components/Title';
 import { useScannedInfo } from '../../hooks/useScannedInfo';
 import { ItemCoordinates, ScannedItem } from '../../models/scan';
 import { getCurrentLocation } from '../../utilities/geolocation-util';
-import { useScanService } from '../../hooks/services/hooks/useScanService';
+import { useScanService } from '../../hooks/services/useScanService';
 
 import './Scan.scss';
 
@@ -42,7 +42,7 @@ export default function Scan() {
       scannedAt: new Date().toISOString(),
     };
 
-    await scanService.sendScan(scan);
+    await scanService.scan(scan);
   }
 
   async function handleUseCurrentLocationChange(e: React.ChangeEvent<HTMLInputElement>) {

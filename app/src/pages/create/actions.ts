@@ -1,6 +1,6 @@
 import { CreateDispatch } from './create-types';
 import { generateDataUri } from '../../utilities/qrcode-generator';
-import { ItemService } from '../../hooks/services/hooks/useItemService';
+import { ItemService } from '../../hooks/services/useItemService';
 import { toScannableItemUrl } from '../../utilities/item-util';
 
 export const INIT = 'INIT';

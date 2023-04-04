@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { Item } from '../../models/item';
-import { useItemService } from '../../hooks/services/hooks/useItemService';
+import { useItemService } from '../../hooks/services/useItemService';
 
 import './Dashboard.scss';
 import { useParams } from 'react-router-dom';
