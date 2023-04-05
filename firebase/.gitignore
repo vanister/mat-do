@@ -1,0 +1,8 @@
+.DS_Store
+*.log
+
+firestore.*.json
+firestore.rules
+
+build/
+node_modules/

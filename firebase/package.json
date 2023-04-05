@@ -1,0 +1,22 @@
+{
+  "name": "mat-do-firebase",
+  "version": "0.1.0",
+  "description": "The firebase backend for Mat do",
+  "main": "server.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vanister/mat-do.git"
+  },
+  "author": "vanister",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vanister/mat-do/issues"
+  },
+  "homepage": "https://github.com/vanister/mat-do#readme",
+  "scripts": {
+    "start:emulators": "firebase emulators:start"
+  },
+  "devDependencies": {
+    "firebase-tools": "^11.25.2"
+  }
+}
