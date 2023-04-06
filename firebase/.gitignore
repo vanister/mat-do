@@ -6,3 +6,4 @@ firestore.rules
 
 build/
 node_modules/
+emulator_data/
