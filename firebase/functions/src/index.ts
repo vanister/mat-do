@@ -1,9 +1,7 @@
-import * as functions from "firebase-functions";
+/** NOTE: v2 functions must be in lowercase-kebab format */
 
-// // Start writing functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+export {
+  list as listitems,
+  get as getitem,
+  create as createitem,
+} from './items';
