@@ -4,14 +4,14 @@ import { Item } from './item-type';
 
 const collection = getCollection<Item>('items');
 
-export async function list(userId: string): Promise<Item[]> {
+export async function list(userId: string, limit = 25): Promise<Item[]> {
   if (!userId) {
     throw new Error('userId is required');
   }
 
   const snapshot = await collection
     .where('userId', '==', userId)
-    .limit(25)
+    .limit(limit)
     .get();
 
   const items = snapshot.docs.map((item) => item.data());
@@ -24,10 +24,15 @@ export async function get(id: string): Promise<Item> {
     throw new Error('id is required');
   }
 
-  const snapshot = await collection.where('id', '==', id).get();
-  const item = snapshot.docs[0]?.data();
+  const snapshot = await collection.doc(id).get();
 
-  return item;
+  if (!snapshot.exists) {
+    return null;
+  }
+
+  const item = snapshot.data();
+
+  return { ...item, id: snapshot.id };
 }
 
 export async function create(item: Partial<Item>): Promise<Item> {

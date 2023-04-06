@@ -41,7 +41,7 @@ export async function getById(req: Request, res: Response) {
 
 export async function createItem(req: Request, res: Response) {
   try {
-    const item = JSON.parse(req.body) as Partial<Item>;
+    const item = req.body;
     const newItem = await create(item);
 
     res.status(201).send(newItem.id);
