@@ -14,7 +14,9 @@
   },
   "homepage": "https://github.com/vanister/mat-do#readme",
   "scripts": {
-    "start:emulators": "firebase emulators:start"
+    "debug": "npm start -- --inspect-functions 9229",
+    "start": "firebase emulators:start --import ./emulator_data --export-on-exit ./emulator_data",
+    "start:clean": "firebase emulators:start"
   },
   "devDependencies": {
     "firebase-tools": "^11.25.2"
