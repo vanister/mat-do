@@ -2,7 +2,7 @@
   "name": "mat-do-firebase",
   "version": "0.1.0",
   "description": "The firebase backend for Mat do",
-  "main": "server.ts",
+  "private": true,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/vanister/mat-do.git"
@@ -14,11 +14,18 @@
   },
   "homepage": "https://github.com/vanister/mat-do#readme",
   "scripts": {
-    "debug": "npm start -- --inspect-functions 9229",
-    "start": "firebase emulators:start --import ./emulator_data --export-on-exit ./emulator_data",
-    "start:clean": "firebase emulators:start"
+    "build": "tsc --project ./functions/tsconfig.json",
+    "build-watch": "npm run build -- --watch",
+    "rebuild": "rimraf ./functions/lib && npm run build",
+    "debug": "npm run start-emulators -- --inspect-functions 9229",
+    "start-emulators": "firebase emulators:start --import ./emulator_data --export-on-exit ./emulator_data",
+    "start": "concurrently npm:build-watch npm:start-emulators",
+    "start-debug": "concurrently npm:build-watch npm:debug"
   },
   "devDependencies": {
-    "firebase-tools": "^11.25.2"
+    "concurrently": "^8.0.1",
+    "firebase-tools": "^11.25.2",
+    "rimraf": "^4.4.1",
+    "typescript": "^5.0.3"
   }
 }
