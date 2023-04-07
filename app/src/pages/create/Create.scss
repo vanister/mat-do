@@ -2,46 +2,5 @@
   .create-page-content {
     display: flex;
     flex-direction: column;
-
-    .qr-code-form {
-      padding: 0.5rem 0;
-
-      .form-errors {
-        color: red;
-        margin-bottom: 0.5rem;
-      }
-
-      .form-field {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        margin: 0.5rem 0;
-
-        input {
-          max-width: 500px;
-          margin-top: 0.25rem;
-        }
-
-        .field-title {
-          font-weight: bold;
-        }
-      }
-
-      .actions {
-        #createButton {
-          margin-right: 0.25rem;
-        }
-      }
-    }
-
-    @media print {
-      .form-field input {
-        border: none;
-      }
-
-      .actions {
-        display: none;
-      }
-    }
   }
 }

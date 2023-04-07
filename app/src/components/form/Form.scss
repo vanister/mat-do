@@ -1,0 +1,44 @@
+.form {
+  padding: 0.5rem 0;
+
+  .form-errors {
+    color: red;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0.5rem 0;
+
+    .field-title {
+      font-weight: bold;
+    }
+
+    .field-input {
+      max-width: 500px;
+      margin-top: 0.25rem;
+    }
+  }
+
+  .actions {
+    button {
+      margin-right: 0.25rem;
+    }
+
+    :last-child {
+      margin-right: 0;
+    }
+  }
+
+  @media print {
+    .form-field input {
+      border: none;
+    }
+
+    .actions {
+      display: none;
+    }
+  }
+}
