@@ -8,17 +8,18 @@ export interface ScanService {
 }
 
 export function useScanService(): ScanService {
+  const path = '/scan';
   const { accessToken } = useServiceDeps();
 
   async function scan(scan: ScannedItem): Promise<void> {
-    await sendRequest<void>('/scan', accessToken, {
+    await sendRequest<void>(path, accessToken, {
       method: 'POST',
       data: scan
     });
   }
 
   async function getByItemId(itemId: string): Promise<ScannedItem[]> {
-    const { data } = await sendRequest<ScannedItem[]>('/scan', accessToken, {
+    const { data } = await sendRequest<ScannedItem[]>(path, accessToken, {
       params: { itemId }
     });
 

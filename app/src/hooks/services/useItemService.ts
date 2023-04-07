@@ -39,17 +39,18 @@ export interface ItemService {
 }
 
 export function useItemService(): ItemService {
+  const path = '/items';
   const { user, accessToken } = useServiceDeps();
 
   async function list(filters: PagingFilter): Promise<Item[]> {
-    const { data } = await sendRequest<Item[]>('/items', accessToken);
+    const { data } = await sendRequest<Item[]>(path, accessToken);
 
     return data;
   }
 
   async function create(item: Partial<Item>): Promise<Item> {
     const itemWithUserId = { ...item, userId: user.sub };
-    const { data: id } = await sendRequest<string>('/items', accessToken, {
+    const { data: id } = await sendRequest<string>(path, accessToken, {
       method: 'POST',
       data: itemWithUserId
     });
@@ -58,7 +59,7 @@ export function useItemService(): ItemService {
   }
 
   async function get(id: string): Promise<Item> {
-    const { data } = await sendRequest<Item>(`/items/${id}`, accessToken);
+    const { data } = await sendRequest<Item>(`${path}/${id}`, accessToken);
 
     return data;
   }
@@ -68,7 +69,7 @@ export function useItemService(): ItemService {
       throw new Error('Id is required');
     }
 
-    await sendRequest<void>('/items', accessToken, {
+    await sendRequest<void>(path, accessToken, {
       method: 'PUT',
       data: item
     });
