@@ -8,7 +8,14 @@ A QR Code-based, crowdsourced, lost and found app.
 
 - Node LTS (18.x)
   - React
-- MongoDB
-- .NET Core 7+
+- Firebase
+  - Firestore
+  - Functions
+  - Hosting (optional)
+  - Authentication (still considering)
+- Auth0 account for third-party authentication
 - Mobile device that supports QR Code scanning
   - Location services enabled (preferred)
+- The following are deprecated:
+  - MongoDB
+  - .NET Core 7+
