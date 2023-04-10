@@ -5,7 +5,7 @@ import { useScannedInfo } from '../../hooks/useScannedInfo';
 import { ItemCoordinates, ScannedItem } from '../../models/scan';
 import { getCurrentLocation } from '../../utilities/geolocation-util';
 import { useScanService } from '../../hooks/services/useScanService';
-import Form, { FormField } from '../../components/form/Form';
+import Form, { FormAction, FormField } from '../../components/form/Form';
 
 import './Scan.scss';
 
@@ -67,6 +67,10 @@ export default function Scan() {
     }
   ];
 
+  const actions: FormAction[] = [
+    { type: 'submit', text: 'Share', disabled: !comments }
+  ];
+
   async function handleCommentFormSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -88,6 +92,7 @@ export default function Scan() {
       <Form
         id="commentForm"
         fields={fields}
+        actions={actions}
         onSubmit={handleCommentFormSubmit}
       />
     </div>
