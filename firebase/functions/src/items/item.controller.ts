@@ -2,7 +2,7 @@ import { Response } from 'firebase-functions/v1';
 import { create, get, list } from './item.service';
 import { Request } from 'firebase-functions/v2/https';
 
-export async function listByUserId(req: Request, res: Response) {
+export async function listByUserId(req: Request, res: Response): Promise<void> {
   const { userId } = req.query;
 
   try {
@@ -15,7 +15,7 @@ export async function listByUserId(req: Request, res: Response) {
   }
 }
 
-export async function getById(req: Request, res: Response) {
+export async function getById(req: Request, res: Response): Promise<void> {
   const { id } = req.params;
 
   if (!id) {
@@ -38,7 +38,7 @@ export async function getById(req: Request, res: Response) {
   }
 }
 
-export async function createItem(req: Request, res: Response) {
+export async function createItem(req: Request, res: Response): Promise<void> {
   try {
     const item = req.body;
     const newItem = await create(item);
