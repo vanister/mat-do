@@ -12,6 +12,13 @@ export type FormField = {
   textArea?: boolean;
   readOnly?: boolean;
   required?: boolean;
+  additionalProps?: { [name: string]: any };
+  /**
+   * Custom field function.
+   *
+   * NOTE: If this function is provided, it will take precedence.
+   */
+  fieldInput?: () => React.ReactNode;
   onChange?: (value: string) => void;
 };
 
@@ -21,6 +28,7 @@ export type FormAction = {
   id?: string;
   type: 'button' | 'submit';
   text: string;
+  disabled?: boolean;
   /** Will only be called when type is not 'submit' */
   onAction?: React.MouseEventHandler;
 };
@@ -43,23 +51,59 @@ export default function Form(props: FormProps) {
 
   return (
     <form className="form" id={props.id} onSubmit={props.onSubmit}>
-      {props.fields.map((field, idx) => (
-        <div key={`${field.name}-${idx}`} className="form-field">
+      {props.fields.map((field, idx) => {
+        const labelField = (
           <label className="field-title" htmlFor={field.name}>
             {field.label}
           </label>
-          <input
-            id={field.name}
-            className={`field-input ${field.className}`}
-            type={field.type ?? 'text'}
-            placeholder={field.placeholder}
-            required={!!field.required}
-            readOnly={!!field.readOnly}
-            value={field.value}
-            onChange={(e) => field.onChange?.call(null, e.target.value)}
-          />
-        </div>
-      ))}
+        );
+
+        if (typeof field.fieldInput === 'function') {
+          return (
+            <>
+              {labelField}
+              {field.fieldInput()}
+            </>
+          );
+        }
+
+        const className = `field-input ${field.className ?? ''}`.trim();
+        const { name, placeholder, required, readOnly, value, type } = field;
+        const additionalProps = field.additionalProps ?? {};
+        const onChange = (e) => field.onChange?.call(null, e.target.value);
+
+        return (
+          <div key={`${name}-${idx}`} className="form-field">
+            {labelField}
+            {field.textArea ? (
+              <textarea
+                id={name}
+                className={className}
+                placeholder={placeholder}
+                required={!!required}
+                readOnly={!!readOnly}
+                value={value}
+                onChange={onChange}
+                {...additionalProps}
+              />
+            ) : (
+              <div className="field-input-container">
+                <input
+                  id={name}
+                  className={className}
+                  type={type ?? 'text'}
+                  placeholder={placeholder}
+                  required={!!required}
+                  readOnly={!!readOnly}
+                  value={value}
+                  onChange={onChange}
+                  {...additionalProps}
+                />
+              </div>
+            )}
+          </div>
+        );
+      })}
       <div className="actions">
         {actions.map((action, idx) => {
           const id = action.id ?? `action${idx}`;
@@ -69,6 +113,7 @@ export default function Form(props: FormProps) {
               key={id}
               id={id}
               type={action.type}
+              disabled={action.disabled}
               onClick={(e) => handleActionClick(action, e)}
             >
               {action.text}

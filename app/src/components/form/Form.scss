@@ -16,9 +16,18 @@
       font-weight: bold;
     }
 
-    .field-input {
+    .field-input-container {
       max-width: 500px;
       margin-top: 0.25rem;
+
+      .field-input {
+        width: 100%;
+        width: -webkit-fill-available;
+
+        &[readonly] {
+          cursor: not-allowed;
+        }
+      }
     }
   }
 
