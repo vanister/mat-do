@@ -43,7 +43,9 @@ export function useItemService(): ItemService {
   const { user, accessToken } = useServiceDeps();
 
   async function list(filters: PagingFilter): Promise<Item[]> {
-    const { data } = await sendRequest<Item[]>(path, accessToken);
+    const { data } = await sendRequest<Item[]>(`${path}/list`, accessToken, {
+      params: { userId: user.sub }
+    });
 
     return data;
   }

@@ -14,7 +14,7 @@ export async function list(userId: string, limit = 25): Promise<Item[]> {
     .limit(limit)
     .get();
 
-  const items = snapshot.docs.map((item) => item.data());
+  const items = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
 
   return items;
 }
@@ -32,7 +32,7 @@ export async function get(id: string): Promise<Item> {
 
   const item = snapshot.data();
 
-  return { ...item, id: snapshot.id };
+  return { id: snapshot.id, ...item };
 }
 
 export async function create(item: Partial<Item>): Promise<Item> {
