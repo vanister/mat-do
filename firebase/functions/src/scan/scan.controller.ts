@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { ScanResponse, ScannedItem } from './scan-types';
 import { scanned } from './scan.service';
 import { isFound } from '../items/item.service';
-import { FieldRequiredError } from '../errors/field-required.error.ts';
+import { BaseError } from '../errors/base.error';
 
 export async function scan(
   req: Request,
@@ -23,12 +23,12 @@ export async function scan(
   } catch (error) {
     console.log(error);
 
-    if (error instanceof FieldRequiredError) {
-      res.status(400).send(error.message as any);
+    if (!(error instanceof BaseError)) {
+      res.sendStatus(500);
       return;
     }
 
-    res.sendStatus(500);
+    res.status(400).send(error.message as any);
   }
 }
 

@@ -1,5 +1,7 @@
-export class FieldRequiredError extends Error {
+import { BaseError } from './base.error';
+
+export class FieldRequiredError extends BaseError {
   constructor(message: string) {
-    super(message);
+    super('FieldRequiredError', message);
   }
 }
