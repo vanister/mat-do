@@ -62,3 +62,13 @@ export async function create(item: Partial<Item>): Promise<Item> {
 
   return fullItem;
 }
+
+export async function isFound(id: string): Promise<boolean> {
+  const snapshot = await collection.doc(id).get();
+
+  if (!snapshot.exists) {
+    throw new Error('document not found');
+  }
+
+  return !!snapshot.data().found;
+}

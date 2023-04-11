@@ -2,32 +2,26 @@ import { Timestamp, FieldValue } from 'firebase-admin/firestore';
 import { getCollection } from '../db';
 import { ScannedItem } from './scan-types';
 import { Item } from '../items/item-type';
+import { FieldRequiredError } from '../errors/field-required.error.ts';
 
 const itemCollection = getCollection<Item>('items');
 const scanCollection = getCollection<ScannedItem>('scans');
 
-export async function scanned(item: ScannedItem): Promise<void> {
-  if (!item) {
-    throw new Error('Scanned item is required');
+export async function scanned(scan: ScannedItem): Promise<void> {
+  if (!scan) {
+    throw new FieldRequiredError('Scanned item is required');
   }
 
-  if (!item.itemId) {
-    throw new Error('ItemId is missing');
+  if (!scan.itemId) {
+    throw new FieldRequiredError('ItemId is missing');
   }
 
-  if (!item.comments) {
-    throw new Error('A comment is required');
+  if (!scan.comments) {
+    throw new FieldRequiredError('A comment is required');
   }
 
+  const itemRef = itemCollection.doc(scan.itemId);
   const nowTimestamp = Timestamp.now();
-  const itemWithTimestamp: ScannedItem = {
-    ...item,
-    scannedAt: nowTimestamp,
-  };
-
-  await scanCollection.add(itemWithTimestamp);
-
-  const itemRef = itemCollection.doc(item.itemId);
   // update the scan count on the item
   const itemUpdates: Partial<Item> = {
     scanned: FieldValue.increment(1) as any,
@@ -36,6 +30,13 @@ export async function scanned(item: ScannedItem): Promise<void> {
   };
 
   await itemRef.update(itemUpdates);
+
+  const scanWithTimestamp: ScannedItem = {
+    ...scan,
+    scannedAt: nowTimestamp,
+  };
+
+  await scanCollection.add(scanWithTimestamp);
 }
 
 export async function listByItemId(

@@ -2,14 +2,19 @@ import { Timestamp } from 'firebase-admin/firestore';
 
 export type ScannedItem = {
   itemId: string;
-  coordinates?: Coordinates;
   comments: string;
-  scannedAt: Timestamp;
+  coordinates?: Coordinates;
+  scannedAt?: Timestamp;
 };
 
 export type Coordinates = {
   longitude: number;
   latitude: number;
-  accuracy: number;
+  accuracy?: number;
   altitude?: number;
+};
+
+export type ScanResponse = {
+  found: boolean;
+  message?: string;
 };
