@@ -4,7 +4,7 @@ export type ScannedItem = {
   itemId: string;
   comments: string;
   coordinates?: Coordinates;
-  scannedAt?: Timestamp;
+  scannedAt: Timestamp;
 };
 
 export type Coordinates = {

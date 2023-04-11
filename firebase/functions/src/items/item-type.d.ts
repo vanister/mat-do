@@ -1,4 +1,5 @@
 import { Timestamp } from 'firebase-admin/firestore';
+import { Coordinates } from '../scan/scan-types';
 
 export type Item = {
   id: string;
@@ -10,4 +11,5 @@ export type Item = {
   createdAt: Timestamp;
   lastUpdated: Timestamp;
   lastScanned?: Timestamp;
+  lastKnownLocation?: Coordinates;
 };
