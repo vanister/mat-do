@@ -1,5 +1,5 @@
 import { Timestamp, FieldValue } from 'firebase-admin/firestore';
-import { getCollection } from '../db';
+import { getCollection, transaction } from '../db';
 import { ScannedItem } from './scan-types';
 import { Item } from '../items/item-type';
 import { FieldRequiredError } from '../errors/field-required.error.ts';
@@ -20,30 +20,32 @@ export async function scanned(scan: Partial<ScannedItem>): Promise<void> {
     throw new FieldRequiredError('A comment is required');
   }
 
-  // todo - wrap in a transaction
+  await transaction(async (transaction, _) => {
+    // todo - wrap in a transaction
+    const itemRef = itemCollection.doc(scan.itemId);
+    const nowTimestamp = Timestamp.now();
+    // update the scan count on the item
+    const itemUpdates: Partial<Item> = {
+      scanned: FieldValue.increment(1) as any,
+      lastScanned: nowTimestamp,
+      lastUpdated: nowTimestamp,
+    };
 
-  const itemRef = itemCollection.doc(scan.itemId);
-  const nowTimestamp = Timestamp.now();
-  // update the scan count on the item
-  const itemUpdates: Partial<Item> = {
-    scanned: FieldValue.increment(1) as any,
-    lastScanned: nowTimestamp,
-    lastUpdated: nowTimestamp,
-  };
+    // if this scan includes a location, set it to the last know location
+    if (!!scan.coordinates) {
+      itemUpdates.lastKnownLocation = scan.coordinates;
+    }
 
-  // if this scan includes a location, set it to the last know location
-  if (!!scan.coordinates) {
-    itemUpdates.lastKnownLocation = scan.coordinates;
-  }
+    transaction.update(itemRef, itemUpdates);
 
-  await itemRef.update(itemUpdates);
+    const scanRef = scanCollection.doc();
+    const scanWithTimestamp = {
+      ...scan,
+      scannedAt: nowTimestamp,
+    } as ScannedItem;
 
-  const scanWithTimestamp = {
-    ...scan,
-    scannedAt: nowTimestamp,
-  } as ScannedItem;
-
-  await scanCollection.add(scanWithTimestamp);
+    transaction.create(scanRef, scanWithTimestamp);
+  });
 }
 
 export async function listByItemId(
