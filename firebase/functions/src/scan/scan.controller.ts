@@ -30,6 +30,11 @@ export async function get(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     const item = await getById(id);
 
+    if (!item) {
+      res.sendStatus(404);
+      return;
+    }
+
     res.send(item);
   } catch (error) {
     handleError(error, res);

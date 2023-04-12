@@ -58,5 +58,13 @@ export async function listByItemId(
 }
 
 export async function getById(id: string): Promise<ScannedItem> {
-  throw new Error('not implemented');
+  const snapshot = await scanCollection.doc(id).get();
+
+  if (!snapshot.exists) {
+    return null;
+  }
+
+  const scan: ScannedItem = { ...snapshot.data(), id: snapshot.id };
+
+  return scan;
 }
