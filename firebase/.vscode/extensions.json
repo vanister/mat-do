@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "firsttris.vscode-jest-runner",
+    "andys8.jest-snippets",
+    "esbenp.prettier-vscode",
+    "toba.vsfire"
+  ]
+}
