@@ -13,11 +13,11 @@ export async function scanned(scan: Partial<ScannedItem>): Promise<void> {
   }
 
   if (!scan.itemId) {
-    throw new FieldRequiredError('ItemId is missing');
+    throw new FieldRequiredError('itemId is missing');
   }
 
   if (!scan.comments) {
-    throw new FieldRequiredError('A comment is required');
+    throw new FieldRequiredError('Comment is required');
   }
 
   await transaction(async (transaction, _) => {
@@ -51,7 +51,10 @@ export async function scanned(scan: Partial<ScannedItem>): Promise<void> {
 export async function listByItemId(
   itemId: string
 ): Promise<Partial<ScannedItem[]>> {
-  throw new Error('not implemented');
+  const snapshot = await scanCollection.where('itemId', '==', itemId).get();
+  const scans = snapshot.docs.map((scan) => ({ ...scan.data(), id: scan.id }));
+
+  return scans;
 }
 
 export async function getById(id: string): Promise<ScannedItem> {

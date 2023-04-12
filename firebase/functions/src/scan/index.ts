@@ -1,10 +1,10 @@
 import express from 'express';
-import { getById, listByItemId, scan } from './scan.controller';
+import { get, list, scan } from './scan.controller';
 
 const router = express.Router();
 
-router.get('/list', listByItemId);
-router.get('/:id', getById);
+router.get('/list', list);
+router.get('/:id', get);
 router.post('/', scan);
 
 export default router;
