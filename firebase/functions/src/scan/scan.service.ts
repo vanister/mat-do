@@ -29,12 +29,9 @@ export async function scanned(scan: Partial<ScannedItem>): Promise<void> {
       scanned: FieldValue.increment(1) as any,
       lastScanned: nowTimestamp,
       lastUpdated: nowTimestamp,
+      lastComment: scan.comments,
+      lastKnownLocation: scan.coordinates,
     };
-
-    // if this scan includes a location, set it to the last know location
-    if (!!scan.coordinates) {
-      itemUpdates.lastKnownLocation = scan.coordinates;
-    }
 
     transaction.update(itemRef, itemUpdates);
 

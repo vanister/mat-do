@@ -75,19 +75,19 @@ export default function Form(props: FormProps) {
         return (
           <div key={`${name}-${idx}`} className="form-field">
             {labelField}
-            {field.textArea ? (
-              <textarea
-                id={name}
-                className={className}
-                placeholder={placeholder}
-                required={!!required}
-                readOnly={!!readOnly}
-                value={value}
-                onChange={onChange}
-                {...additionalProps}
-              />
-            ) : (
-              <div className="field-input-container">
+            <div className="field-input-container">
+              {field.textArea ? (
+                <textarea
+                  id={name}
+                  className={className}
+                  placeholder={placeholder}
+                  required={!!required}
+                  readOnly={!!readOnly}
+                  value={value}
+                  onChange={onChange}
+                  {...additionalProps}
+                />
+              ) : (
                 <input
                   id={name}
                   className={className}
@@ -99,8 +99,8 @@ export default function Form(props: FormProps) {
                   onChange={onChange}
                   {...additionalProps}
                 />
-              </div>
-            )}
+              )}
+            </div>
           </div>
         );
       })}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import { useScannedInfo } from '../../hooks/useScannedInfo';
@@ -33,39 +33,42 @@ export default function Scan() {
     }
   }, [useCurrentLocation]);
 
-  const fields: FormField[] = [
-    {
-      name: 'nameField',
-      label: 'Name',
-      value: item?.name ?? 'Could not read the "name" field',
-      readOnly: true
-    },
-    {
-      name: 'descriptionField',
-      label: 'Description',
-      value: item?.description ?? 'No "description" provided',
-      readOnly: true
-    },
-    {
-      name: 'useLocationField',
-      label: 'Use current location',
-      type: 'checkbox',
-      additionalProps: { checked: useCurrentLocation },
-      onChange: () => {
-        setUseCurrentLocation(!useCurrentLocation);
+  const fields: FormField[] = useMemo(
+    () => [
+      {
+        name: 'nameField',
+        label: 'Name',
+        value: item?.name ?? 'Could not read the "name" field',
+        readOnly: true
+      },
+      {
+        name: 'descriptionField',
+        label: 'Description',
+        value: item?.description ?? 'No "description" provided',
+        readOnly: true
+      },
+      {
+        name: 'useLocationField',
+        label: 'Use current location',
+        type: 'checkbox',
+        additionalProps: { checked: useCurrentLocation },
+        onChange: () => {
+          setUseCurrentLocation(!useCurrentLocation);
+        }
+      },
+      {
+        name: 'commentsField',
+        label: 'Comments',
+        value: comments,
+        required: true,
+        textArea: true,
+        placeholder: 'Brief description of where you found it..',
+        additionalProps: { rows: 4, maxLength: 200 },
+        onChange: (value: string) => setComments(value)
       }
-    },
-    {
-      name: 'commentsField',
-      label: 'Comments',
-      value: comments,
-      required: true,
-      textArea: true,
-      placeholder: 'Brief description of where you found it..',
-      additionalProps: { rows: 4, maxLength: 200 },
-      onChange: (value: string) => setComments(value)
-    }
-  ];
+    ],
+    [comments, item?.description, item?.name, useCurrentLocation]
+  );
 
   const actions: FormAction[] = [
     { type: 'submit', text: 'Share', disabled: !comments }
@@ -74,7 +77,7 @@ export default function Scan() {
   async function handleCommentFormSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    const scan: ScannedItem = {
+    const scan: Partial<ScannedItem> = {
       itemId,
       comments,
       coordinates: itemCoordinates,

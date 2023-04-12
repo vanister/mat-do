@@ -12,4 +12,5 @@ export type Item = {
   lastUpdated: Timestamp;
   lastScanned?: Timestamp;
   lastKnownLocation?: Coordinates;
+  lastComment?: string;
 };

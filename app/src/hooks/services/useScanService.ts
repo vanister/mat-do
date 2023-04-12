@@ -3,7 +3,7 @@ import { sendRequest } from '../../utilities/api';
 import { useServiceDeps } from './useServiceDependencies';
 
 export interface ScanService {
-  scan(scan: ScannedItem): Promise<void>;
+  scan(scan: Partial<ScannedItem>): Promise<void>;
   getByItemId(itemId: string): Promise<ScannedItem[]>;
 }
 
@@ -11,7 +11,7 @@ export function useScanService(): ScanService {
   const path = '/scan';
   const { accessToken } = useServiceDeps();
 
-  async function scan(scan: ScannedItem): Promise<void> {
+  async function scan(scan: Partial<ScannedItem>): Promise<void> {
     await sendRequest<void>(path, accessToken, {
       method: 'POST',
       data: scan

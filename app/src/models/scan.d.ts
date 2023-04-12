@@ -1,5 +1,5 @@
 export type ScannedItem = {
-  id?: string;
+  id: string;
   itemId: string;
   scannedAt: string;
   comments: string;
