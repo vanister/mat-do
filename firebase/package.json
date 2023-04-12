@@ -23,6 +23,7 @@
     "start-debug": "concurrently 'npm:build-watch' 'npm:debug'"
   },
   "devDependencies": {
+    "@types/jest": "^29.5.0",
     "concurrently": "^8.0.1",
     "firebase-tools": "^11.25.2",
     "rimraf": "^4.4.1",
