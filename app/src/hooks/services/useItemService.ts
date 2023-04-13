@@ -67,10 +67,6 @@ export function useItemService(): ItemService {
   }
 
   async function update(item: Item): Promise<void> {
-    if (!item.id) {
-      throw new Error('Id is required');
-    }
-
     await sendRequest<void>(path, accessToken, {
       method: 'PUT',
       data: item

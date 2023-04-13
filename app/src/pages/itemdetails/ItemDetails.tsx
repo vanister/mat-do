@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import { Item } from '../../models/item';
 import { useItemService } from '../../hooks/services/useItemService';
@@ -11,7 +11,9 @@ import './ItemDetails.scss';
 
 export default function ItemDetails() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const [item, setItem] = useState<Item>();
+  const [isSaving, setIsSaving] = useState(false);
   const itemService = useItemService();
 
   useEffect(() => {
@@ -65,20 +67,38 @@ export default function ItemDetails() {
             Timestamp.fromMillis(item.lastScanned._seconds * 1000)
               .toDate()
               .toLocaleString()
-          : '',
+          : 'Never scanned',
         readOnly: true
       }
     ];
   }, [item]);
 
   const actions: FormAction[] = [
-    { type: 'submit', text: 'Update', disabled: !item?.name }
+    {
+      type: 'submit',
+      text: isSaving ? 'Saving...' : 'Update',
+      disabled: isSaving || !item?.name
+    },
+    {
+      type: 'button',
+      text: 'Cancel',
+      onAction: () => navigate('/dashboard')
+    }
   ];
 
   async function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    alert('TODO');
+    try {
+      setIsSaving(true);
+
+      await itemService.update(item);
+    } catch (error) {
+      console.error(error);
+      alert('There was an error updating the item, please try again.');
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   if (!item) {
