@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { ScanResponse, ScannedItem } from './scan-types';
-import { getById, listByItemId, scanned } from './scan.service';
+import { get, list, scanned } from './scan.service';
 import { isFound } from '../items/item.service';
 import { handleError } from '../errors/handler';
 
@@ -25,10 +25,10 @@ export async function scan(
   }
 }
 
-export async function get(req: Request, res: Response): Promise<void> {
+export async function getById(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;
-    const item = await getById(id);
+    const item = await get(id);
 
     if (!item) {
       res.sendStatus(404);
@@ -41,10 +41,10 @@ export async function get(req: Request, res: Response): Promise<void> {
   }
 }
 
-export async function list(req: Request, res: Response): Promise<void> {
+export async function listByItemId(req: Request, res: Response): Promise<void> {
   try {
     const { itemId } = req.query;
-    const items = await listByItemId(itemId as string);
+    const items = await list(itemId as string);
 
     res.send(items);
   } catch (error) {

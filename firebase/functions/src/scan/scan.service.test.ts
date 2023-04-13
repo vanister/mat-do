@@ -1,5 +1,5 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
-import { listByItemId, scanned } from './scan.service';
+import { list, scanned } from './scan.service';
 import { getCollection } from '../db';
 
 jest.mock('firebase-admin/firestore');
@@ -32,7 +32,7 @@ describe('ScanService', () => {
   });
 
   test.skip('should get a list of scanned items', async () => {
-    const items = await listByItemId('anItemId');
+    const items = await list('anItemId');
 
     expect(items).toBeDefined();
     expect(items).toHaveLength(3);

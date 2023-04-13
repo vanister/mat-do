@@ -1,7 +1,6 @@
 import { Response } from 'firebase-functions/v1';
 import { create, get, list } from './item.service';
 import { Request } from 'firebase-functions/v2/https';
-import { BaseError } from '../errors/base.error';
 import { handleError } from '../errors/handler';
 
 export async function listByUserId(req: Request, res: Response): Promise<void> {

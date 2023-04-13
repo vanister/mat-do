@@ -45,16 +45,14 @@ export async function scanned(scan: Partial<ScannedItem>): Promise<void> {
   });
 }
 
-export async function listByItemId(
-  itemId: string
-): Promise<Partial<ScannedItem[]>> {
+export async function list(itemId: string): Promise<Partial<ScannedItem[]>> {
   const snapshot = await scanCollection.where('itemId', '==', itemId).get();
   const scans = snapshot.docs.map((scan) => ({ ...scan.data(), id: scan.id }));
 
   return scans;
 }
 
-export async function getById(id: string): Promise<ScannedItem> {
+export async function get(id: string): Promise<ScannedItem> {
   const snapshot = await scanCollection.doc(id).get();
 
   if (!snapshot.exists) {
