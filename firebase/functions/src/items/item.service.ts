@@ -38,17 +38,7 @@ export async function get(id: string): Promise<Item> {
 }
 
 export async function create(item: Partial<Item>): Promise<Item> {
-  if (!item) {
-    throw new FieldRequiredError('Item cannot be null');
-  }
-
-  if (!item.name) {
-    throw new FieldRequiredError('Item name is required');
-  }
-
-  if (!item.userId) {
-    throw new FieldRequiredError('Item userId is required');
-  }
+  validateItem(item as Item);
 
   const fullItem = {
     ...item,
@@ -73,4 +63,40 @@ export async function isFound(id: string): Promise<boolean> {
   }
 
   return !!snapshot.data().found;
+}
+
+export async function update(item: Item): Promise<void> {
+  validateItem(item);
+
+  const { id, name, description, found } = item;
+  const itemRef = collection.doc(id);
+  const snapshot = await itemRef.get();
+
+  if (!snapshot.exists) {
+    throw new NotFoundError();
+  }
+
+  const itemUpdates: Partial<Item> = {
+    name,
+    description,
+    found,
+    lastUpdated: Timestamp.now(),
+  };
+
+  await itemRef.update(itemUpdates);
+}
+
+/** TODO - refactor to return validation result and move to controller? */
+function validateItem(item: Item): void {
+  if (!item) {
+    throw new FieldRequiredError('Item cannot be null');
+  }
+
+  if (!item.name) {
+    throw new FieldRequiredError('Item name is required');
+  }
+
+  if (!item.userId) {
+    throw new FieldRequiredError('Item userId is required');
+  }
 }

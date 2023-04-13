@@ -9,6 +9,7 @@ import PublicLayout from './pages/PublicLayout';
 import Scan from './pages/scan/Scan';
 import Dashboard from './pages/dashboard/Dashboard';
 import Thankyou from './pages/thankyou/Thankyou';
+import ItemDetails from './pages/itemdetails/ItemDetails';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
       >
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/create" element={<Create />} />
+        <Route path="/item/:id" element={<ItemDetails />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

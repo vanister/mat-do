@@ -27,6 +27,11 @@
         &[readonly] {
           cursor: not-allowed;
         }
+
+        &[type='checkbox'] {
+          margin: 0;
+          width: auto;
+        }
       }
     }
   }

@@ -1,5 +1,5 @@
 import { Response } from 'firebase-functions/v1';
-import { create, get, list } from './item.service';
+import { create, get, list, update } from './item.service';
 import { Request } from 'firebase-functions/v2/https';
 import { handleError } from '../errors/handler';
 
@@ -36,6 +36,17 @@ export async function createItem(req: Request, res: Response): Promise<void> {
     const newItem = await create(item);
 
     res.status(201).send(newItem.id);
+  } catch (error) {
+    handleError(error, res);
+  }
+}
+
+export async function updateItem(req: Request, res: Response): Promise<void> {
+  try {
+    const item = req.body;
+    await update(item);
+
+    res.sendStatus(204);
   } catch (error) {
     handleError(error, res);
   }

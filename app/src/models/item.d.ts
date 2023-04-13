@@ -1,3 +1,5 @@
+import { FirestoreTimestamp } from './firestore';
+
 export type Item = {
   id: string;
   userId: string;
@@ -6,6 +8,6 @@ export type Item = {
   scanned?: number;
   found?: boolean;
   createdAt: string;
-  lastUpdated?: string;
-  lastScanned?: string;
+  lastUpdated?: FirestoreTimestamp;
+  lastScanned?: FirestoreTimestamp;
 };
