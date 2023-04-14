@@ -3,18 +3,16 @@
 ## Setup
 
 Create a `.env.local` file and set the following environments:
-- `HTTPS=true` - must be true to use the browers Geolocation API
 - `REACT_APP_API_BASE_URL`
-  - Set this to `http://localhost:3030` to use the local `json-server`
-- If you want to use the local `json-server` the `REACT_APP_AUTH_*` environments are optional
-  - `REACT_APP_AUTH_DOMAIN`
-  - `REACT_APP_AUTH_CLIENT_ID`
-  - `REACT_APP_AUTH_AUDIENCE`
-  - `REACT_APP_AUTH_CALLBACK_URI`
-
+  - Set to `http://localhost:5001/mat-do-5ab6a/us-central1/api` for firebase emulator
+- TODO: firebase auth
+  
 ## Data
 
+Run the firebase emulator suite from the firebase backend project.
+
 ### Seeding
+**`@deprecated - Use Firebase Enmulator Suite instead.`**
 
 To seed some local (`json-server`) server data, run `npm run seed`. Pass the following optional positional args to control output.
 
