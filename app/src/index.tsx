@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import FirebaseProvider from './firebase/FirebaseContext';
+import FirebaseProvider from './contexts/FirebaseContext';
 import { appSettings } from './AppSettings';
 import App from './App';
 
 import './index.scss';
-import { FirebaseAuthProvider } from './firebase/FirebaseAuthContext';
+import { FirebaseAuthProvider } from './contexts/FirebaseAuthContext';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
