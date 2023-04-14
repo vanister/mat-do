@@ -5,14 +5,14 @@ import {
   Transaction,
 } from 'firebase-admin/firestore';
 
+import { app } from './app';
+
 export type TransactionFunction = (
   /** The transaction object. */
   transaction: Transaction,
   /** The firestore db. */
   db: Firestore
 ) => Promise<void>;
-
-const app = admin.initializeApp();
 
 export const firestore = admin.firestore(app);
 

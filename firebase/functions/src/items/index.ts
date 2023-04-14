@@ -1,4 +1,5 @@
 import express from 'express';
+import { validateToken } from '../middleware/validate-token.middleware';
 import {
   createItem,
   getById,
@@ -7,6 +8,8 @@ import {
 } from './item.controller';
 
 const router = express.Router();
+
+router.use(validateToken);
 
 router.get('/list', listByUserId);
 router.get('/:id', getById);

@@ -7,13 +7,12 @@ export function handleError(
   error: Error,
   response: Response,
   logger: Logger = functionLogger
-): void {
-  logger.log(error);
+): Response {
+  logger.error(error);
 
   if (error instanceof BaseError) {
-    response.status(400).send(error.message as any);
-    return;
+    return response.status(400).send(error.message as any);
   }
 
-  response.sendStatus(500);
+  return response.sendStatus(500);
 }
