@@ -1,5 +1,5 @@
 import { Item } from '../../models/item';
-import { sendRequest } from '../../utilities/api';
+import { sendRequestWithAuth } from '../../utilities/api';
 import { useServiceDeps } from './useServiceDependencies';
 
 export type PagingFilter = {
@@ -43,16 +43,20 @@ export function useItemService(): ItemService {
   const { user, accessToken } = useServiceDeps();
 
   async function list(filters: PagingFilter): Promise<Item[]> {
-    const { data } = await sendRequest<Item[]>(`${path}/list`, accessToken, {
-      params: { userId: user.sub }
-    });
+    const { data } = await sendRequestWithAuth<Item[]>(
+      `${path}/list`,
+      accessToken,
+      {
+        params: { userId: user.uid }
+      }
+    );
 
     return data;
   }
 
   async function create(item: Partial<Item>): Promise<Item> {
-    const itemWithUserId = { ...item, userId: user.sub };
-    const { data: id } = await sendRequest<string>(path, accessToken, {
+    const itemWithUserId = { ...item, userId: user.uid };
+    const { data: id } = await sendRequestWithAuth<string>(path, accessToken, {
       method: 'POST',
       data: itemWithUserId
     });
@@ -61,13 +65,16 @@ export function useItemService(): ItemService {
   }
 
   async function get(id: string): Promise<Item> {
-    const { data } = await sendRequest<Item>(`${path}/${id}`, accessToken);
+    const { data } = await sendRequestWithAuth<Item>(
+      `${path}/${id}`,
+      accessToken
+    );
 
     return data;
   }
 
   async function update(item: Item): Promise<void> {
-    await sendRequest<void>(path, accessToken, {
+    await sendRequestWithAuth<void>(path, accessToken, {
       method: 'PUT',
       data: item
     });

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { User, useAuth0 } from '@auth0/auth0-react';
+import { useFirebaseAuth } from '../contexts/FirebaseAuthContext';
+import { User } from 'firebase/auth';
 
 export type UserAccessToken = {
   user: User;
@@ -7,14 +8,24 @@ export type UserAccessToken = {
 };
 
 export function useUserAccessToken(): UserAccessToken {
-  const { user, getAccessTokenSilently } = useAuth0();
+  const { user } = useFirebaseAuth();
   const [accessToken, setAccessToken] = useState<string>();
 
   useEffect(() => {
-    getAccessTokenSilently().then((token) => {
-      setAccessToken(token);
-    });
-  }, [getAccessTokenSilently]);
+    if (!user) {
+      return;
+    }
+
+    user
+      .getIdToken()
+      .then((token) => setAccessToken(token))
+      .catch((error) => {
+        console.error(error);
+        setAccessToken(null);
+
+        throw error;
+      });
+  }, [user]);
 
   return { user, accessToken };
 }

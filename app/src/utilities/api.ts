@@ -8,15 +8,26 @@ export type RequestOptions = {
   params?: Record<string, string | number>;
 };
 
-export async function sendRequest<T>(
+export async function sendRequestWithAuth<T>(
   url: string,
   accessToken: string,
+  options: RequestOptions = {}
+): Promise<AxiosResponse<T>> {
+  const authOptions: RequestOptions = {
+    ...options,
+    additionalHeaders: { Authroization: `Bearer ${accessToken}` }
+  };
+
+  return await sendRequest(url, authOptions);
+}
+
+export async function sendRequest<T>(
+  url: string,
   options: RequestOptions = {}
 ): Promise<AxiosResponse<T>> {
   const { data, additionalHeaders, method, baseUrl, params } = options;
 
   const headers = {
-    Authorization: `Bearer ${accessToken}`,
     'Content-Type': 'application/json',
     Accepts: 'application/json',
     ...(additionalHeaders || {})

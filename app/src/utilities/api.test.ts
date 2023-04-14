@@ -1,6 +1,6 @@
 import { describe, expect, test, beforeEach } from '@jest/globals';
 import axios from 'axios';
-import { sendRequest } from './api';
+import { sendRequestWithAuth } from './api';
 
 jest.mock('axios', () => ({
   request: jest.fn()
@@ -22,7 +22,7 @@ describe('API Utility', () => {
       Accepts: 'application/json'
     };
 
-    await sendRequest('/unittest', accessToken);
+    await sendRequestWithAuth('/unittest', accessToken);
 
     expect(mockAxiosRequest).toHaveBeenCalledWith(
       expect.objectContaining({ headers: expectedHeaders })
@@ -35,7 +35,7 @@ describe('API Utility', () => {
       itemId: 'item-guid-string'
     };
 
-    await sendRequest('/unittest/params', accessToken, { params });
+    await sendRequestWithAuth('/unittest/params', accessToken, { params });
 
     expect(mockAxiosRequest).toHaveBeenCalledWith(
       expect.objectContaining({ params })
@@ -54,7 +54,7 @@ describe('API Utility', () => {
     });
 
     test('should default to GET method', async () => {
-      await sendRequest('/default/method', accessToken);
+      await sendRequestWithAuth('/default/method', accessToken);
 
       expect(mockAxiosRequest).toHaveBeenCalledWith(
         expect.objectContaining({ method: 'GET' })
@@ -62,7 +62,7 @@ describe('API Utility', () => {
     });
 
     test('should default to process.env.REACT_APP_API_BASE_URL for baseUrl', async () => {
-      await sendRequest('/unittest/env', accessToken);
+      await sendRequestWithAuth('/unittest/env', accessToken);
 
       expect(mockAxiosRequest).toHaveBeenCalledWith(
         expect.objectContaining({ baseURL: `${baseUrl}/defaults` })
