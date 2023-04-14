@@ -61,7 +61,7 @@ export function FirebaseAuthProvider({ children }: FirebaseAuthProviderProps) {
     }
   }
 
-  async function logout(redirectUrl?: string): Promise<void> {
+  async function logout(redirectUrl = '/dashboard'): Promise<void> {
     try {
       setIsLoading(true);
 

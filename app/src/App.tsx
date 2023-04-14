@@ -10,6 +10,7 @@ import Scan from './pages/scan/Scan';
 import Dashboard from './pages/dashboard/Dashboard';
 import Thankyou from './pages/thankyou/Thankyou';
 import ItemDetails from './pages/itemdetails/ItemDetails';
+import Login from './components/login/Login';
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/scan/:id" element={<Scan />} />
         <Route path="/thankyou" element={<Thankyou />} />
       </Route>

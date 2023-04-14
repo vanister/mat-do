@@ -1,14 +1,13 @@
 import React from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { NavLink, Outlet } from 'react-router-dom';
-import LoginButton from '../components/auth/LoginButton';
 import LogoutButton from '../components/auth/LogoutButton';
 import NavMenu from '../components/nav/NavMenu';
 
 import './PublicLayout.scss';
+import { useFirebaseAuth } from '../contexts/FirebaseAuthContext';
 
 export default function PublicLayout() {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated } = useFirebaseAuth();
 
   return (
     <div className="public-layout-content">
@@ -17,7 +16,11 @@ export default function PublicLayout() {
         <NavMenu>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/dashboard">Dashboard</NavLink>
-          {!isLoading && (isAuthenticated ? <LogoutButton /> : <LoginButton />)}
+          {isAuthenticated ? (
+            <LogoutButton />
+          ) : (
+            <NavLink to="/login">Login</NavLink>
+          )}
         </NavMenu>
       </header>
       <main className="main-content">

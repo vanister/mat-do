@@ -1,23 +1,24 @@
-import React from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
+import React, { useEffect } from 'react';
 import Loading from '../loading/Loading';
+import { useFirebaseAuth } from '../../contexts/FirebaseAuthContext';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export type RequireAuthProps = {
   children: React.ReactElement;
 };
 
 export default function RequireAuth({ children }: RequireAuthProps) {
-  const { isAuthenticated, user, isLoading, loginWithRedirect } = useAuth0();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated, isLoading } = useFirebaseAuth();
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/login', { state: { from: location.pathname } });
+    }
+  }, [isAuthenticated]);
 
-  if (!(isAuthenticated || user)) {
-    loginWithRedirect({
-      authorizationParams: { redirect_uri: window.location.href }
-    });
-
+  if (!isAuthenticated || isLoading) {
     return <Loading />;
   }
 

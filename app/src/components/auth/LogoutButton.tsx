@@ -1,15 +1,16 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React from 'react';
 import LinkButton from '../common/LinkButton';
+import { useFirebaseAuth } from '../../contexts/FirebaseAuthContext';
 
 export default function LogoutButton() {
-  const { logout } = useAuth0();
+  const { logout } = useFirebaseAuth();
 
-  const handleLoginClick = async (e: React.MouseEvent) => {
+  async function handleLoginClick(e: React.MouseEvent) {
     e.preventDefault();
 
-    logout();
-  };
+    await logout();
+  }
 
   return <LinkButton onClick={handleLoginClick}>Logout</LinkButton>;
 }
