@@ -4,14 +4,16 @@
   "description": "Local testing sandbox",
   "private": true,
   "scripts": {
-    "start": "ts-node ./src/index.ts"
+    "token": "ts-node index.ts"
   },
   "author": "vanister",
   "license": "MIT",
   "dependencies": {
+    "@types/yargs": "^17.0.24",
     "dotenv": "^16.0.3",
     "firebase": "^9.19.1",
     "ts-node": "^10.9.1",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "yargs": "^17.7.1"
   }
 }

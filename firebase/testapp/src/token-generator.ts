@@ -3,9 +3,12 @@ import { log } from './util';
 
 export async function getTestToken(
   auth: Auth,
-  username: string = process.env.FIREBASE_TEST_UN,
-  password: string = process.env.FIREBASE_TEST_PW
+  logger?: (...msg: any[]) => void
 ): Promise<string> {
+  const log = logger ?? console.log;
+  const username = process.env.FIREBASE_TEST_UN;
+  const password = process.env.FIREBASE_TEST_PW;
+
   log(
     `logging in with: '${username}'`,
     `and password: '${password.substring(0, 3)}****'`
