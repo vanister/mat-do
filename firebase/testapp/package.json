@@ -1,0 +1,17 @@
+{
+  "name": "matdo-firebase-testapp",
+  "version": "0.1.0",
+  "description": "Local testing sandbox",
+  "private": true,
+  "scripts": {
+    "start": "ts-node ./src/index.ts"
+  },
+  "author": "vanister",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "firebase": "^9.19.1",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
+}
