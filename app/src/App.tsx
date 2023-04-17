@@ -10,7 +10,7 @@ import Scan from './pages/scan/Scan';
 import Dashboard from './pages/dashboard/Dashboard';
 import Thankyou from './pages/thankyou/Thankyou';
 import ItemDetails from './pages/itemdetails/ItemDetails';
-import Login from './components/login/Login';
+import Login from './pages/login/Login';
 
 export default function App() {
   return (

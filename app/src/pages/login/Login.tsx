@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import Title from '../Title';
-import Form, { FormField } from '../form/Form';
+import React, { useEffect, useState } from 'react';
+import Title from '../../components/Title';
+import Form, { FormField } from '../../components/form/Form';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useFirebaseAuth } from '../../contexts/FirebaseAuthContext';
 
