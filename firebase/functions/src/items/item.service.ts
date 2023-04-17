@@ -21,7 +21,7 @@ export async function list(userId: string, limit = 25): Promise<Item[]> {
   return items;
 }
 
-export async function get(id: string): Promise<Item> {
+export async function get(id: string, userId: string): Promise<Item> {
   if (!id) {
     throw new FieldRequiredError('id is required');
   }
@@ -37,7 +37,10 @@ export async function get(id: string): Promise<Item> {
   return { id: snapshot.id, ...item };
 }
 
-export async function create(item: Partial<Item>): Promise<Item> {
+export async function create(
+  item: Partial<Item>,
+  userId: string
+): Promise<Item> {
   validateItem(item as Item);
 
   const fullItem = {
@@ -55,7 +58,7 @@ export async function create(item: Partial<Item>): Promise<Item> {
   return fullItem;
 }
 
-export async function isFound(id: string): Promise<boolean> {
+export async function isFound(id: string, userId: string): Promise<boolean> {
   const snapshot = await collection.doc(id).get();
 
   if (!snapshot.exists) {
@@ -65,7 +68,7 @@ export async function isFound(id: string): Promise<boolean> {
   return !!snapshot.data().found;
 }
 
-export async function update(item: Item): Promise<void> {
+export async function update(item: Item, userId: string): Promise<void> {
   validateItem(item);
 
   const { id, name, description, found } = item;
