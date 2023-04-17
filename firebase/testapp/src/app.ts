@@ -1,6 +1,3 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
 import { initializeApp } from 'firebase/app';
 import { connectAuthEmulator, initializeAuth } from 'firebase/auth';
 import { logWithOptions, logError, log as logVerbose } from './util';

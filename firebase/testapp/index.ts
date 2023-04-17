@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { run } from './src/app';
