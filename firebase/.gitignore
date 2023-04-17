@@ -3,8 +3,11 @@
 
 .firebaserc
 firestore.rules
+.env*
+.env.*
 
 build/
 lib/
 node_modules/
 emulator_data/
+firebase-export-*/
