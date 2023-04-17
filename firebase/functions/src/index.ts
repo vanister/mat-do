@@ -3,8 +3,6 @@ import itemRouter from './items';
 import scanRouter from './scan';
 import { onRequest } from 'firebase-functions/v2/https';
 
-// todo - validate jwt
-
 const app = express();
 
 app.use(express.json());
