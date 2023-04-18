@@ -3,8 +3,11 @@
   "version": "0.1.0",
   "description": "Local testing sandbox",
   "private": true,
+  "bin": {
+    "matdo": "bin/matdo"
+  },
   "scripts": {
-    "token": "ts-node index.ts"
+    "build": "npx tsc"
   },
   "author": "vanister",
   "license": "MIT",

@@ -1,5 +1,4 @@
 import { Auth, signInWithEmailAndPassword } from 'firebase/auth';
-import { log } from './util';
 
 export async function getTestToken(
   auth: Auth,

@@ -13,4 +13,7 @@ Use this app to get a test token from the firebase emulator.
   - Create a user in the auth emulator and set the username and password in the following env:
     - `FIREBASE_TEST_UN='some@user.com' `
     - `FIREBASE_TEST_PW='some-stronge-pw-:-)'`
-- Run: `npm start` from this app to get a token with the values set in the `.env` file.
+- Run `npm run build` to build the `lib` directory
+- Run `npm link` (you only need to do this once)
+- Run `matdo` to generate the a test token
+  - Run `matdo --verbose` to log

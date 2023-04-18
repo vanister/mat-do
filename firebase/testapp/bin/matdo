@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+require('dotenv').config();
+
+const yargs = require('yargs');
+const { hideBin } = require('yargs/helpers');
+const { run } = require('../lib/app');
+
+const args = yargs(hideBin(process.argv))
+  .command('token', 'generates a test token')
+  .boolean('verbose')
+  .parse();
+
+const verbose = !!args.verbose;
+
+run({ verbose })
+  .then(() => process.exit(0))
+  .catch(() => process.exit(1));

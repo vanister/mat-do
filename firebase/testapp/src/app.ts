@@ -34,6 +34,7 @@ export async function run({ verbose }: TestAppArgs) {
     const token = await getTestToken(auth, log);
 
     logVerbose(`id token:\n\n${token}`, '\n\n');
+    logVerbose(`Done!`);
   } catch (error) {
     logError('error getting the test token');
     logError(error);
