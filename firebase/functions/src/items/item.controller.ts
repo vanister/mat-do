@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { create, get, list, update } from './item.service';
 import { handleError } from '../errors/handler';
-import { getUserId } from '../request.util';
+import { getItemService, getUserId } from '../request.util';
+import { ServiceRequest } from '../core';
 
 export async function listByUserId(req: Request, res: Response): Promise<void> {
   try {
-    const userId = getUserId(req);
-    const items = await list(userId as string);
+    const itemService = getItemService(req as ServiceRequest);
+    const items = await itemService.list();
 
     res.send(items);
   } catch (error) {
@@ -16,9 +16,9 @@ export async function listByUserId(req: Request, res: Response): Promise<void> {
 
 export async function getById(req: Request, res: Response): Promise<void> {
   try {
-    const userId = getUserId(req);
+    const itemService = getItemService(req as ServiceRequest);
     const { id } = req.params;
-    const item = await get(id, userId);
+    const item = await itemService.get(id);
 
     if (!item) {
       res.sendStatus(404);
@@ -33,11 +33,12 @@ export async function getById(req: Request, res: Response): Promise<void> {
 
 export async function createItem(req: Request, res: Response): Promise<void> {
   try {
-    const userId = getUserId(req);
+    const itemService = getItemService(req as ServiceRequest);
     const item = req.body;
-    const newItem = await create(item, userId);
+    const { id } = await itemService.create(item);
 
-    res.status(201).send(newItem.id);
+    res.setHeader('Location', `/items/${id}`);
+    res.status(201).send(id);
   } catch (error) {
     handleError(error, res);
   }
@@ -45,9 +46,9 @@ export async function createItem(req: Request, res: Response): Promise<void> {
 
 export async function updateItem(req: Request, res: Response): Promise<void> {
   try {
-    const userId = getUserId(req);
+    const itemService = getItemService(req as ServiceRequest);
     const item = req.body;
-    await update(item, userId);
+    await itemService.update(item);
 
     res.sendStatus(204);
   } catch (error) {

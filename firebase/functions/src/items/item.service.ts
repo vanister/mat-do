@@ -1,105 +1,128 @@
-import { Timestamp } from 'firebase-admin/firestore';
-import { getCollection } from '../db';
+import { CollectionReference, Timestamp } from 'firebase-admin/firestore';
 import { Item } from './item-type';
-import { FieldRequiredError } from '../errors/field-required.error.ts';
+import { ValidationError } from '../errors/field-required.error.ts';
 import { NotFoundError } from '../errors/not-found.error';
 
-const collection = getCollection<Item>('items');
+export class ItemService {
+  constructor(
+    private collection: CollectionReference<Item>,
+    private userId: string
+  ) {}
 
-export async function list(userId: string, limit = 25): Promise<Item[]> {
-  if (!userId) {
-    throw new FieldRequiredError('userId is required');
+  async list(limit = 25): Promise<Item[]> {
+    const snapshot = await this.collection
+      .where('userId', '==', this.userId)
+      .limit(limit)
+      .get();
+
+    const items = snapshot.docs.map((item) => ({
+      id: item.id,
+      ...item.data(),
+    }));
+
+    return items;
   }
 
-  const snapshot = await collection
-    .where('userId', '==', userId)
-    .limit(limit)
-    .get();
+  async get(id: string): Promise<Item> {
+    if (!id) {
+      throw new ValidationError('id is required');
+    }
 
-  const items = snapshot.docs.map((item) => ({ id: item.id, ...item.data() }));
+    const snapshot = await this.collection.doc(id).get();
 
-  return items;
-}
+    if (!snapshot.exists) {
+      return null;
+    }
 
-export async function get(id: string, userId: string): Promise<Item> {
-  if (!id) {
-    throw new FieldRequiredError('id is required');
+    const item = snapshot.data();
+
+    // make sure the item belongs to the user
+    if (!this.isUserItem(item)) {
+      return null;
+    }
+
+    return { id: snapshot.id, ...item };
   }
 
-  const snapshot = await collection.doc(id).get();
+  async create(item: Partial<Item>): Promise<Item> {
+    this.validateItem(item as Item);
 
-  if (!snapshot.exists) {
-    return null;
+    const fullItem = {
+      ...item,
+      createdAt: Timestamp.now(),
+      found: false,
+      scanned: 0,
+      lastUpdated: Timestamp.now(),
+    } as Item;
+
+    const { id } = await this.collection.add(fullItem);
+
+    fullItem.id = id;
+
+    return fullItem;
   }
 
-  const item = snapshot.data();
+  async update(item: Item): Promise<void> {
+    this.validateItem(item);
 
-  return { id: snapshot.id, ...item };
-}
+    const { id, name, description, found } = item;
+    const itemRef = this.collection.doc(id);
+    const snapshot = await itemRef.get();
 
-export async function create(
-  item: Partial<Item>,
-  userId: string
-): Promise<Item> {
-  validateItem(item as Item);
+    if (!snapshot.exists) {
+      throw new NotFoundError();
+    }
 
-  const fullItem = {
-    ...item,
-    createdAt: Timestamp.now(),
-    found: false,
-    scanned: 0,
-    lastUpdated: Timestamp.now(),
-  } as Item;
+    const itemUpdates: Partial<Item> = {
+      name,
+      description,
+      found,
+      lastUpdated: Timestamp.now(),
+    };
 
-  const { id } = await collection.add(fullItem);
-
-  fullItem.id = id;
-
-  return fullItem;
-}
-
-export async function isFound(id: string, userId: string): Promise<boolean> {
-  const snapshot = await collection.doc(id).get();
-
-  if (!snapshot.exists) {
-    throw new NotFoundError('document not found');
+    await itemRef.update(itemUpdates);
   }
 
-  return !!snapshot.data().found;
-}
+  /**
+   * Determines if an item is marked as `found` by the user.
+   *
+   * @param id The id of the Item document.
+   */
+  async isFound(id: string): Promise<boolean> {
+    const snapshot = await this.collection.doc(id).get();
 
-export async function update(item: Item, userId: string): Promise<void> {
-  validateItem(item);
+    if (!snapshot.exists) {
+      throw new NotFoundError('document not found');
+    }
 
-  const { id, name, description, found } = item;
-  const itemRef = collection.doc(id);
-  const snapshot = await itemRef.get();
+    const item = snapshot.data();
 
-  if (!snapshot.exists) {
-    throw new NotFoundError();
+    if (item.userId !== this.userId) {
+      throw new NotFoundError('document not found');
+    }
+
+    return !!snapshot.data().found;
   }
 
-  const itemUpdates: Partial<Item> = {
-    name,
-    description,
-    found,
-    lastUpdated: Timestamp.now(),
-  };
+  private validateItem(item: Item): void {
+    if (!item) {
+      throw new ValidationError('Item cannot be null');
+    }
 
-  await itemRef.update(itemUpdates);
-}
+    if (!item.name) {
+      throw new ValidationError('Item name is required');
+    }
 
-/** TODO - refactor to return validation result and move to controller? */
-function validateItem(item: Item): void {
-  if (!item) {
-    throw new FieldRequiredError('Item cannot be null');
+    if (!item.userId) {
+      throw new ValidationError('Item userId is required');
+    }
+
+    if (!this.isUserItem(item)) {
+      throw new ValidationError('Item does not belong to this user');
+    }
   }
 
-  if (!item.name) {
-    throw new FieldRequiredError('Item name is required');
-  }
-
-  if (!item.userId) {
-    throw new FieldRequiredError('Item userId is required');
+  private isUserItem(item: Item): boolean {
+    return item?.userId === this.userId;
   }
 }

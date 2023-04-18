@@ -1,9 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyIdToken } from '../auth';
 import { logger } from 'firebase-functions/v2';
+import { UserRequest } from '../core';
 
 export async function validateToken(
-  req: Request,
+  req: UserRequest,
   res: Response,
   next: NextFunction
 ): Promise<void | Response> {
@@ -18,15 +19,13 @@ export async function validateToken(
   const { valid, user } = tokenResult;
 
   if (!valid) {
-    logger.error('Error validting authorization header', tokenResult.error);
+    logger.error('Error validting authorization header:', tokenResult.error);
 
-    return res.sendStatus(401);
+    return res.status(401).send(tokenResult.errorCode);
   }
 
   // set the user on the request
-  // @ts-ignore
   req.user = user;
-  // @ts-ignore
   req.uid = user.uid;
 
   next();

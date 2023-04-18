@@ -2,22 +2,22 @@ import { Timestamp, FieldValue } from 'firebase-admin/firestore';
 import { getCollection, transaction } from '../db';
 import { ScannedItem } from './scan-types';
 import { Item } from '../items/item-type';
-import { FieldRequiredError } from '../errors/field-required.error.ts';
+import { ValidationError } from '../errors/field-required.error.ts';
 
 const itemCollection = getCollection<Item>('items');
 const scanCollection = getCollection<ScannedItem>('scans');
 
 export async function scanned(scan: Partial<ScannedItem>): Promise<void> {
   if (!scan) {
-    throw new FieldRequiredError('Scanned item is required');
+    throw new ValidationError('Scanned item is required');
   }
 
   if (!scan.itemId) {
-    throw new FieldRequiredError('itemId is missing');
+    throw new ValidationError('itemId is missing');
   }
 
   if (!scan.comments) {
-    throw new FieldRequiredError('Comment is required');
+    throw new ValidationError('Comment is required');
   }
 
   await transaction(async (transaction, _) => {
