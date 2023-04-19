@@ -19,7 +19,7 @@
     "rebuild": "rimraf ./functions/lib && npm run build",
     "export-data": "npx firebase emulators:export ./emulator_data",
     "debug": "npm run start-emulators -- --inspect-functions 9229",
-    "start-emulators": "firebase emulators:start --import ./emulator_data",
+    "start-emulators": "firebase emulators:start --import ./emulator_data --export-on-exit",
     "start": "concurrently 'npm:build-watch' 'npm:start-emulators'",
     "start-debug": "concurrently 'npm:build-watch' 'npm:debug'",
     "restore": "npm ci && cd ./functions && npm ci && cd .."
