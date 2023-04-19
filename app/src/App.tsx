@@ -13,12 +13,15 @@ import ItemDetails from './pages/itemdetails/ItemDetails';
 import Login from './pages/login/Login';
 import { AuthProvider, useFirebaseApp } from 'reactfire';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import { appSettings } from './AppSettings';
 
 export default function App() {
   const app = useFirebaseApp();
   const auth = getAuth(app);
 
-  connectAuthEmulator(auth, 'http://localhost:9099');
+  if (!appSettings.isProduction) {
+    connectAuthEmulator(auth, 'http://localhost:9099');
+  }
 
   return (
     <AuthProvider sdk={auth}>
