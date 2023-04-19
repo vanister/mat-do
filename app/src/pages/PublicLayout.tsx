@@ -4,10 +4,10 @@ import LogoutButton from '../components/auth/LogoutButton';
 import NavMenu from '../components/nav/NavMenu';
 
 import './PublicLayout.scss';
-import { useFirebaseAuth } from '../contexts/FirebaseAuthContext';
+import { useSigninCheck } from 'reactfire';
 
 export default function PublicLayout() {
-  const { isAuthenticated } = useFirebaseAuth();
+  const { data } = useSigninCheck();
 
   return (
     <div className="public-layout-content">
@@ -16,10 +16,10 @@ export default function PublicLayout() {
         <NavMenu>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/dashboard">Dashboard</NavLink>
-          {isAuthenticated ? (
-            <LogoutButton />
-          ) : (
+          {!data?.signedIn ? (
             <NavLink to="/login">Login</NavLink>
+          ) : (
+            <LogoutButton />
           )}
         </NavMenu>
       </header>

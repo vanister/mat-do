@@ -2,21 +2,23 @@ import React, { useEffect, useState } from 'react';
 import Title from '../../components/Title';
 import Form, { FormField } from '../../components/form/Form';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useFirebaseAuth } from '../../contexts/FirebaseAuthContext';
+import { useSigninCheck } from 'reactfire';
+import { useFirebaseEmailAuth } from '../../hooks/useFirebaseEmailAuth';
 
 export default function Login() {
   const [username, setUsername] = useState<string>();
   const [password, setPassword] = useState<string>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated, isLoading, login } = useFirebaseAuth();
+  const { status, data: signInCheckResult } = useSigninCheck();
+  const { login } = useFirebaseEmailAuth();
   const redirectUrl = location.state?.from ?? '/dashboard';
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (signInCheckResult?.signedIn) {
       navigate(redirectUrl, { replace: true });
     }
-  }, [isAuthenticated]);
+  }, [signInCheckResult?.signedIn]);
 
   const fields: FormField[] = [
     {
@@ -59,7 +61,7 @@ export default function Login() {
           {
             type: 'submit',
             text: 'Login',
-            disabled: !(username && password) || isLoading
+            disabled: !(username && password) || status === 'loading'
           }
         ]}
         onSubmit={handleFormSubmit}

@@ -1,9 +1,9 @@
 import React from 'react';
 import LinkButton from '../common/LinkButton';
-import { useFirebaseAuth } from '../../contexts/FirebaseAuthContext';
+import { useFirebaseEmailAuth } from '../../hooks/useFirebaseEmailAuth';
 
 export default function LogoutButton() {
-  const { logout } = useFirebaseAuth();
+  const { logout } = useFirebaseEmailAuth();
 
   async function handleLoginClick(e: React.MouseEvent) {
     e.preventDefault();

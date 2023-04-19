@@ -11,29 +11,38 @@ import Dashboard from './pages/dashboard/Dashboard';
 import Thankyou from './pages/thankyou/Thankyou';
 import ItemDetails from './pages/itemdetails/ItemDetails';
 import Login from './pages/login/Login';
+import { AuthProvider, useFirebaseApp } from 'reactfire';
+import { connectAuthEmulator, getAuth } from 'firebase/auth';
 
 export default function App() {
+  const app = useFirebaseApp();
+  const auth = getAuth(app);
+
+  connectAuthEmulator(auth, 'http://localhost:9099');
+
   return (
-    <Routes>
-      <Route element={<PublicLayout />}>
-        <Route path="/" element={<Navigate to="/home" replace />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/scan/:id" element={<Scan />} />
-        <Route path="/thankyou" element={<Thankyou />} />
-      </Route>
-      <Route
-        element={
-          <RequireAuth>
-            <Layout />
-          </RequireAuth>
-        }
-      >
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/create" element={<Create />} />
-        <Route path="/item/:id" element={<ItemDetails />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-    </Routes>
+    <AuthProvider sdk={auth}>
+      <Routes>
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/scan/:id" element={<Scan />} />
+          <Route path="/thankyou" element={<Thankyou />} />
+        </Route>
+        <Route
+          element={
+            <RequireAuth>
+              <Layout />
+            </RequireAuth>
+          }
+        >
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/create" element={<Create />} />
+          <Route path="/item/:id" element={<ItemDetails />} />
+          <Route path="*" element={<NotFound />} />
+        </Route>
+      </Routes>
+    </AuthProvider>
   );
 }

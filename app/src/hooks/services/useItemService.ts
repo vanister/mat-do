@@ -1,6 +1,6 @@
+import { useUser } from 'reactfire';
 import { Item } from '../../models/item';
 import { sendRequestWithAuth } from '../../utilities/api';
-import { useServiceDeps } from './useServiceDependencies';
 
 export type PagingFilter = {
   size: number;
@@ -40,9 +40,10 @@ export interface ItemService {
 
 export function useItemService(): ItemService {
   const path = '/items';
-  const { user, accessToken } = useServiceDeps();
+  const { data: user } = useUser();
 
   async function list(filters: PagingFilter): Promise<Item[]> {
+    const accessToken = await user.getIdToken();
     const { data } = await sendRequestWithAuth<Item[]>(
       `${path}/list`,
       accessToken,
@@ -55,6 +56,7 @@ export function useItemService(): ItemService {
   }
 
   async function create(item: Partial<Item>): Promise<Item> {
+    const accessToken = await user.getIdToken();
     const itemWithUserId = { ...item, userId: user.uid };
     const { data: id } = await sendRequestWithAuth<string>(path, accessToken, {
       method: 'POST',
@@ -65,6 +67,7 @@ export function useItemService(): ItemService {
   }
 
   async function get(id: string): Promise<Item> {
+    const accessToken = await user.getIdToken();
     const { data } = await sendRequestWithAuth<Item>(
       `${path}/${id}`,
       accessToken
@@ -74,6 +77,8 @@ export function useItemService(): ItemService {
   }
 
   async function update(item: Item): Promise<void> {
+    const accessToken = await user.getIdToken();
+
     await sendRequestWithAuth<void>(path, accessToken, {
       method: 'PUT',
       data: item
