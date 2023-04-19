@@ -1,5 +1,7 @@
 # Matdo .NET Server
 
+This project is **deprecated**. Firebase is now used as the backend for Matdo.
+
 ## Setup
 
 This project was created using the .net core cli and VS Code.
