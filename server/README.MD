@@ -1,4 +1,4 @@
-# Matdo .NET Server
+# Matdo .NET Server (deprecated)
 
 This project is **deprecated**. Firebase is now used as the backend for Matdo.
 
