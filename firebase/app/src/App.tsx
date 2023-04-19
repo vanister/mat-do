@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './pages/Layout';
 import Create from './pages/create/Create';
@@ -14,6 +14,8 @@ import Login from './pages/login/Login';
 import { AuthProvider, useFirebaseApp } from 'reactfire';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
 import { appSettings } from './AppSettings';
+import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
+import Error from './components/error/Error';
 
 export default function App() {
   const app = useFirebaseApp();
@@ -23,29 +25,37 @@ export default function App() {
     connectAuthEmulator(auth, 'http://localhost:9099');
   }
 
+  function handleErrorBoundaryFallback({ error }: FallbackProps): ReactNode {
+    console.log(error);
+
+    return <Error />;
+  }
+
   return (
     <AuthProvider sdk={auth}>
-      <Routes>
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/scan/:id" element={<Scan />} />
-          <Route path="/thankyou" element={<Thankyou />} />
-        </Route>
-        <Route
-          element={
-            <RequireAuth>
-              <Layout />
-            </RequireAuth>
-          }
-        >
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/create" element={<Create />} />
-          <Route path="/item/:id" element={<ItemDetails />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
+      <ErrorBoundary fallbackRender={handleErrorBoundaryFallback}>
+        <Routes>
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Navigate to="/home" replace />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/scan/:id" element={<Scan />} />
+            <Route path="/thankyou" element={<Thankyou />} />
+          </Route>
+          <Route
+            element={
+              <RequireAuth>
+                <Layout />
+              </RequireAuth>
+            }
+          >
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/create" element={<Create />} />
+            <Route path="/item/:id" element={<ItemDetails />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </ErrorBoundary>
     </AuthProvider>
   );
 }

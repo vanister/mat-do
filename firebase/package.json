@@ -22,7 +22,7 @@
     "start-emulators": "firebase emulators:start --import ./emulator_data",
     "start": "concurrently 'npm:build-watch' 'npm:start-emulators'",
     "start-debug": "concurrently 'npm:build-watch' 'npm:debug'",
-    "restore": "npm ci && cd ./functions && npm ci && cd .."
+    "restore": "npm ci && cd ./functions && npm ci && cd .. && cd ./app && npm ci && cd .."
   },
   "devDependencies": {
     "@types/jest": "^29.5.0",
