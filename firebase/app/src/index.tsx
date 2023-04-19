@@ -14,7 +14,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <FirebaseAppProvider firebaseConfig={appSettings}>
+      <FirebaseAppProvider firebaseConfig={appSettings.firebaseOptions}>
         <App />
       </FirebaseAppProvider>
     </BrowserRouter>
