@@ -15,7 +15,7 @@ export async function sendRequestWithAuth<T>(
 ): Promise<AxiosResponse<T>> {
   const authOptions: RequestOptions = {
     ...options,
-    additionalHeaders: { Authroization: `Bearer ${accessToken}` }
+    additionalHeaders: { Authorization: `Bearer ${accessToken}` }
   };
 
   return await sendRequest(url, authOptions);
