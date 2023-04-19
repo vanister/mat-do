@@ -1,16 +1,18 @@
 import { Request, Response } from 'express';
 import { ScanResponse, ScannedItem } from './scan-types';
 import { get, list, scanned } from './scan.service';
-import { isFound } from '../items/item.service';
 import { handleError } from '../errors/handler';
+import { getItemService } from '../request.util';
+import { ServiceRequest } from '../core';
 
 export async function scan(
   req: Request,
   res: Response<ScanResponse>
 ): Promise<void> {
   try {
+    const itemService = getItemService(req as ServiceRequest, true);
     const item = req.body as ScannedItem;
-    const found = await isFound(item?.itemId);
+    const found = await itemService.isFound(item?.itemId);
 
     if (found) {
       res.status(200).send({ found: true });
@@ -41,6 +43,7 @@ export async function getById(req: Request, res: Response): Promise<void> {
   }
 }
 
+// TODO - this needs auth
 export async function listByItemId(req: Request, res: Response): Promise<void> {
   try {
     const { itemId } = req.query;

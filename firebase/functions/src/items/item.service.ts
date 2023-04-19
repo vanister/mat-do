@@ -3,7 +3,9 @@ import { Item } from './item-type';
 import { ValidationError } from '../errors/field-required.error.ts';
 import { NotFoundError } from '../errors/not-found.error';
 
-export class ItemService {
+export interface InjectableService {}
+
+export class ItemService implements InjectableService {
   constructor(
     private collection: CollectionReference<Item>,
     private userId: string
@@ -89,15 +91,10 @@ export class ItemService {
    * @param id The id of the Item document.
    */
   async isFound(id: string): Promise<boolean> {
+    // TODO - move to scan service
     const snapshot = await this.collection.doc(id).get();
 
     if (!snapshot.exists) {
-      throw new NotFoundError('document not found');
-    }
-
-    const item = snapshot.data();
-
-    if (item.userId !== this.userId) {
       throw new NotFoundError('document not found');
     }
 
