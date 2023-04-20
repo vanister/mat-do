@@ -46,10 +46,7 @@ export function useItemService(): ItemService {
     const accessToken = await user.getIdToken();
     const { data } = await sendRequestWithAuth<Item[]>(
       `${path}/list`,
-      accessToken,
-      {
-        params: { userId: user.uid }
-      }
+      accessToken
     );
 
     return data;

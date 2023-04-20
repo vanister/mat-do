@@ -1,4 +1,9 @@
-import axios, { AxiosResponse, Method } from 'axios';
+import axios, {
+  AxiosError,
+  AxiosResponse,
+  HttpStatusCode,
+  Method
+} from 'axios';
 
 export type RequestOptions = {
   data?: any;
@@ -8,11 +13,17 @@ export type RequestOptions = {
   params?: Record<string, string | number>;
 };
 
+export type Response<T> = {
+  status: HttpStatusCode;
+  errorMsg?: string;
+  data?: T;
+};
+
 export async function sendRequestWithAuth<T>(
   url: string,
   accessToken: string,
   options: RequestOptions = {}
-): Promise<AxiosResponse<T>> {
+): Promise<Response<T>> {
   const authOptions: RequestOptions = {
     ...options,
     additionalHeaders: { Authorization: `Bearer ${accessToken}` }
@@ -24,7 +35,7 @@ export async function sendRequestWithAuth<T>(
 export async function sendRequest<T>(
   url: string,
   options: RequestOptions = {}
-): Promise<AxiosResponse<T>> {
+): Promise<Response<T>> {
   const { data, additionalHeaders, method, baseUrl, params } = options;
 
   const headers = {
@@ -45,8 +56,13 @@ export async function sendRequest<T>(
 
     return response;
   } catch (error) {
-    console.error(error);
-
     throw error;
+    // const axiosError = error as AxiosError;
+
+    // if (!axiosError) {
+    // }
+
+    // // return the error status
+    // return { status: axiosError.response.status, errorMsg: axiosError.message };
   }
 }

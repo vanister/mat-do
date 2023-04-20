@@ -6,6 +6,7 @@ import { useItemService } from '../../hooks/services/useItemService';
 import Loading from '../../components/loading/Loading';
 import Form, { FormAction, FormField } from '../../components/form/Form';
 import { Timestamp } from 'firebase/firestore';
+import { useErrorBoundary } from 'react-error-boundary';
 
 import './ItemDetails.scss';
 
@@ -15,14 +16,13 @@ export default function ItemDetails() {
   const [item, setItem] = useState<Item>();
   const [isSaving, setIsSaving] = useState(false);
   const itemService = useItemService();
+  const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
     itemService
       .get(id)
       .then((item) => setItem(item))
-      .catch((_) => {
-        alert('Failed fetching the item');
-      });
+      .catch((error) => showBoundary(error));
   }, [id]);
 
   const fields: FormField[] = useMemo(() => {

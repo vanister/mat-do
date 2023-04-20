@@ -1,11 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
 import { Item } from '../../models/item';
 import { useItemService } from '../../hooks/services/useItemService';
-
-import './Dashboard.scss';
 import { NavLink, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import Loading from '../../components/loading/Loading';
+
+import './Dashboard.scss';
 
 export type FilterParams = {
   page: string;
@@ -20,13 +21,20 @@ export default function Dashboard() {
   const itemService = useItemService();
   const { size } = useParams<FilterParams>();
   const pageSize = useMemo(() => parseInt(size) || 10, [size]);
+  const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
     setIsLoading(true);
-    itemService.list({ size: pageSize }).then((items) => {
-      setIsLoading(false);
-      setItems(items);
-    });
+
+    itemService
+      .list({ size: pageSize })
+      .then((items) => {
+        setIsLoading(false);
+        setItems(items);
+      })
+      .catch((error) => {
+        showBoundary(error);
+      });
   }, [pageSize]);
 
   return (

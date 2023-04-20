@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import LogoutButton from '../components/auth/LogoutButton';
 import NavMenu from '../components/nav/NavMenu';
+import { useSigninCheck } from 'reactfire';
 
 import './PublicLayout.scss';
-import { useSigninCheck } from 'reactfire';
 
 export default function PublicLayout() {
   const { data } = useSigninCheck();

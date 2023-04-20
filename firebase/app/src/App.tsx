@@ -26,8 +26,6 @@ export default function App() {
   }
 
   function handleErrorBoundaryFallback({ error }: FallbackProps): ReactNode {
-    console.log(error);
-
     return <Error />;
   }
 
