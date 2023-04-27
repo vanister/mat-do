@@ -8,8 +8,8 @@ export default function Home() {
     <div className="home-page">
       <Title>Home</Title>
       <p>
-        Generate QR Codes with a name and description and tag it to an item you
-        want to track using crowd sourcing.
+        Generate QR Codes with a name and description, print it out and tag it
+        to an item you want to track using crowd sourcing.
       </p>
       <p>
         This low-tech solution depends on kind people who will scan and report
