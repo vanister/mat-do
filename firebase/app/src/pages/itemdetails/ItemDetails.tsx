@@ -4,7 +4,7 @@ import Title from '../../components/Title';
 import { Item } from '../../models/item';
 import { useItemService } from '../../hooks/services/useItemService';
 import Loading from '../../components/loading/Loading';
-import Form, { FormAction, FormField } from '../../components/form/Form';
+import Form, { FormAction, FormField } from '../../components/form/FormOld';
 import { Timestamp } from 'firebase/firestore';
 import { useErrorBoundary } from 'react-error-boundary';
 

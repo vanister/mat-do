@@ -11,7 +11,7 @@ import {
 } from './actions';
 import { CreateState } from './create-types';
 import { useItemService } from '../../hooks/services/useItemService';
-import Form, { FormAction, FormField } from '../../components/form/Form';
+import Form, { FormAction, FormField } from '../../components/form/FormOld';
 
 import './Create.scss';
 

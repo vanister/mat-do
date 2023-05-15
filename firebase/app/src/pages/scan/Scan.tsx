@@ -5,7 +5,7 @@ import { useScannedInfo } from '../../hooks/useScannedInfo';
 import { ItemCoordinates, ScannedItem } from '../../models/scan';
 import { getCurrentLocation } from '../../utilities/geolocation-util';
 import { useScanService } from '../../hooks/services/useScanService';
-import Form, { FormAction, FormField } from '../../components/form/Form';
+import Form, { FormAction, FormField } from '../../components/form/FormOld';
 import { Timestamp } from 'firebase/firestore';
 
 import './Scan.scss';

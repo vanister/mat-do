@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Title from '../../components/Title';
-import Form, { FormField } from '../../components/form/Form';
+import Form, { FormField } from '../../components/form/FormOld';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
 import { useFirebaseEmailAuth } from '../../hooks/useFirebaseEmailAuth';
