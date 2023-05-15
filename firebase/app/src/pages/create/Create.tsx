@@ -10,10 +10,10 @@ import {
   validationFailed
 } from './actions';
 import { CreateState } from './create-types';
-
-import './Create.scss';
 import { useItemService } from '../../hooks/services/useItemService';
 import Form, { FormAction, FormField } from '../../components/form/Form';
+
+import './Create.scss';
 
 const initialState: CreateState = {
   created: false,
