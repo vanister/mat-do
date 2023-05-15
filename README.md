@@ -16,7 +16,7 @@ https://user-images.githubusercontent.com/7736967/234744160-aee3e29a-04e5-4ced-a
   - Firestore
   - Functions
   - Hosting (optional)
-  - Authentication (still considering)
+  - Authentication
 - Mobile device that supports QR Code scanning
   - Location services enabled (preferred)
 - The following are deprecated:
