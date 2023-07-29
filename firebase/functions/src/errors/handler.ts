@@ -11,7 +11,7 @@ export function handleError(
   logger.error(error);
 
   if (error instanceof BaseError) {
-    return response.status(400).send(error.message as any);
+    return response.status(400).send(error.message);
   }
 
   return response.sendStatus(500);
