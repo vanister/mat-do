@@ -35,7 +35,7 @@ export default function Dashboard() {
       .catch((error) => {
         showBoundary(error);
       });
-  }, [pageSize]);
+  }, [itemService, pageSize, showBoundary]);
 
   return (
     <div className="dashboard-page">
