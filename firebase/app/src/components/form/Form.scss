@@ -36,14 +36,9 @@
     }
   }
 
-  .actions {
-    button {
-      margin-right: 0.25rem;
-    }
-
-    :last-child {
-      margin-right: 0;
-    }
+  .form-action {
+    min-width: 75px;
+    margin-right: 0.25rem;
   }
 
   @media print {
