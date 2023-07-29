@@ -1,14 +1,16 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import './ItemDetails.scss';
+
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import { Item } from '../../models/item';
 import { useItemService } from '../../hooks/services/useItemService';
 import Loading from '../../components/loading/Loading';
-import Form, { FormAction, FormField } from '../../components/form/FormOld';
 import { Timestamp } from 'firebase/firestore';
 import { useErrorBoundary } from 'react-error-boundary';
-
-import './ItemDetails.scss';
+import Form from '../../components/form/Form';
+import FormInput from '../../components/form/FormInput';
+import FormAction from '../../components/form/FormAction';
 
 export default function ItemDetails() {
   const { id } = useParams<{ id: string }>();
@@ -23,68 +25,15 @@ export default function ItemDetails() {
       .get(id)
       .then((item) => setItem(item))
       .catch((error) => showBoundary(error));
-  }, [id]);
+  }, []);
 
-  const fields: FormField[] = useMemo(() => {
-    if (!item) {
-      return [];
-    }
+  function handleValueChange(field: string, value: string | boolean) {
+    setItem({ ...item, [field]: value });
+  }
 
-    return [
-      {
-        name: 'nameField',
-        label: 'Name',
-        placeholder: `Jyn's blaster`,
-        value: item?.name,
-        required: true,
-        onChange: (value) => {
-          setItem({ ...item, name: value });
-        }
-      },
-      {
-        name: 'descriptionField',
-        label: 'Description',
-        placeholder: 'The one she stole from Cassian...',
-        value: item?.description,
-        onChange: (value) => setItem({ ...item, description: value })
-      },
-      {
-        name: 'foundField',
-        type: 'checkbox',
-        label: 'Found'
-      },
-      {
-        name: 'scannedField',
-        label: 'Number of times scanned',
-        value: item.scanned.toString(),
-        readOnly: true
-      },
-      {
-        name: 'lastScannedField',
-        label: 'last scanned',
-        value: item.lastScanned
-          ? // todo - move to util
-            Timestamp.fromMillis(item.lastScanned._seconds * 1000)
-              .toDate()
-              .toLocaleString()
-          : 'Never scanned',
-        readOnly: true
-      }
-    ];
-  }, [item]);
-
-  const actions: FormAction[] = [
-    {
-      type: 'submit',
-      text: isSaving ? 'Saving...' : 'Update',
-      disabled: isSaving || !item?.name
-    },
-    {
-      type: 'button',
-      text: 'Cancel',
-      onAction: () => navigate('/dashboard')
-    }
-  ];
+  function handleCancelClick() {
+    navigate('/dashboard');
+  }
 
   async function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -108,12 +57,57 @@ export default function ItemDetails() {
   return (
     <div className="item-page">
       <Title>Item Details</Title>
-      <Form
-        id="itemForm"
-        fields={fields}
-        actions={actions}
-        onSubmit={handleFormSubmit}
-      />
+
+      <Form onSubmit={handleFormSubmit}>
+        <FormInput
+          id="nameField"
+          label="Name"
+          value={item.name}
+          onChange={(value) => handleValueChange('name', value)}
+          additionalProps={{ placeholder: `Jyn's Blaster`, required: true }}
+        />
+        <FormInput
+          id="descField"
+          label="Description"
+          value={item.description}
+          multiline
+          onChange={(value) => handleValueChange('description', value)}
+        />
+        <FormInput
+          label="Found"
+          onChange={(_, event) =>
+            handleValueChange(
+              'found',
+              (event.target as HTMLInputElement).checked
+            )
+          }
+        />
+        <FormInput
+          label="Number of times scanned"
+          value={item.scanned.toString()}
+          readOnly
+        />
+        <FormInput
+          label="Last scanned"
+          readOnly
+          value={
+            item.lastScanned
+              ? Timestamp.fromMillis(item.lastScanned._seconds * 1000)
+                  .toDate()
+                  .toLocaleString()
+              : 'Never'
+          }
+        />
+        <FormAction
+          type="submit"
+          additionalProps={{ disabled: isSaving || !item?.name }}
+        >
+          {isSaving ? 'Saving...' : 'Update'}
+        </FormAction>
+        <FormAction type="button" onClick={handleCancelClick}>
+          Cancel
+        </FormAction>
+      </Form>
     </div>
   );
 }
