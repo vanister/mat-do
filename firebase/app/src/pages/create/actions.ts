@@ -1,7 +1,10 @@
-import { CreateDispatch } from './create-types';
+import { CreateAction, CreateDispatch } from './create-types';
 import { generateDataUri } from '../../utilities/qrcode-generator';
 import { ItemService } from '../../hooks/services/useItemService';
 import { toScannableItemUrl } from '../../utilities/item-util';
+import { User } from 'firebase/auth';
+import { Item } from '../../models/item';
+import { sendRequestWithAuth } from '../../utilities/api';
 
 export const INIT = 'INIT';
 export const POSTING_REQUEST = 'POSTING_REQUEST';
@@ -29,20 +32,22 @@ export const updateDescription = (description: string) => ({
   payload: { description }
 });
 
-/**
- * Creates a new Item record in the db and then generates a
- * QR code with an embedded url to the item for scanning.
- *
- * @param dispatch The action dispatcher.
- * @param service The ItemService to use.
- */
-export function generate(dispatch: CreateDispatch, service: ItemService) {
-  return async function (name: string, description?: string) {
+export function generateQrCode(user: User, name: string, description?: string) {
+  return async function (dispatch: React.Dispatch<CreateAction>) {
     try {
       dispatch({ type: POSTING_REQUEST });
 
-      const item = await service.create({ name, description });
-      const qrData = toScannableItemUrl(item);
+      const { uid } = user;
+      const accessToken = await user.getIdToken();
+      const item: Partial<Item> = { name, description, userId: uid };
+
+      const { data: id } = await sendRequestWithAuth<string>(
+        '/items',
+        accessToken,
+        { method: 'POST', data: item }
+      );
+
+      const qrData = toScannableItemUrl({ ...item, id } as Item);
 
       dispatch({ type: GENERATING_QR_CODE });
 

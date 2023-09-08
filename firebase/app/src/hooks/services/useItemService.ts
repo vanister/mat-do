@@ -51,7 +51,11 @@ export function useItemService(): ItemService {
 
     return data;
   }
-
+  /**
+   * Creates a new item by sending a POST request to the server.
+   *
+   * @param item The item to create on the server.
+   */
   async function create(item: Partial<Item>): Promise<Item> {
     const accessToken = await user.getIdToken();
     const itemWithUserId = { ...item, userId: user.uid };

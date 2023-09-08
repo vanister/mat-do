@@ -17,25 +17,25 @@ export type FilterParams = {
 
 export default function Dashboard() {
   const [items, setItems] = useState<Item[]>();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const itemService = useItemService();
   const { size } = useParams<FilterParams>();
   const pageSize = useMemo(() => parseInt(size) || 10, [size]);
   const { showBoundary } = useErrorBoundary();
 
   useEffect(() => {
-    setIsLoading(true);
-
     itemService
       .list({ size: pageSize })
       .then((items) => {
-        setIsLoading(false);
         setItems(items);
       })
       .catch((error) => {
         showBoundary(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-  }, [itemService, pageSize, showBoundary]);
+  }, [pageSize]);
 
   return (
     <div className="dashboard-page">

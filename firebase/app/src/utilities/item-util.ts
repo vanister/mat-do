@@ -1,6 +1,7 @@
-import { url } from 'inspector';
 import { Item } from '../models/item';
 import { fromBase64, toBase64 } from './base64-util';
+
+const INFO_HASH_KEY = 'i';
 
 /**
  * Converts a given Item to an absolute URL string.
@@ -22,7 +23,7 @@ export function toScannableItemUrl(item: Item, path = '/scan'): string {
 
   // create a url with name and and desc embedded in the hash
   // so we don't have to retrieve it when it is scanned
-  return `${window.location.origin}${path}/${item.id}#info=${encoded}`;
+  return `${window.location.origin}${path}/${item.id}#${INFO_HASH_KEY}=${encoded}`;
 }
 
 /**
@@ -35,17 +36,19 @@ export function getScanItemInfo(hash: string): Partial<Item> {
     throw new Error('hash');
   }
 
-  if (!hash.includes('info=')) {
-    throw new Error('Missing info param');
+  if (!hash.includes(`${INFO_HASH_KEY}=`)) {
+    throw new Error('missing hash key');
   }
 
+  // build a search params map in case we decide to append more data in the hash
+  // at a later point
   const params = new URLSearchParams(hash.replace('#', ''));
 
-  if (!params.has('info')) {
-    throw new Error('Missing info param');
+  if (!params.has(INFO_HASH_KEY)) {
+    throw new Error('missing hash');
   }
 
-  const base64InfoStr = params.get('info');
+  const base64InfoStr = params.get(INFO_HASH_KEY);
   const decodedInfoStr = fromBase64(base64InfoStr);
   const item: Partial<Item> = JSON.parse(decodedInfoStr);
 

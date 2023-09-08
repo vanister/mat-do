@@ -1,21 +1,22 @@
 import './Create.scss';
 
-import React, { useLayoutEffect, useReducer } from 'react';
+import React, { useCallback, useLayoutEffect } from 'react';
 import Title from '../../components/Title';
 import QrCodeImage from '../../components/common/QrCodeImage';
 import { createReducer } from './reducer';
 import {
-  generate,
+  generateQrCode,
   init,
   updateDescription,
   updateName,
   validationFailed
 } from './actions';
 import { CreateState } from './create-types';
-import { useItemService } from '../../hooks/services/useItemService';
 import Form from '../../components/form/Form';
 import FormInput from '../../components/form/FormInput';
 import FormAction from '../../components/form/FormAction';
+import { useUser } from 'reactfire';
+import { useThunkReducer } from '../../hooks/useThunkReducer';
 
 const initialState: CreateState = {
   created: false,
@@ -24,10 +25,9 @@ const initialState: CreateState = {
 };
 
 export default function Create() {
-  const [state, dispatch] = useReducer(createReducer, initialState);
+  const { data: user } = useUser();
+  const [state, dispatch] = useThunkReducer(createReducer, initialState);
   const { error, name, description: desc, created: qrCreated, dataUri } = state;
-  const itemService = useItemService();
-  const generateQrCode = generate(dispatch, itemService);
 
   useLayoutEffect(() => {
     if (!!error) {
@@ -35,23 +35,26 @@ export default function Create() {
     }
   }, [error]);
 
-  async function handleFormSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const handleFormSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    if (!name) {
-      dispatch(validationFailed('A name is required'));
-      return;
-    }
+      if (!name) {
+        dispatch(validationFailed('A name is required'));
+        return;
+      }
 
-    await generateQrCode(name, desc);
-  }
+      dispatch(generateQrCode(user, name, desc));
+    },
+    [desc, dispatch, name, user]
+  );
 
   return (
     <div className="create-page">
       <Title>Create an Item</Title>
       <section className="create-page-content">
         {qrCreated && <QrCodeImage dataUri={dataUri} />}
-        <Form>
+        <Form onSubmit={handleFormSubmit}>
           <FormInput
             id="nameField"
             label="Name"
