@@ -7,14 +7,25 @@ export type FormInputProps = {
   value?: string;
   readOnly?: boolean;
   multiline?: boolean;
+  type?: React.HTMLInputTypeAttribute;
   placeholder?: string;
+  required?: boolean;
   additionalProps?: AdditionalProps;
   onChange?: FormInputChangeEventHander;
 };
 
 export default function FormInput(props: FormInputProps) {
-  const { id, label, value, onChange, readOnly, multiline, placeholder } =
-    props;
+  const {
+    id,
+    label,
+    value,
+    readOnly,
+    multiline,
+    placeholder,
+    type,
+    required,
+    onChange
+  } = props;
   const additionalProps = props.additionalProps ?? {};
 
   return (
@@ -31,6 +42,7 @@ export default function FormInput(props: FormInputProps) {
             rows={6}
             placeholder={placeholder}
             readOnly={readOnly}
+            required={required}
             onChange={(e) => {
               onChange && onChange(e.target.value, e);
             }}
@@ -41,9 +53,10 @@ export default function FormInput(props: FormInputProps) {
             id={id}
             className="field-input"
             value={value}
-            type="text"
+            type={type ?? 'text'}
             placeholder={placeholder}
             readOnly={readOnly}
+            required={required}
             onChange={(e) => {
               onChange && onChange(e.target.value, e);
             }}
