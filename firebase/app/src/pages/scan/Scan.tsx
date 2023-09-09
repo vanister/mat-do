@@ -1,26 +1,38 @@
+import './Scan.scss';
+
 import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import { useScannedInfo } from '../../hooks/useScannedInfo';
 import { ItemCoordinates, ScannedItem } from '../../models/scan';
-import { getCurrentLocation } from '../../utilities/geolocation-util';
+import {
+  getCurrentLocation,
+  getLatLongString
+} from '../../utilities/geolocation-util';
 import { useScanService } from '../../hooks/services/useScanService';
-import Form, { FormAction, FormField } from '../../components/form/FormOld';
 import { Timestamp } from 'firebase/firestore';
-
-import './Scan.scss';
+import Form from '../../components/form/Form';
+import FormInput from '../../components/form/FormInput';
+import FormAction from '../../components/form/FormAction';
 
 export default function Scan() {
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
-  const [comments, setComments] = useState<string>();
+  const [fetchingCoords, setFetchingCoords] = useState(false);
+  const [comments, setComments] = useState('');
   const [itemCoordinates, setItemCoordinates] = useState<ItemCoordinates>();
   const { id: itemId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const item = useScannedInfo();
   const scanService = useScanService();
+  const coordString = useMemo(
+    () => getLatLongString(itemCoordinates),
+    [itemCoordinates]
+  );
 
   useEffect(() => {
     if (useCurrentLocation) {
+      setFetchingCoords(true);
+
       getCurrentLocation(navigator.geolocation)
         .then((coords) => {
           setItemCoordinates(coords);
@@ -28,52 +40,14 @@ export default function Scan() {
         .catch(() => {
           alert('Unable to access current location.');
           setUseCurrentLocation(false);
+        })
+        .finally(() => {
+          setFetchingCoords(false);
         });
     } else {
       setItemCoordinates(null);
     }
   }, [useCurrentLocation]);
-
-  const fields: FormField[] = useMemo(
-    () => [
-      {
-        name: 'nameField',
-        label: 'Name',
-        value: item?.name ?? 'Could not read the "name" field',
-        readOnly: true
-      },
-      {
-        name: 'descriptionField',
-        label: 'Description',
-        value: item?.description ?? 'No "description" provided',
-        readOnly: true
-      },
-      {
-        name: 'useLocationField',
-        label: 'Use current location',
-        type: 'checkbox',
-        additionalProps: { checked: useCurrentLocation },
-        onChange: () => {
-          setUseCurrentLocation(!useCurrentLocation);
-        }
-      },
-      {
-        name: 'commentsField',
-        label: 'Comments',
-        value: comments,
-        required: true,
-        textArea: true,
-        placeholder: 'Brief description of where you found it..',
-        additionalProps: { rows: 4, maxLength: 200 },
-        onChange: (value: string) => setComments(value)
-      }
-    ],
-    [comments, item?.description, item?.name, useCurrentLocation]
-  );
-
-  const actions: FormAction[] = [
-    { type: 'submit', text: 'Share', disabled: !comments }
-  ];
 
   async function handleCommentFormSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -93,12 +67,41 @@ export default function Scan() {
   return (
     <div className="scan-page">
       <Title>Scanned Item</Title>
-      <Form
-        id="commentForm"
-        fields={fields}
-        actions={actions}
-        onSubmit={handleCommentFormSubmit}
-      />
+      <Form id="commentForm" onSubmit={handleCommentFormSubmit}>
+        <FormInput
+          label="Name"
+          value={item?.name ?? '[Could not read the "name" field]'}
+          readOnly
+        />
+        <FormInput
+          label="Description"
+          value={item?.description ?? '[No description provided]'}
+          readOnly
+        />
+        <FormInput
+          label="Use current location"
+          type="checkbox"
+          onChange={() => setUseCurrentLocation(!useCurrentLocation)}
+          additionalProps={{ checked: useCurrentLocation }}
+        />
+        <FormInput
+          label="Recorded location"
+          readOnly
+          value={fetchingCoords ? 'Determining location...' : coordString}
+        />
+        <FormInput
+          label="Comments"
+          value={comments}
+          required
+          multiline
+          placeholder="Brief description of where you found it..."
+          onChange={(value) => setComments(value)}
+          additionalProps={{ rows: 4, maxLength: 200 }}
+        />
+        <FormAction type="submit" disabled={!comments}>
+          Share
+        </FormAction>
+      </Form>
     </div>
   );
 }
