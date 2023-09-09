@@ -3,9 +3,12 @@ import { handleError } from '../errors/handler';
 import { getItemService, getUserId } from '../request.util';
 import { ServiceRequest } from '../core';
 
-export async function listByUserId(req: Request, res: Response): Promise<void> {
+export async function listByUserId(
+  req: ServiceRequest,
+  res: Response
+): Promise<void> {
   try {
-    const itemService = getItemService(req as ServiceRequest);
+    const itemService = getItemService(req);
     const items = await itemService.list();
 
     res.send(items);
@@ -14,9 +17,12 @@ export async function listByUserId(req: Request, res: Response): Promise<void> {
   }
 }
 
-export async function getById(req: Request, res: Response): Promise<void> {
+export async function getById(
+  req: ServiceRequest,
+  res: Response
+): Promise<void> {
   try {
-    const itemService = getItemService(req as ServiceRequest);
+    const itemService = getItemService(req);
     const { id } = req.params;
     const item = await itemService.get(id);
 
@@ -31,9 +37,12 @@ export async function getById(req: Request, res: Response): Promise<void> {
   }
 }
 
-export async function createItem(req: Request, res: Response): Promise<void> {
+export async function createItem(
+  req: ServiceRequest,
+  res: Response
+): Promise<void> {
   try {
-    const itemService = getItemService(req as ServiceRequest);
+    const itemService = getItemService(req);
     const item = req.body;
     const { id } = await itemService.create(item);
 
@@ -44,9 +53,12 @@ export async function createItem(req: Request, res: Response): Promise<void> {
   }
 }
 
-export async function updateItem(req: Request, res: Response): Promise<void> {
+export async function updateItem(
+  req: ServiceRequest,
+  res: Response
+): Promise<void> {
   try {
-    const itemService = getItemService(req as ServiceRequest);
+    const itemService = getItemService(req);
     const item = req.body;
     await itemService.update(item);
 

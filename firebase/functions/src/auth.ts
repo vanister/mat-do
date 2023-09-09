@@ -1,7 +1,7 @@
 import admin from 'firebase-admin';
 
 import { app } from './app';
-import { DecodedIdToken } from 'firebase-admin/auth';
+import { Auth, DecodedIdToken } from 'firebase-admin/auth';
 
 export type TokenVerificationResult = {
   valid: boolean;
@@ -11,10 +11,11 @@ export type TokenVerificationResult = {
   errorMsg?: string;
 };
 
-const auth = admin.auth(app);
+const defaultAuth = admin.auth(app);
 
 export async function verifyIdToken(
-  token: string
+  token: string,
+  auth: Auth = defaultAuth
 ): Promise<TokenVerificationResult> {
   try {
     const decodedToken = await auth.verifyIdToken(token);
