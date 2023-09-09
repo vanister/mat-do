@@ -1,7 +1,7 @@
 import { Item } from '../models/item';
 import { fromBase64, toBase64 } from './base64-util';
 
-const INFO_HASH_KEY = 'i';
+const INFO_HASH_KEY = 'd';
 
 /**
  * Converts a given Item to an absolute URL string.
