@@ -34,3 +34,11 @@ export function getCurrentLocation(
 
   return promise;
 }
+
+export function getLatLongString(coords?: ItemCoordinates) {
+  if (!coords) {
+    return '';
+  }
+
+  return `${coords.latitude}, ${coords.longitude}`;
+}
