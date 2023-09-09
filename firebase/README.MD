@@ -21,14 +21,14 @@ The default is to use the emulator so you will need to install that by running:
 - `npx firebase init`
 - The emulated services are:
   - Cloud Firestore
-  - Authentication (not used currently)
+  - Authentication
   - Cloud Functions
 
 // TODO - set up eslint...again.
 
 ### Running/Debugging
 
-- Run the project from the root level folder.
+- Run the project from the root (`/firebase`) level folder.
   - `npm run start` will start the emulators for the project.
   - `npm run start-debug` will start the emulator with the debugger port set to `9229`.
     - Attach the debugger with the `Attach to functions` VS Code launch settings.
