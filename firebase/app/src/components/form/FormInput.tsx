@@ -7,12 +7,14 @@ export type FormInputProps = {
   value?: string;
   readOnly?: boolean;
   multiline?: boolean;
+  placeholder?: string;
   additionalProps?: AdditionalProps;
   onChange?: FormInputChangeEventHander;
 };
 
 export default function FormInput(props: FormInputProps) {
-  const { id, label, value, onChange, readOnly, multiline } = props;
+  const { id, label, value, onChange, readOnly, multiline, placeholder } =
+    props;
   const additionalProps = props.additionalProps ?? {};
 
   return (
@@ -27,6 +29,7 @@ export default function FormInput(props: FormInputProps) {
             className="field-input"
             value={value}
             rows={6}
+            placeholder={placeholder}
             readOnly={readOnly}
             onChange={(e) => {
               onChange && onChange(e.target.value, e);
@@ -39,6 +42,7 @@ export default function FormInput(props: FormInputProps) {
             className="field-input"
             value={value}
             type="text"
+            placeholder={placeholder}
             readOnly={readOnly}
             onChange={(e) => {
               onChange && onChange(e.target.value, e);

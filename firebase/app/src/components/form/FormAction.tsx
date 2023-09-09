@@ -5,12 +5,13 @@ export type FormActionProps = {
   id?: string;
   children: string;
   type: 'button' | 'submit';
+  disabled?: boolean;
   additionalProps?: AdditionalProps;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export default function FormAction(props: FormActionProps) {
-  const { id, children, type, onClick } = props;
+  const { id, children, type, disabled, onClick } = props;
   const additionalProps = props.additionalProps ?? {};
 
   return (
@@ -19,6 +20,7 @@ export default function FormAction(props: FormActionProps) {
       key={id}
       id={id}
       type={type}
+      disabled={disabled}
       onClick={onClick}
       {...additionalProps}
     >
