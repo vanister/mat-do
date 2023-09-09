@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Title from '../../components/Title';
-import Form, { FormField } from '../../components/form/FormOld';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
 import { useFirebaseEmailAuth } from '../../hooks/useFirebaseEmailAuth';
+import Form from '../../components/form/Form';
+import FormInput from '../../components/form/FormInput';
+import FormAction from '../../components/form/FormAction';
 
 export default function Login() {
-  const [username, setUsername] = useState<string>();
-  const [password, setPassword] = useState<string>();
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
   const { status, data: signInCheckResult } = useSigninCheck();
@@ -18,25 +20,7 @@ export default function Login() {
     if (signInCheckResult?.signedIn) {
       navigate(redirectUrl, { replace: true });
     }
-  }, [signInCheckResult?.signedIn]);
-
-  const fields: FormField[] = [
-    {
-      name: 'usernameField',
-      label: 'Username',
-      placeholder: 'jyn@matdo.com',
-      required: true,
-      onChange: (value) => setUsername(value)
-    },
-    {
-      name: 'passwordField',
-      label: 'Password',
-      placeholder: 'An awesomely strong password!',
-      required: true,
-      type: 'password',
-      onChange: (value) => setPassword(value)
-    }
-  ];
+  }, [navigate, redirectUrl, signInCheckResult?.signedIn]);
 
   async function handleFormSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -53,19 +37,29 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <Title>Welcome!</Title>
-      <Form
-        id="loginForm"
-        fields={fields}
-        actions={[
-          {
-            type: 'submit',
-            text: 'Login',
-            disabled: !(username && password) || status === 'loading'
-          }
-        ]}
-        onSubmit={handleFormSubmit}
-      />
+      <Title>Login</Title>
+      <Form id="loginForm" onSubmit={handleFormSubmit}>
+        <FormInput
+          id="usernameField"
+          label="Username"
+          value={username}
+          onChange={(value) => setUsername(value)}
+        />
+        <FormInput
+          id="passwordField"
+          label="Password"
+          value={password}
+          onChange={(value) => setPassword(value)}
+          additionalProps={{ type: 'password' }}
+        />
+        <FormAction
+          id="loginButton"
+          type="submit"
+          disabled={status === 'loading'}
+        >
+          Login
+        </FormAction>
+      </Form>
     </div>
   );
 }
