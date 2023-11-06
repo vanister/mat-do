@@ -54,6 +54,7 @@ export default function Create() {
       <Title>Create an Item</Title>
       <section className="create-page-content">
         {qrCreated && <QrCodeImage dataUri={dataUri} />}
+
         <Form onSubmit={handleFormSubmit}>
           <FormInput
             id="nameField"

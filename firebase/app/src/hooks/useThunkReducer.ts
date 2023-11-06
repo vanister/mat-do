@@ -4,13 +4,15 @@ export type ThunkDispatchFunction<TAction> = (
   dispatch: React.Dispatch<TAction>
 ) => void | Promise<void>;
 
+export type ThunkAction<TAction> = TAction | ThunkDispatchFunction<TAction>;
+
 export function useThunkReducer<TState, TAction>(
   reducerFunc: (state: TState, action: TAction) => TState,
   initialState: TState
-): [TState, (action: TAction | ThunkDispatchFunction<TAction>) => void] {
+): [TState, (action: ThunkAction<TAction>) => void] {
   const [state, dispatch] = useReducer(reducerFunc, initialState);
 
-  const thunkDispatch = (action: TAction | ThunkDispatchFunction<TAction>) => {
+  const thunkDispatch = (action: ThunkAction<TAction>) => {
     if (typeof action === 'function') {
       return (action as ThunkDispatchFunction<TAction>)(thunkDispatch);
     }

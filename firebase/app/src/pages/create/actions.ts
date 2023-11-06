@@ -1,6 +1,5 @@
-import { CreateAction, CreateDispatch } from './create-types';
+import { CreateAction } from './create-types';
 import { generateDataUri } from '../../utilities/qrcode-generator';
-import { ItemService } from '../../hooks/services/useItemService';
 import { toScannableItemUrl } from '../../utilities/item-util';
 import { User } from 'firebase/auth';
 import { Item } from '../../models/item';

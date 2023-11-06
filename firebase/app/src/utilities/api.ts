@@ -1,9 +1,4 @@
-import axios, {
-  AxiosError,
-  AxiosResponse,
-  HttpStatusCode,
-  Method
-} from 'axios';
+import axios, { HttpStatusCode, Method } from 'axios';
 
 export type RequestOptions = {
   data?: any;
