@@ -1,24 +1,32 @@
 import './Dashboard.scss';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useErrorBoundary } from 'react-error-boundary';
 import { NavLink, useParams } from 'react-router-dom';
+import { useUser } from 'reactfire';
 import Title from '../../components/Title';
 import Loading from '../../components/loading/Loading';
-import useItemList from './useItemList';
+import { useThunkReducer } from '../../hooks/useThunkReducer';
+import { dashboardReducer } from './reducer';
+import { DashboardState, FilterParams } from './dashboard-types';
+import { load } from './actions';
 
-export type FilterParams = {
-  page: string;
-  size: string;
-  sortBy: string;
-  sortDir: 'asc' | 'desc';
+const initialState: DashboardState = {
+  items: [],
+  loading: false
 };
 
 export default function Dashboard() {
   const { size } = useParams<FilterParams>();
   const pageSize = parseInt(size) || 10;
   const { showBoundary } = useErrorBoundary();
-  const { items, loading, error } = useItemList(pageSize);
+  const { data: user } = useUser();
+  const [state, dispatch] = useThunkReducer(dashboardReducer, initialState);
+  const { loading, error, items } = state;
+
+  useEffect(() => {
+    dispatch(load(user, pageSize));
+  }, [dispatch, pageSize, user]);
 
   if (error) {
     showBoundary(error);
