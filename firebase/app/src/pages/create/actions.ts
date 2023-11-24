@@ -16,17 +16,17 @@ export const VALIDATION_ERROR = 'VALIDATION_ERROR';
 
 export const init = { type: INIT };
 
-export const validationFailed = (error: string) => ({
+export const validationFailed = (errorMsg: string): CreateAction => ({
   type: VALIDATION_ERROR,
-  payload: { error }
+  payload: { errorMsg }
 });
 
-export const updateName = (name: string) => ({
+export const updateName = (name: string): CreateAction => ({
   type: UPDATE_NAME,
   payload: { name }
 });
 
-export const updateDescription = (description: string) => ({
+export const updateDescription = (description: string): CreateAction => ({
   type: UPDATE_DESC,
   payload: { description }
 });
@@ -40,11 +40,10 @@ export function generateQrCode(user: User, name: string, description?: string) {
       const accessToken = await user.getIdToken();
       const item: Partial<Item> = { name, description, userId: uid };
 
-      const { data: id } = await sendRequestWithAuth<string>(
-        '/items',
-        accessToken,
-        { method: 'POST', data: item }
-      );
+      const { data: id } = await sendRequestWithAuth<string>('/items', accessToken, {
+        method: 'POST',
+        data: item
+      });
 
       const qrData = toScannableItemUrl({ ...item, id } as Item);
 
@@ -60,7 +59,7 @@ export function generateQrCode(user: User, name: string, description?: string) {
       dispatch({
         type: FAILED,
         payload: {
-          error: error?.message
+          errorMsg: error?.message
         }
       });
     }

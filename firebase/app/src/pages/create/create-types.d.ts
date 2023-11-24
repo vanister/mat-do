@@ -8,9 +8,19 @@ export type CreateState = {
   isLoading?: boolean;
 };
 
+export type CreatePayload = {
+  dataUri: string;
+  description: string;
+  errorMsg: string;
+  id: string;
+  name: string;
+};
+
 export type CreateAction = {
   type: string;
-  payload?: Partial<CreateState>;
+  payload?: Partial<CreatePayload>;
 };
+
+// todo - add CreatePayload
 
 export type CreateDispatch = Dispatch<CreateAction>;

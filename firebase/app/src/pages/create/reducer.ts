@@ -10,10 +10,7 @@ import {
   VALIDATION_ERROR
 } from './actions';
 
-export function createReducer(
-  state: CreateState = null,
-  action: CreateAction
-): CreateState {
+export function createReducer(state: CreateState = null, action: CreateAction): CreateState {
   const { type, payload } = action;
 
   switch (type) {
@@ -52,7 +49,7 @@ export function createReducer(
     case FAILED:
       return {
         ...state,
-        error: payload.error,
+        error: payload.errorMsg,
         isLoading: false,
         created: null,
         id: null,
