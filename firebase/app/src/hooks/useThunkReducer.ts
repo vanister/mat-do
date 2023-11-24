@@ -1,4 +1,4 @@
-import { useReducer } from 'react';
+import { useCallback, useReducer } from 'react';
 
 export type ThunkDispatchFunction<TAction> = (
   dispatch: React.Dispatch<TAction>
@@ -12,13 +12,13 @@ export function useThunkReducer<TState, TAction>(
 ): [TState, (action: ThunkAction<TAction>) => void] {
   const [state, dispatch] = useReducer(reducerFunc, initialState);
 
-  const thunkDispatch = (action: ThunkAction<TAction>) => {
+  const thunkDispatch = useCallback((action: ThunkAction<TAction>) => {
     if (typeof action === 'function') {
       return (action as ThunkDispatchFunction<TAction>)(thunkDispatch);
     }
 
     dispatch(action);
-  };
+  }, []);
 
   return [state, thunkDispatch];
 }
