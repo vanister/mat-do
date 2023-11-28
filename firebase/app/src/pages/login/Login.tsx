@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import Title from '../../components/Title';
+import './Login.scss';
+
+import React, { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
+import Title from '../../components/Title';
 import { useFirebaseEmailAuth } from '../../hooks/useFirebaseEmailAuth';
 import Form from '../../components/form/Form';
 import FormInput from '../../components/form/FormInput';
 import FormAction from '../../components/form/FormAction';
+import { useStateObject } from '../../hooks/useStateObject';
+
+type LoginForm = {
+  username: string;
+  password: string;
+};
 
 export default function Login() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const { state, setState } = useStateObject<LoginForm>({ username: '', password: '' });
   const navigate = useNavigate();
   const location = useLocation();
   const { status, data: signInCheckResult } = useSigninCheck();
@@ -22,18 +29,21 @@ export default function Login() {
     }
   }, [navigate, redirectUrl, signInCheckResult?.signedIn]);
 
-  async function handleFormSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const handleFormSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    const status = await login(username, password);
+      const status = await login(state.username, state.password);
 
-    if (status.success) {
-      navigate(redirectUrl);
-      return;
-    }
+      if (status.success) {
+        navigate(redirectUrl);
+        return;
+      }
 
-    alert(status.errorMsg);
-  }
+      alert(status.errorMsg);
+    },
+    [login, navigate, redirectUrl, state]
+  );
 
   return (
     <div className="login-page">
@@ -42,21 +52,17 @@ export default function Login() {
         <FormInput
           id="usernameField"
           label="Username"
-          value={username}
-          onChange={(value) => setUsername(value)}
+          value={state.username}
+          onChange={(value) => setState({ username: value })}
         />
         <FormInput
           id="passwordField"
           label="Password"
-          value={password}
-          onChange={(value) => setPassword(value)}
+          value={state.password}
+          onChange={(value) => setState({ password: value })}
           additionalProps={{ type: 'password' }}
         />
-        <FormAction
-          id="loginButton"
-          type="submit"
-          disabled={status === 'loading'}
-        >
+        <FormAction id="loginButton" type="submit" disabled={status === 'loading'}>
           Login
         </FormAction>
       </Form>
