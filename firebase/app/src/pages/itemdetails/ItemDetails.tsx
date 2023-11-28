@@ -1,47 +1,60 @@
 import './ItemDetails.scss';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import { Item } from '../../models/item';
-import { useItemService } from '../../hooks/services/useItemService';
 import Loading from '../../components/loading/Loading';
 import { Timestamp } from 'firebase/firestore';
-import { useErrorBoundary } from 'react-error-boundary';
 import Form from '../../components/form/Form';
 import FormInput from '../../components/form/FormInput';
 import FormAction from '../../components/form/FormAction';
+import useItemDetails from '../../hooks/useItemDetails.1';
 
-export type ItemDetailState = {
-  loading: boolean;
-  saving: boolean;
-  item?: Item;
+type ItemForm = {
+  name: string;
+  description: string;
+  found: boolean;
+  scanned?: number;
+  lastScanned?: string;
 };
 
 export default function ItemDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const itemService = useItemService();
-  const { showBoundary } = useErrorBoundary();
-  const [state, setState] = useState<ItemDetailState>({ loading: true, saving: false });
-  const { item, loading, saving } = state;
+  const { item, saving, loading, error, saveChanges } = useItemDetails(id);
+  const [itemForm, setItemForm] = useState<ItemForm>({
+    name: '',
+    description: '',
+    found: false
+  });
 
   useEffect(() => {
-    itemService
-      .get(id)
-      .then((item) => setState((s) => ({ ...s, item, loading: false })))
-      .catch((error) => {
-        setState((s) => ({ ...s, loading: false }));
-        showBoundary(error);
-      });
-  }, [id, itemService, showBoundary]);
+    if (loading || !item) {
+      return;
+    }
+
+    // copy the item over to the form
+    setItemForm({
+      name: item.name,
+      description: item.description,
+      found: !!item.found,
+      scanned: item.scanned ?? 0,
+      lastScanned: item.lastScanned
+        ? Timestamp.fromMillis(item.lastScanned._seconds * 1000)
+            .toDate()
+            .toLocaleString()
+        : 'Never'
+    });
+  }, [item, loading]);
+
+  useLayoutEffect(() => {
+    // todo -temp
+    alert(error.message);
+  }, [error]);
 
   const handleValueChange = (field: string, value: string | boolean) => {
-    setState((s) => {
-      const updatedItem = { ...s.item, [field]: value } as Item;
-
-      return { ...s, item: updatedItem };
-    });
+    setItemForm((s) => ({ ...s, [field]: value }));
   };
 
   const handleCancelClick = useCallback(() => {
@@ -52,60 +65,43 @@ export default function ItemDetails() {
     async (event: React.FormEvent) => {
       event.preventDefault();
 
-      try {
-        setState((s) => ({ ...s, saving: true }));
-
-        await itemService.update(item);
-      } catch (error) {
-        console.error(error);
-        alert('There was an error updating the item, please try again.');
-      } finally {
-        setState((s) => ({ ...s, saving: false }));
-      }
+      await saveChanges(itemForm as Item);
     },
-    [item, itemService]
+    [saveChanges, itemForm]
   );
 
   return (
     <div className="item-page">
       <Title>Item Details</Title>
 
-      {loading || !item ? (
+      {loading ? (
         <Loading />
       ) : (
         <Form onSubmit={handleFormSubmit}>
           <FormInput
             id="nameField"
             label="Name"
-            value={item.name}
+            value={itemForm.name}
             onChange={(value) => handleValueChange('name', value)}
             additionalProps={{ placeholder: `Jyn's Blaster`, required: true }}
           />
           <FormInput
             id="descField"
             label="Description"
-            value={item.description}
+            value={itemForm.description}
             multiline
             onChange={(value) => handleValueChange('description', value)}
           />
           <FormInput
             label="Found"
+            type="checkbox"
+            additionalProps={{ checked: itemForm.found }}
             onChange={(_, event) =>
               handleValueChange('found', (event.target as HTMLInputElement).checked)
             }
           />
-          <FormInput label="Number of times scanned" value={item.scanned.toString()} readOnly />
-          <FormInput
-            label="Last scanned"
-            readOnly
-            value={
-              item.lastScanned
-                ? Timestamp.fromMillis(item.lastScanned._seconds * 1000)
-                    .toDate()
-                    .toLocaleString()
-                : 'Never'
-            }
-          />
+          <FormInput label="Number of times scanned" value={itemForm.scanned.toString()} readOnly />
+          <FormInput label="Last scanned" readOnly value={itemForm.lastScanned} />
           <FormAction type="submit" additionalProps={{ disabled: saving || !item?.name }}>
             {saving ? 'Saving...' : 'Update'}
           </FormAction>

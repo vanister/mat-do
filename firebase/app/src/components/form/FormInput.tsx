@@ -15,17 +15,7 @@ export type FormInputProps = {
 };
 
 export default function FormInput(props: FormInputProps) {
-  const {
-    id,
-    label,
-    value,
-    readOnly,
-    multiline,
-    placeholder,
-    type,
-    required,
-    onChange
-  } = props;
+  const { id, label, value, readOnly, multiline, placeholder, type, required, onChange } = props;
   const additionalProps = props.additionalProps ?? {};
 
   return (

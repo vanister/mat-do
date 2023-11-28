@@ -8,8 +8,10 @@ export type PagingFilter = {
   total: number;
 };
 
+/** @deprecated - replace with custom hooks */
 export interface ItemService {
   /**
+   * @deprecated
    * Gets and item by its id.
    *
    * @param id The Id of the item to get.
@@ -17,6 +19,7 @@ export interface ItemService {
   get(id: string): Promise<Item>;
 
   /**
+   * @deprecated
    * Updates the given item.
    *
    * @param item The item to update.
@@ -24,6 +27,7 @@ export interface ItemService {
   update(item: Item): Promise<void>;
 
   /**
+   * @deprecated
    * Gets a list of Items belonging to the current authenticated user.
    *
    * @param filters The paging filters.
@@ -31,6 +35,7 @@ export interface ItemService {
   list(filters: Partial<PagingFilter>): Promise<Item[]>;
 
   /**
+   * @deprecated
    * Creates a new item by sending a POST request to the server.
    *
    * @param item The item to create on the server.
@@ -44,10 +49,7 @@ export function useItemService(): ItemService {
 
   async function list(filters: PagingFilter): Promise<Item[]> {
     const accessToken = await user.getIdToken();
-    const { data } = await sendRequestWithAuth<Item[]>(
-      `${path}/list`,
-      accessToken
-    );
+    const { data } = await sendRequestWithAuth<Item[]>(`${path}/list`, accessToken);
 
     return data;
   }
@@ -69,10 +71,7 @@ export function useItemService(): ItemService {
 
   async function get(id: string): Promise<Item> {
     const accessToken = await user.getIdToken();
-    const { data } = await sendRequestWithAuth<Item>(
-      `${path}/${id}`,
-      accessToken
-    );
+    const { data } = await sendRequestWithAuth<Item>(`${path}/${id}`, accessToken);
 
     return data;
   }
