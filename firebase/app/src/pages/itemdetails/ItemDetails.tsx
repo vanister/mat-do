@@ -9,7 +9,7 @@ import { Timestamp } from 'firebase/firestore';
 import Form from '../../components/form/Form';
 import FormInput from '../../components/form/FormInput';
 import FormAction from '../../components/form/FormAction';
-import useItemDetails from '../../hooks/useItemDetails.1';
+import useItemDetails from '../../hooks/useItemDetails';
 
 type ItemForm = {
   name: string;
@@ -20,14 +20,18 @@ type ItemForm = {
 };
 
 export default function ItemDetails() {
+  // todo - use reducer
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { item, saving, loading, error, saveChanges } = useItemDetails(id);
+  const { details, saveChanges } = useItemDetails(id);
+  // todo - useStateObject
   const [itemForm, setItemForm] = useState<ItemForm>({
     name: '',
     description: '',
     found: false
   });
+
+  const { item, saving, loading, error } = details;
 
   useEffect(() => {
     if (loading || !item) {

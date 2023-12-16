@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useUser } from 'reactfire';
 import { sendRequestWithAuth } from '../utilities/api';
 import { Item } from '../models/item';
@@ -16,53 +16,53 @@ export type ItemDetailState = {
 
 export default function useItemDetails(id: string) {
   const { data: user } = useUser();
-  const { state, setState } = useStateObject<ItemDetailState>({ loading: false, saving: false });
+  const [details, setDetails] = useStateObject<ItemDetailState>({
+    loading: false,
+    saving: false
+  });
 
   useEffect(() => {
     async function getItemDetails() {
       try {
-        setState({ loading: true, error: null });
+        setDetails({ loading: true, error: null });
 
         const accessToken = await user.getIdToken();
         const { data } = await sendRequestWithAuth<Item>(`${path}/${id}`, accessToken);
 
-        setState({ item: data, loading: false });
+        setDetails({ item: data, loading: false });
       } catch (error) {
-        setState({ loading: false, error, item: null });
+        setDetails({ loading: false, error, item: null });
       }
     }
 
     getItemDetails();
-  }, [id, setState, user]);
+  }, [id, setDetails, user]);
 
-  const saveChanges = useCallback(
-    async (item: Item) => {
-      try {
-        setState({ saving: true });
+  async function saveChanges(item: Item) {
+    try {
+      setDetails({ saving: true });
 
-        const accessToken = await user.getIdToken();
+      const accessToken = await user.getIdToken();
 
-        await sendRequestWithAuth<void>(path, accessToken, {
-          method: 'PUT',
-          data: item
-        });
+      await sendRequestWithAuth<void>(path, accessToken, {
+        method: 'PUT',
+        data: item
+      });
 
-        setState((s) => ({
-          ...s,
-          saving: false,
-          item: {
-            ...s.item,
-            name: item.name,
-            description: item.description,
-            found: item.found
-          }
-        }));
-      } catch (error) {
-        setState({ saving: false, error });
-      }
-    },
-    [setState, user]
-  );
+      setDetails((s) => ({
+        ...s,
+        saving: false,
+        item: {
+          ...s.item,
+          name: item.name,
+          description: item.description,
+          found: item.found
+        }
+      }));
+    } catch (error) {
+      setDetails({ saving: false, error });
+    }
+  }
 
-  return { ...state, saveChanges };
+  return { details, saveChanges };
 }
