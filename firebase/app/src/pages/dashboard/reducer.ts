@@ -1,20 +1,36 @@
+import { produce } from 'immer';
 import { DASHBOARD_LOAD_FAILED, DASHBOARD_LOAD_REQUEST, DASHBOARD_LOAD_SUCCESS } from './actions';
 import { DashboardAction, DashboardState } from './dashboard-types';
 
-export function dashboardReducer(state: DashboardState, action: DashboardAction): DashboardState {
+export function dashboardReducer(
+  baseState: DashboardState,
+  action: DashboardAction
+): DashboardState {
   const { type, payload } = action;
 
-  switch (type) {
-    case DASHBOARD_LOAD_REQUEST:
-      return { ...state, loading: true };
+  return produce(baseState, (state: DashboardState) => {
+    switch (type) {
+      case DASHBOARD_LOAD_REQUEST:
+        state.loading = true;
 
-    case DASHBOARD_LOAD_SUCCESS:
-      return { ...state, items: payload.items, loading: false, error: null };
+        return state;
 
-    case DASHBOARD_LOAD_FAILED:
-      return { ...this.state, items: [], loading: false, error: payload.error };
+      case DASHBOARD_LOAD_SUCCESS:
+        state.items = payload.items;
+        state.loading = false;
+        state.error = null;
 
-    default:
-      return state;
-  }
+        return state;
+
+      case DASHBOARD_LOAD_FAILED:
+        state.items = [];
+        state.loading = false;
+        state.error = payload.error;
+
+        return state;
+
+      default:
+        return state;
+    }
+  });
 }

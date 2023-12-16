@@ -1,6 +1,8 @@
 import './Form.scss';
 
 import React from 'react';
+import FormInput from './FormInput';
+import FormAction from './FormAction';
 
 export type FormInputChangeEventHander = (
   value: string,
@@ -30,3 +32,6 @@ export default function Form(props: FormProps) {
     </form>
   );
 }
+
+Form.Input = FormInput;
+Form.Action = FormAction;

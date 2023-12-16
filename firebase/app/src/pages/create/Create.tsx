@@ -1,53 +1,42 @@
 import './Create.scss';
 
-import React, { useCallback, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import Title from '../../components/Title';
 import QrCodeImage from '../../components/common/QrCodeImage';
 import { createReducer } from './reducer';
-import {
-  generateQrCode,
-  init,
-  updateDescription,
-  updateName,
-  validationFailed
-} from './actions';
+import { generateQrCode, init, updateDescription, updateName, validationFailed } from './actions';
 import { CreateState } from './create-types';
 import Form from '../../components/form/Form';
-import FormInput from '../../components/form/FormInput';
-import FormAction from '../../components/form/FormAction';
 import { useUser } from 'reactfire';
 import { useThunkReducer } from '../../hooks/useThunkReducer';
 
-const initialState: CreateState = {
-  created: false,
+const INITIAL_CREATE_STATE: CreateState = {
   name: '',
   description: ''
 };
 
 export default function Create() {
   const { data: user } = useUser();
-  const [state, dispatch] = useThunkReducer(createReducer, initialState);
+  const [state, dispatch] = useThunkReducer(createReducer, INITIAL_CREATE_STATE);
   const { error, name, description: desc, created: qrCreated, dataUri } = state;
 
   useLayoutEffect(() => {
     if (!!error) {
+      // todo - replace with modal or something other than a blocking alert
       alert(error);
     }
   }, [error]);
 
-  const handleFormSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
+  async function handleFormSubmit(e: React.FormEvent) {
+    e.preventDefault();
 
-      if (!name) {
-        dispatch(validationFailed('A name is required'));
-        return;
-      }
+    if (!name) {
+      dispatch(validationFailed('A name is required'));
+      return;
+    }
 
-      dispatch(generateQrCode(user, name, desc));
-    },
-    [desc, dispatch, name, user]
-  );
+    dispatch(generateQrCode(user, name, desc));
+  }
 
   return (
     <div className="create-page">
@@ -56,7 +45,7 @@ export default function Create() {
         {qrCreated && <QrCodeImage dataUri={dataUri} />}
 
         <Form onSubmit={handleFormSubmit}>
-          <FormInput
+          <Form.Input
             id="nameField"
             label="Name"
             value={name}
@@ -65,7 +54,7 @@ export default function Create() {
             }}
             additionalProps={{ placeholder: `Jyn's Blaster`, required: true }}
           />
-          <FormInput
+          <Form.Input
             id="descriptionField"
             label="Description"
             value={desc}
@@ -75,14 +64,10 @@ export default function Create() {
             }}
             additionalProps={{ placeholder: `The one she stole from Cassian` }}
           />
-          <FormAction
-            id="createButton"
-            type="submit"
-            onClick={handleFormSubmit}
-          >
+          <Form.Action id="createButton" type="submit">
             Create
-          </FormAction>
-          <FormAction
+          </Form.Action>
+          <Form.Action
             id="clearButton"
             type="button"
             onClick={() => {
@@ -90,7 +75,7 @@ export default function Create() {
             }}
           >
             Clear
-          </FormAction>
+          </Form.Action>
         </Form>
       </section>
     </div>

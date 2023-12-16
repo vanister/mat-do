@@ -1,3 +1,4 @@
+import { produce } from 'immer';
 import { CreateAction, CreateState } from './create-types';
 import {
   FAILED,
@@ -10,53 +11,58 @@ import {
   VALIDATION_ERROR
 } from './actions';
 
-export function createReducer(state: CreateState = null, action: CreateAction): CreateState {
+export function createReducer(baseState: CreateState, action: CreateAction): CreateState {
   const { type, payload } = action;
 
-  switch (type) {
-    case INIT:
-      return { name: '', description: '' };
+  return produce(baseState, (state: CreateState) => {
+    switch (type) {
+      case INIT:
+        return { name: '', description: '' };
 
-    case POSTING_REQUEST:
-      return {
-        ...state,
-        error: null,
-        isLoading: true,
-        created: false,
-        dataUri: null,
-        id: null
-      };
+      case POSTING_REQUEST:
+        state.error = null;
+        state.isLoading = true;
+        state.created = false;
+        state.dataUri = null;
+        state.id = null;
 
-    case GENERATING_QR_CODE:
-      return { ...state, isLoading: true };
+        return state;
 
-    case GENERATED_QR_CODE:
-      return {
-        ...state,
-        dataUri: payload.dataUri,
-        id: payload.id,
-        isLoading: false,
-        created: true
-      };
+      case GENERATING_QR_CODE:
+        state.isLoading = true;
 
-    case UPDATE_DESC:
-      return { ...state, description: payload.description };
+        return state;
 
-    case UPDATE_NAME:
-      return { ...state, name: payload.name };
+      case GENERATED_QR_CODE:
+        state.dataUri = payload.dataUri;
+        state.id = payload.id;
+        state.isLoading = false;
+        state.created = true;
 
-    case VALIDATION_ERROR:
-    case FAILED:
-      return {
-        ...state,
-        error: payload.errorMsg,
-        isLoading: false,
-        created: null,
-        id: null,
-        dataUri: null
-      };
+        return state;
 
-    default:
-      return state;
-  }
+      case UPDATE_DESC:
+        state.description = payload.description;
+
+        return state;
+
+      case UPDATE_NAME:
+        state.name = payload.name;
+
+        return state;
+
+      case VALIDATION_ERROR:
+      case FAILED:
+        state.error = payload.errorMsg;
+        state.isLoading = false;
+        state.created = null;
+        state.id = null;
+        state.dataUri = null;
+
+        return state;
+
+      default:
+        return state;
+    }
+  });
 }
