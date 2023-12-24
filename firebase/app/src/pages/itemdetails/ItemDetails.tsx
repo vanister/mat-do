@@ -1,78 +1,54 @@
 import './ItemDetails.scss';
 
-import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useUser } from 'reactfire';
 import Title from '../../components/Title';
-import { Item } from '../../models/item';
 import Loading from '../../components/loading/Loading';
-import { Timestamp } from 'firebase/firestore';
 import Form from '../../components/form/Form';
 import FormInput from '../../components/form/FormInput';
 import FormAction from '../../components/form/FormAction';
-import useItemDetails from '../../hooks/useItemDetails';
+import { ItemDetailState } from './itemdetails-types';
+import { useThunkReducer } from 'src/hooks/useThunkReducer';
+import { itemDetailReducer } from './reducer';
+import { getItemDetails, toggleFound, updateDescription, updateItem, updateName } from './actions';
 
-type ItemForm = {
-  name: string;
-  description: string;
-  found: boolean;
-  scanned?: number;
-  lastScanned?: string;
+export const INITIAL_STATE: ItemDetailState = {
+  name: '',
+  description: '',
+  found: false
 };
 
 export default function ItemDetails() {
-  // todo - use reducer
+  const { data: user } = useUser();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { details, saveChanges } = useItemDetails(id);
-  // todo - useStateObject
-  const [itemForm, setItemForm] = useState<ItemForm>({
-    name: '',
-    description: '',
-    found: false
-  });
-
-  const { item, saving, loading, error } = details;
+  const [state, dispatch] = useThunkReducer(itemDetailReducer, INITIAL_STATE);
+  const { item, saving, loading, errorMessage } = state;
 
   useEffect(() => {
-    if (loading || !item) {
-      return;
-    }
-
-    // copy the item over to the form
-    setItemForm({
-      name: item.name,
-      description: item.description,
-      found: !!item.found,
-      scanned: item.scanned ?? 0,
-      lastScanned: item.lastScanned
-        ? Timestamp.fromMillis(item.lastScanned._seconds * 1000)
-            .toDate()
-            .toLocaleString()
-        : 'Never'
+    user.getIdToken().then((accessToken) => {
+      dispatch(getItemDetails(id, accessToken));
     });
-  }, [item, loading]);
+  }, [dispatch, id, user]);
 
   useLayoutEffect(() => {
-    // todo -temp
-    alert(error.message);
-  }, [error]);
+    if (errorMessage) {
+      alert(errorMessage);
+    }
+  }, [errorMessage]);
 
-  const handleValueChange = (field: string, value: string | boolean) => {
-    setItemForm((s) => ({ ...s, [field]: value }));
+  const handleCancelClick = () => {
+    navigate('/dashboard');
   };
 
-  const handleCancelClick = useCallback(() => {
-    navigate('/dashboard');
-  }, [navigate]);
+  const handleFormSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
 
-  const handleFormSubmit = useCallback(
-    async (event: React.FormEvent) => {
-      event.preventDefault();
+    const accessToken = await user.getIdToken();
 
-      await saveChanges(itemForm as Item);
-    },
-    [saveChanges, itemForm]
-  );
+    dispatch(updateItem(item, accessToken));
+  };
 
   return (
     <div className="item-page">
@@ -85,27 +61,27 @@ export default function ItemDetails() {
           <FormInput
             id="nameField"
             label="Name"
-            value={itemForm.name}
-            onChange={(value) => handleValueChange('name', value)}
+            value={item.name}
+            onChange={(value) => dispatch(updateName(value))}
             additionalProps={{ placeholder: `Jyn's Blaster`, required: true }}
           />
           <FormInput
             id="descField"
             label="Description"
-            value={itemForm.description}
+            value={item.description}
             multiline
-            onChange={(value) => handleValueChange('description', value)}
+            onChange={(value) => updateDescription(value)}
           />
           <FormInput
             label="Found"
             type="checkbox"
-            additionalProps={{ checked: itemForm.found }}
+            additionalProps={{ checked: item.found }}
             onChange={(_, event) =>
-              handleValueChange('found', (event.target as HTMLInputElement).checked)
+              dispatch(toggleFound((event.target as HTMLInputElement).checked))
             }
           />
-          <FormInput label="Number of times scanned" value={itemForm.scanned.toString()} readOnly />
-          <FormInput label="Last scanned" readOnly value={itemForm.lastScanned} />
+          <FormInput label="Number of times scanned" value={item.scanned.toString()} readOnly />
+          <FormInput label="Last scanned" readOnly value={item.lastScanned} />
           <FormAction type="submit" additionalProps={{ disabled: saving || !item?.name }}>
             {saving ? 'Saving...' : 'Update'}
           </FormAction>

@@ -1,10 +1,10 @@
 import './Scan.scss';
 
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import { useScannedInfo } from '../../hooks/useScannedInfo';
-import { ItemCoordinates, ScannedItem } from '../../models/scan';
+import { ScannedItem } from '../../models/scan';
 import { getCurrentLocation, getLatLongString } from '../../utilities/geolocation-util';
 import { useScanService } from '../../hooks/services/useScanService';
 import { Timestamp } from 'firebase/firestore';
@@ -13,15 +13,9 @@ import FormInput from '../../components/form/FormInput';
 import FormAction from '../../components/form/FormAction';
 import { useStateObject } from '../../hooks/useStateObject';
 import { useScan } from '../../hooks/useScan';
+import { ScanState } from './scan-types';
 
-type ScanForm = {
-  useCurrentLocation: boolean;
-  fetchingCoords: boolean;
-  comments: string;
-  itemCoordinates?: ItemCoordinates;
-};
-
-const INITIAL_STATE: ScanForm = {
+const INITIAL_STATE: ScanState = {
   useCurrentLocation: false,
   fetchingCoords: false,
   comments: ''
@@ -31,7 +25,7 @@ export default function Scan() {
   const { id: itemId } = useParams<{ id: string }>();
 
   // todo - use reducer
-  const [state, setState] = useStateObject<ScanForm>(INITIAL_STATE);
+  const [state, setState] = useStateObject<ScanState>(INITIAL_STATE);
   const { comments, fetchingCoords, useCurrentLocation, itemCoordinates } = state;
   const { saving, updateItem } = useScan();
   const navigate = useNavigate();
@@ -64,23 +58,20 @@ export default function Scan() {
     getLocation();
   }, [setState, useCurrentLocation]);
 
-  const handleCommentFormSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
+  async function handleCommentFormSubmit(e: React.FormEvent) {
+    e.preventDefault();
 
-      const scan: Partial<ScannedItem> = {
-        itemId,
-        comments,
-        coordinates: itemCoordinates,
-        scannedAt: Timestamp.now()
-      };
+    const scan: Partial<ScannedItem> = {
+      itemId,
+      comments,
+      coordinates: itemCoordinates,
+      scannedAt: Timestamp.now()
+    };
 
-      await scanService.scan(scan);
+    await scanService.scan(scan);
 
-      navigate('/thankyou', { replace: true });
-    },
-    [itemId, navigate, scanService, comments, itemCoordinates]
-  );
+    navigate('/thankyou', { replace: true });
+  }
 
   return (
     <div className="scan-page">
