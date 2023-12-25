@@ -1,11 +1,11 @@
 import { produce } from 'immer';
 import { CreateAction, CreateState } from './create-types';
 import {
-  FAILED,
-  GENERATED_QR_CODE,
-  GENERATING_QR_CODE,
+  QR_CODE_GENERATION_FAILED,
+  QR_CODE_GENERATED,
+  QR_CODE_GENERATING,
   INIT,
-  POSTING_REQUEST,
+  CREATE_REQUEST,
   UPDATE_DESC,
   UPDATE_NAME,
   VALIDATION_ERROR
@@ -19,8 +19,8 @@ export function createReducer(baseState: CreateState, action: CreateAction): Cre
       case INIT:
         return { name: '', description: '' };
 
-      case POSTING_REQUEST:
-        state.error = null;
+      case CREATE_REQUEST:
+        state.errorMessage = null;
         state.isLoading = true;
         state.created = false;
         state.dataUri = null;
@@ -28,12 +28,12 @@ export function createReducer(baseState: CreateState, action: CreateAction): Cre
 
         return state;
 
-      case GENERATING_QR_CODE:
+      case QR_CODE_GENERATING:
         state.isLoading = true;
 
         return state;
 
-      case GENERATED_QR_CODE:
+      case QR_CODE_GENERATED:
         state.dataUri = payload.dataUri;
         state.id = payload.id;
         state.isLoading = false;
@@ -52,8 +52,8 @@ export function createReducer(baseState: CreateState, action: CreateAction): Cre
         return state;
 
       case VALIDATION_ERROR:
-      case FAILED:
-        state.error = payload.errorMsg;
+      case QR_CODE_GENERATION_FAILED:
+        state.errorMessage = payload.errorMessage;
         state.isLoading = false;
         state.created = null;
         state.id = null;

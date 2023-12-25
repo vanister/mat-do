@@ -15,6 +15,7 @@ export function toScannableItemUrl(item: Item, path = '/scan'): string {
     throw new Error('item is null');
   }
 
+  // consider using compression
   const hashFrag = JSON.stringify({
     name: item.name,
     description: item.description

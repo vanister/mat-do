@@ -9,6 +9,7 @@ export type ThunkAction<A, S> = (
 
 export type ThunkDispatch<A, S> = Dispatch<A> | ThunkAction<A, S>;
 
+/** @deprecated Don't use this complex hook when KISS is better */
 export function useThunkReducer<S, A>(
   reducer: (state: S, action: A) => S,
   initialState: S

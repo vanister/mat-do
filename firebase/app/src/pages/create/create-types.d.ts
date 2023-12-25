@@ -4,14 +4,14 @@ export type CreateState = {
   created?: boolean;
   id?: string;
   dataUri?: string;
-  error?: string;
+  errorMessage?: string;
   isLoading?: boolean;
 };
 
 export type CreatePayload = {
   dataUri: string;
   description: string;
-  errorMsg: string;
+  errorMessage: string;
   id: string;
   name: string;
 };
@@ -20,7 +20,5 @@ export type CreateAction = {
   type: string;
   payload?: Partial<CreatePayload>;
 };
-
-// todo - add CreatePayload
 
 export type CreateDispatch = Dispatch<CreateAction>;

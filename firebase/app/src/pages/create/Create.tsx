@@ -1,14 +1,13 @@
 import './Create.scss';
 
-import React, { useLayoutEffect } from 'react';
+import React, { useCallback, useLayoutEffect, useReducer } from 'react';
 import Title from '../../components/Title';
 import QrCodeImage from '../../components/common/QrCodeImage';
 import { createReducer } from './reducer';
-import { generateQrCode, init, updateDescription, updateName, validationFailed } from './actions';
+import { createItemQrCode, init, updateDescription, updateName, validationFailed } from './actions';
 import { CreateState } from './create-types';
 import Form from '../../components/form/Form';
 import { useUser } from 'reactfire';
-import { useThunkReducer } from '../../hooks/useThunkReducer';
 
 const INITIAL_CREATE_STATE: CreateState = {
   name: '',
@@ -17,8 +16,8 @@ const INITIAL_CREATE_STATE: CreateState = {
 
 export default function Create() {
   const { data: user } = useUser();
-  const [state, dispatch] = useThunkReducer(createReducer, INITIAL_CREATE_STATE);
-  const { error, name, description: desc, created: qrCreated, dataUri } = state;
+  const [state, dispatch] = useReducer(createReducer, INITIAL_CREATE_STATE);
+  const { errorMessage: error, name, description, created: qrCreated, dataUri } = state;
 
   useLayoutEffect(() => {
     if (!!error) {
@@ -27,16 +26,19 @@ export default function Create() {
     }
   }, [error]);
 
-  async function handleFormSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const handleFormSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
 
-    if (!name) {
-      dispatch(validationFailed('A name is required'));
-      return;
-    }
+      if (!name) {
+        dispatch(validationFailed('A name is required'));
+        return;
+      }
 
-    dispatch(generateQrCode(user, name, desc));
-  }
+      await createItemQrCode(user, name, description)(dispatch);
+    },
+    [description, name, user]
+  );
 
   return (
     <div className="create-page">
@@ -57,7 +59,7 @@ export default function Create() {
           <Form.Input
             id="descriptionField"
             label="Description"
-            value={desc}
+            value={description}
             multiline
             onChange={(value) => {
               dispatch(updateDescription(value));
@@ -71,7 +73,7 @@ export default function Create() {
             id="clearButton"
             type="button"
             onClick={() => {
-              dispatch(init);
+              dispatch(init());
             }}
           >
             Clear
