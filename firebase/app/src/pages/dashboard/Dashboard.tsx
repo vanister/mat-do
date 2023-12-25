@@ -6,12 +6,13 @@ import { NavLink, useParams } from 'react-router-dom';
 import { useUser } from 'reactfire';
 import Title from '../../components/Title';
 import Loading from '../../components/loading/Loading';
-import { useThunkReducer } from '../../hooks/useThunkReducer';
-import { dashboardReducer } from './reducer';
 import { DashboardState, FilterParams } from './dashboard-types';
-import { load } from './actions';
+import { sendRequestWithAuth } from '../../utilities/api';
+import { Item } from 'firebase/analytics';
+import { useStateObject } from '../../hooks/useStateObject';
+import { AxiosError } from 'axios';
 
-const initialState: DashboardState = {
+const INITIAL_STATE: DashboardState = {
   items: [],
   loading: false
 };
@@ -19,20 +20,34 @@ const initialState: DashboardState = {
 export default function Dashboard() {
   const { size } = useParams<FilterParams>();
   const pageSize = parseInt(size) || 10;
-  const { showBoundary } = useErrorBoundary();
+  const { showBoundary, resetBoundary } = useErrorBoundary();
   const { data: user } = useUser();
-  const [state, dispatch] = useThunkReducer(dashboardReducer, initialState);
-  const { loading, error, items } = state;
+  const [state, setState] = useStateObject<DashboardState>(INITIAL_STATE);
+  const { loading, items } = state;
 
   useEffect(() => {
-    dispatch(load(user, pageSize));
-  }, [dispatch, pageSize, user]);
+    const load = async () => {
+      try {
+        resetBoundary();
+        setState({ loading: true });
 
-  if (error) {
-    showBoundary(error);
+        const token = await user.getIdToken();
+        const { data } = await sendRequestWithAuth<Item[]>(`/items/list`, token);
 
-    return null;
-  }
+        setState({ items: data, loading: false });
+      } catch (error) {
+        // if there is a response object, its an axios error, otherwise, it's
+        // a normal error
+        setState({ loading: false, errorMessage: error.response?.data || error.message });
+
+        if (!(error instanceof AxiosError)) {
+          showBoundary(error);
+        }
+      }
+    };
+
+    load();
+  }, [pageSize, resetBoundary, setState, showBoundary, user]);
 
   return (
     <div className="dashboard-page">
