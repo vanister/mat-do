@@ -1,6 +1,6 @@
 import './ItemDetails.scss';
 
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useReducer } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUser } from 'reactfire';
 import Title from '../../components/Title';
@@ -9,7 +9,6 @@ import Form from '../../components/form/Form';
 import FormInput from '../../components/form/FormInput';
 import FormAction from '../../components/form/FormAction';
 import { ItemDetailState } from './itemdetails-types';
-import { useThunkReducer } from 'src/hooks/useThunkReducer';
 import { itemDetailReducer } from './reducer';
 import { getItemDetails, toggleFound, updateDescription, updateItem, updateName } from './actions';
 
@@ -23,13 +22,17 @@ export default function ItemDetails() {
   const { data: user } = useUser();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [state, dispatch] = useThunkReducer(itemDetailReducer, INITIAL_STATE);
+  const [state, dispatch] = useReducer(itemDetailReducer, INITIAL_STATE);
   const { item, saving, loading, errorMessage } = state;
 
   useEffect(() => {
-    user.getIdToken().then((accessToken) => {
-      dispatch(getItemDetails(id, accessToken));
-    });
+    const load = async () => {
+      const accessToken = await user.getIdToken();
+
+      await getItemDetails(id, accessToken)(dispatch);
+    };
+
+    load();
   }, [dispatch, id, user]);
 
   useLayoutEffect(() => {
@@ -47,7 +50,7 @@ export default function ItemDetails() {
 
     const accessToken = await user.getIdToken();
 
-    dispatch(updateItem(item, accessToken));
+    await updateItem(item, accessToken)(dispatch);
   };
 
   return (
@@ -70,7 +73,7 @@ export default function ItemDetails() {
             label="Description"
             value={item.description}
             multiline
-            onChange={(value) => updateDescription(value)}
+            onChange={(value) => dispatch(updateDescription(value))}
           />
           <FormInput
             label="Found"

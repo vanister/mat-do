@@ -1,6 +1,6 @@
+import { Item } from '../../models/item';
+import { sendRequestWithAuth } from '../../utilities/api';
 import { ItemDetailAction, ItemDetailDispatch } from './itemdetails-types';
-import { sendRequestWithAuth } from 'src/utilities/api';
-import { Item } from 'src/models/item';
 
 export const ITEM_DETAILS_FAILED = 'ITEM_DETAILS_FAILED';
 export const ITEM_DETAILS_REQUEST = 'ITEM_DETAIL_REQUEST';
