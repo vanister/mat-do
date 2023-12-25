@@ -1,9 +1,7 @@
 import { useCallback, useState } from 'react';
 
 export type StateObjectUpdater<T> = (state: T) => T;
-
 export type SetStateObjectAction<T> = (newState: Partial<T> | StateObjectUpdater<T>) => void;
-
 export type UseStateObject<T> = [state: T, setState: SetStateObjectAction<T>];
 
 /**
@@ -12,7 +10,7 @@ export type UseStateObject<T> = [state: T, setState: SetStateObjectAction<T>];
  * Shorthand for writing this:
  * ```
  * const [state, useState] = useState(someObj);
- * ...
+ * // more code...
  * setState((s) => ({...s, { value: 42 }}));
  * ```
  */

@@ -13,16 +13,9 @@ export function useFirebaseEmailAuth() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  async function login(
-    username: string,
-    password: string
-  ): Promise<AuthStatus> {
+  async function login(username: string, password: string): Promise<AuthStatus> {
     try {
-      const { user } = await signInWithEmailAndPassword(
-        auth,
-        username,
-        password
-      );
+      const { user } = await signInWithEmailAndPassword(auth, username, password);
 
       return { success: true, user };
     } catch (error) {
@@ -39,7 +32,6 @@ export function useFirebaseEmailAuth() {
     } catch (error) {
       console.error(error);
       throw error;
-    } finally {
     }
   }
 

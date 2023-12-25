@@ -29,9 +29,9 @@ export default function Scan() {
     initScan(itemId, location.hash)(dispatch);
   }, [dispatch, itemId, location.hash]);
 
-  const handleUseCurrentLocation = useCallback(async (toggled: boolean) => {
+  const handleUseCurrentLocation = async (toggled: boolean) => {
     await getUserLocation(toggled)(dispatch);
-  }, []);
+  };
 
   const handleCommentFormSubmit = useCallback(
     async (e: React.FormEvent) => {
