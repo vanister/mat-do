@@ -2,7 +2,8 @@ import { FirestoreTimestamp } from './firestore';
 
 export type ScannedItem = {
   id: string;
-  itemId: string;
+  name: string;
+  description: string;
   scannedAt: FirestoreTimestamp;
   comments: string;
   coordinates?: ItemCoordinates;

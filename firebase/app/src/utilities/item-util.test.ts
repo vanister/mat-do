@@ -22,13 +22,13 @@ describe('Item Utilities', () => {
     test(`should throw an error if 'info' param is missing`, () => {
       const badHash = '#notinfo=somebase64encodedstring';
 
-      expect(() => getScanItemInfo(badHash)).toThrowError('Missing info param');
+      expect(() => getScanItemInfo(badHash)).toThrowError('missing hash key');
     });
 
     test('should throw if hash is falsy', () => {
-      expect(() => getScanItemInfo('')).toThrowError('hash');
-      expect(() => getScanItemInfo(null)).toThrowError('hash');
-      expect(() => getScanItemInfo(undefined)).toThrowError('hash');
+      expect(() => getScanItemInfo('')).toThrowError('missing hash');
+      expect(() => getScanItemInfo(null)).toThrowError('missing hash');
+      expect(() => getScanItemInfo(undefined)).toThrowError('missing hash');
     });
   });
 });

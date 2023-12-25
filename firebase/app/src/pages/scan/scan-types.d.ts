@@ -1,14 +1,24 @@
+import { ItemCoordinates, ScannedItem } from '../../models/scan';
+
 export type ScanState = {
-  useCurrentLocation: boolean;
-  fetchingCoords: boolean;
-  comments: string;
+  itemId?: string;
+  comments?: string;
+  coordinateString?: string;
   itemCoordinates?: ItemCoordinates;
+  loading: boolean;
+  requestingUserLocation: boolean;
+  saving?: boolean;
+  scannedItem?: ScannedItem;
+  useCurrentLocation: boolean;
 };
 
 export type ScanPayload = {
-  itemCoordinates: ItemCoordinates;
-  fieldValue: { name: string; value: string | boolean };
   errorMessage: string;
+  fieldValue: { name: string; value: string | boolean };
+  itemCoordinates: ItemCoordinates;
+  itemId: string;
+  scannedItem: Partial<ScannedItem>;
+  comments: string;
 };
 
 export type ScanAction = {

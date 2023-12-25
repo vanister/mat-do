@@ -1,7 +1,7 @@
 import { describe } from '@jest/globals';
 import { sendRequestWithAuth } from '../../utilities/api';
 import {
-  ITEM_DETAILS_FAILURE,
+  ITEM_DETAILS_FAILED,
   ITEM_DETAILS_REQUEST,
   ITEM_DETAILS_SUCCESS,
   getItemDetails
@@ -47,7 +47,7 @@ describe('getItemDetails Thunk', () => {
 
       expect(mockDispatch).toHaveBeenCalledWith({ type: ITEM_DETAILS_REQUEST });
       expect(mockDispatch).toHaveBeenCalledWith({
-        type: ITEM_DETAILS_FAILURE,
+        type: ITEM_DETAILS_FAILED,
         payload: { errorMessage }
       });
     });

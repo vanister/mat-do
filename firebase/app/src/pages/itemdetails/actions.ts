@@ -2,17 +2,15 @@ import { ItemDetailAction, ItemDetailDispatch } from './itemdetails-types';
 import { sendRequestWithAuth } from 'src/utilities/api';
 import { Item } from 'src/models/item';
 
+export const ITEM_DETAILS_FAILED = 'ITEM_DETAILS_FAILED';
 export const ITEM_DETAILS_REQUEST = 'ITEM_DETAIL_REQUEST';
 export const ITEM_DETAILS_SUCCESS = 'ITEM_DETAIL_SUCCESS';
-export const ITEM_DETAILS_FAILURE = 'ITEM_DETAIL_FAILURE';
-
+export const TOGGLE_FOUND = 'ITEM_DETAILS_TOGGLE_FOUND';
+export const UPDATE_DESCRIPTION = 'ITEM_DETAILS_UPDATE_DESCRIPTION';
+export const UPDATE_ITEM_FAILED = 'UPDATE_ITEM_FAILED';
 export const UPDATE_ITEM_REQUEST = 'UPDATE_ITEM_REQUEST';
 export const UPDATE_ITEM_SUCCESS = 'UPDATE_ITEM_SUCCESS';
-export const UPDATE_ITEM_FAILURE = 'UPDATE_ITEM_FAILURE';
-
 export const UPDATE_NAME = 'ITEM_DETAILS_UPDATE_NAME';
-export const UPDATE_DESCRIPTION = 'ITEM_DETAILS_UPDATE_DESCRIPTION';
-export const TOGGLE_FOUND = 'ITEM_DETAILS_TOGGLE_FOUND';
 
 const ITEM_PATH = '/items';
 
@@ -44,7 +42,7 @@ export const getItemDetails =
       });
     } catch (error) {
       dispatch({
-        type: ITEM_DETAILS_FAILURE,
+        type: ITEM_DETAILS_FAILED,
         payload: { errorMessage: error.message || 'Error fetching item details' }
       });
     }
@@ -61,6 +59,6 @@ export const updateItem =
 
       dispatch({ type: UPDATE_ITEM_SUCCESS });
     } catch (error) {
-      dispatch({ type: UPDATE_ITEM_FAILURE, payload: { errorMessage: error.message } });
+      dispatch({ type: UPDATE_ITEM_FAILED, payload: { errorMessage: error.message } });
     }
   };

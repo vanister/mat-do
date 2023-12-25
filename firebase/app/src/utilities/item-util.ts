@@ -1,4 +1,5 @@
 import { Item } from '../models/item';
+import { ScannedItem } from '../models/scan';
 import { fromBase64, toBase64 } from './base64-util';
 
 const INFO_HASH_KEY = 'd';
@@ -31,9 +32,9 @@ export function toScannableItemUrl(item: Item, path = '/scan'): string {
  *
  * @param hash The hash fragment containing the base64 encoded info string.
  */
-export function getScanItemInfo(hash: string): Partial<Item> {
+export function getScanItemInfo(hash: string): Partial<ScannedItem> {
   if (!hash) {
-    throw new Error('hash');
+    throw new Error('missing hash');
   }
 
   if (!hash.includes(`${INFO_HASH_KEY}=`)) {
@@ -42,15 +43,11 @@ export function getScanItemInfo(hash: string): Partial<Item> {
 
   // build a search params map in case we decide to append more data in the hash
   // at a later point
-  const params = new URLSearchParams(hash.replace('#', ''));
-
-  if (!params.has(INFO_HASH_KEY)) {
-    throw new Error('missing hash');
-  }
+  const params = new URLSearchParams(hash?.replace('#', ''));
 
   const base64InfoStr = params.get(INFO_HASH_KEY);
   const decodedInfoStr = fromBase64(base64InfoStr);
-  const item: Partial<Item> = JSON.parse(decodedInfoStr);
+  const item: Partial<ScannedItem> = JSON.parse(decodedInfoStr);
 
   return item;
 }

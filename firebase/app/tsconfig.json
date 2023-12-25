@@ -19,10 +19,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "paths": {
       "@types": [
-        "src/typings.d.ts"
+        "./src/typings.d.ts"
       ]
     }
   },

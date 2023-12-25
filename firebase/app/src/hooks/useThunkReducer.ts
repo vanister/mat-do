@@ -1,27 +1,27 @@
-import { useCallback, useReducer, useRef } from 'react';
+import { Dispatch, useCallback, useReducer, useRef } from 'react';
 
-export type GetState<TState> = () => TState;
+export type GetState<S> = () => S;
 
-export type ThunkDispatchFunction<TAction, TState> = (
-  dispatch: React.Dispatch<TAction>,
-  getState?: GetState<TState>
+export type ThunkAction<A, S> = (
+  dispatch: Dispatch<A>,
+  getState?: GetState<S>
 ) => void | Promise<void>;
 
-export type ThunkAction<TAction, TState> = TAction | ThunkDispatchFunction<TAction, TState>;
+export type ThunkDispatch<A, S> = Dispatch<A> | ThunkAction<A, S>;
 
-export function useThunkReducer<TState, TAction>(
-  reducerFunc: (state: TState, action: TAction) => TState,
-  initialState: TState
-): [TState, (action: ThunkAction<TAction, TState>) => void] {
-  const [state, dispatch] = useReducer(reducerFunc, initialState);
+export function useThunkReducer<S, A>(
+  reducer: (state: S, action: A) => S,
+  initialState: S
+): [S, (action: A) => void | ThunkDispatch<A, S>] {
+  const [state, dispatch] = useReducer(reducer, initialState);
   const dispatchRef = useRef(dispatch);
 
   dispatchRef.current = dispatch;
 
   const thunkDispatch = useCallback(
-    (action: ThunkAction<TAction, TState>) => {
+    (action: A) => {
       if (typeof action === 'function') {
-        return (action as ThunkDispatchFunction<TAction, TState>)(thunkDispatch, () => state);
+        return action(thunkDispatch, () => state);
       }
 
       dispatchRef.current(action);

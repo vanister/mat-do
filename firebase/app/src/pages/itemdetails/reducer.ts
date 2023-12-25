@@ -5,11 +5,11 @@ import {
   TOGGLE_FOUND,
   ITEM_DETAILS_REQUEST,
   ITEM_DETAILS_SUCCESS,
-  ITEM_DETAILS_FAILURE
+  ITEM_DETAILS_FAILED
 } from './actions';
 import { ItemDetailState, ItemDetailAction } from './itemdetails-types';
 
-export const itemDetailReducer = (baseState: ItemDetailState, action: ItemDetailAction) => {
+export function itemDetailReducer(baseState: ItemDetailState, action: ItemDetailAction) {
   const { type, payload } = action;
 
   return produce(baseState, (draft) => {
@@ -24,7 +24,7 @@ export const itemDetailReducer = (baseState: ItemDetailState, action: ItemDetail
         draft.item = payload.item;
         break;
 
-      case ITEM_DETAILS_FAILURE:
+      case ITEM_DETAILS_FAILED:
         draft.loading = false;
         draft.errorMessage = payload.errorMessage;
         break;
@@ -45,4 +45,4 @@ export const itemDetailReducer = (baseState: ItemDetailState, action: ItemDetail
         break;
     }
   });
-};
+}
