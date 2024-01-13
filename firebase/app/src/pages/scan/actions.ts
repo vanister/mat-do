@@ -1,10 +1,9 @@
 import { getCurrentLocation } from '../../utilities/geolocation-util';
-import { ScanAction } from './scan-types';
+import { ScanAction, ScanDispatch } from './scan-types';
 import { ScannedItem } from '../../models/scan';
 import { sendRequest } from '../../utilities/api';
 import { Timestamp } from 'firebase/firestore';
 import { getScanItemInfo } from '../../utilities/item-util';
-import { Dispatch } from 'react';
 
 export const SCAN_GET_CURRENT_LOCATION_ERROR = 'SCAN_GET_CURRENT_LOCATION_ERROR';
 export const SCAN_GET_CURRENT_LOCATION_REQUEST = 'SCAN_GET_CURRENT_LOCATION_REQUEST';
@@ -27,7 +26,7 @@ export const updateComments = (comments: string): ScanAction => ({
 
 export const removeCurrentLocation = (): ScanAction => ({ type: SCAN_REMOVE_CURRENT_LCOATION });
 
-export const initScan = (itemId: string, hash?: string) => (dispatch: Dispatch<ScanAction>) => {
+export const initScan = (itemId: string, hash?: string) => (dispatch: ScanDispatch) => {
   dispatch({ type: SCAN_INIT, payload: { itemId } });
 
   try {
@@ -44,7 +43,7 @@ export const initScan = (itemId: string, hash?: string) => (dispatch: Dispatch<S
   }
 };
 
-export const getUserLocation = (toggled: boolean) => async (dispatch: Dispatch<ScanAction>) => {
+export const getUserLocation = (toggled: boolean) => async (dispatch: ScanDispatch) => {
   if (!toggled) {
     dispatch(removeCurrentLocation());
     return;
@@ -67,22 +66,21 @@ export const getUserLocation = (toggled: boolean) => async (dispatch: Dispatch<S
   }
 };
 
-export const updateScan =
-  (scannedItem: Partial<ScannedItem>) => async (dispatch: Dispatch<ScanAction>) => {
-    const timestampedScannedItem: Partial<ScannedItem> = {
-      ...scannedItem,
-      scannedAt: Timestamp.now()
-    };
-
-    // todo - validate scanned item
-
-    try {
-      dispatch({ type: SCAN_UPDATE_REQUEST });
-
-      await sendRequest(SCAN_ENDPOINT, { method: 'POST', data: timestampedScannedItem });
-
-      dispatch({ type: SCAN_UPDATE_SUCCESS });
-    } catch (error) {
-      dispatch({ type: SCAN_UPDATE_FAILED, payload: { errorMessage: error.message } });
-    }
+export const updateScan = (scannedItem: Partial<ScannedItem>) => async (dispatch: ScanDispatch) => {
+  const timestampedScannedItem: Partial<ScannedItem> = {
+    ...scannedItem,
+    scannedAt: Timestamp.now()
   };
+
+  // todo - validate scanned item
+
+  try {
+    dispatch({ type: SCAN_UPDATE_REQUEST });
+
+    await sendRequest(SCAN_ENDPOINT, { method: 'POST', data: timestampedScannedItem });
+
+    dispatch({ type: SCAN_UPDATE_SUCCESS });
+  } catch (error) {
+    dispatch({ type: SCAN_UPDATE_FAILED, payload: { errorMessage: error.message } });
+  }
+};

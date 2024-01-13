@@ -1,6 +1,6 @@
 import './Scan.scss';
 
-import React, { useCallback, useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import Form from '../../components/form/Form';
@@ -9,6 +9,7 @@ import FormAction from '../../components/form/FormAction';
 import { ScanState } from './scan-types';
 import { scanReducer } from './reducer';
 import { getUserLocation, initScan, updateComments, updateScan } from './actions';
+import { useThunkReducer } from '../../hooks/useThunkReducer';
 
 const INITIAL_STATE: ScanState = {
   useCurrentLocation: false,
@@ -22,26 +23,26 @@ export default function Scan() {
   const { id: itemId } = useParams<{ id: string }>();
   const location = useLocation();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(scanReducer, INITIAL_STATE);
+  const [state, dispatch] = useThunkReducer(scanReducer, INITIAL_STATE);
   const { scannedItem: item, comments, saving } = state;
 
   useEffect(() => {
-    initScan(itemId, location.hash)(dispatch);
+    dispatch(initScan(itemId, location.hash));
   }, [dispatch, itemId, location.hash]);
 
   const handleUseCurrentLocation = async (toggled: boolean) => {
-    await getUserLocation(toggled)(dispatch);
+    await dispatch(getUserLocation(toggled));
   };
 
   const handleCommentFormSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
 
-      await updateScan({ comments, coordinates: state.itemCoordinates })(dispatch);
+      await dispatch(updateScan({ comments, coordinates: state.itemCoordinates }));
 
       navigate('/thankyou', { replace: true });
     },
-    [comments, navigate, state.itemCoordinates]
+    [comments, dispatch, navigate, state.itemCoordinates]
   );
 
   return (

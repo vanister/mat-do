@@ -1,6 +1,6 @@
 import './Create.scss';
 
-import React, { useCallback, useLayoutEffect, useReducer } from 'react';
+import React, { useCallback, useLayoutEffect } from 'react';
 import Title from '../../components/Title';
 import QrCodeImage from '../../components/common/QrCodeImage';
 import { createReducer } from './reducer';
@@ -8,6 +8,7 @@ import { createItemQrCode, init, updateDescription, updateName, validationFailed
 import { CreateState } from './create-types';
 import Form from '../../components/form/Form';
 import { useUser } from 'reactfire';
+import { useThunkReducer } from '../../hooks/useThunkReducer';
 
 const INITIAL_CREATE_STATE: CreateState = {
   name: '',
@@ -16,7 +17,7 @@ const INITIAL_CREATE_STATE: CreateState = {
 
 export default function Create() {
   const { data: user } = useUser();
-  const [state, dispatch] = useReducer(createReducer, INITIAL_CREATE_STATE);
+  const [state, dispatch] = useThunkReducer(createReducer, INITIAL_CREATE_STATE);
   const { errorMessage: error, name, description, created: qrCreated, dataUri } = state;
 
   useLayoutEffect(() => {
@@ -35,9 +36,9 @@ export default function Create() {
         return;
       }
 
-      await createItemQrCode(user, name, description)(dispatch);
+      await dispatch(createItemQrCode(user, name, description));
     },
-    [description, name, user]
+    [description, dispatch, name, user]
   );
 
   return (

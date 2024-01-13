@@ -1,6 +1,6 @@
 import './ItemDetails.scss';
 
-import React, { useEffect, useLayoutEffect, useReducer } from 'react';
+import React, { useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUser } from 'reactfire';
 import Title from '../../components/Title';
@@ -11,6 +11,7 @@ import FormAction from '../../components/form/FormAction';
 import { ItemDetailState } from './itemdetails-types';
 import { itemDetailReducer } from './reducer';
 import { getItemDetails, toggleFound, updateDescription, updateItem, updateName } from './actions';
+import { useThunkReducer } from '../../hooks/useThunkReducer';
 
 export const INITIAL_STATE: ItemDetailState = {
   name: '',
@@ -22,14 +23,14 @@ export default function ItemDetails() {
   const { data: user } = useUser();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(itemDetailReducer, INITIAL_STATE);
+  const [state, dispatch] = useThunkReducer(itemDetailReducer, INITIAL_STATE);
   const { item, saving, loading, errorMessage } = state;
 
   useEffect(() => {
     const load = async () => {
       const accessToken = await user.getIdToken();
 
-      await getItemDetails(id, accessToken)(dispatch);
+      await dispatch(getItemDetails(id, accessToken));
     };
 
     load();

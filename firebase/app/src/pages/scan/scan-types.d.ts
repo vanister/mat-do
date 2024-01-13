@@ -1,3 +1,4 @@
+import { Dispatch } from 'react';
 import { ItemCoordinates, ScannedItem } from '../../models/scan';
 
 export type ScanState = {
@@ -25,3 +26,5 @@ export type ScanAction = {
   type: string;
   payload?: Partial<ScanPayload>;
 };
+
+export type ScanDispatch = Dispatch<ScanAction>;

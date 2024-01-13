@@ -8,11 +8,12 @@ export type UseStateObject<T> = [state: T, setState: SetStateObjectAction<T>];
  * A custom hook for quickly using objects and updating them via the `useState` updater function.
  *
  * Shorthand for writing this:
- * ```
+ *
+ * @example
+ *
  * const [state, useState] = useState(someObj);
  * // more code...
- * setState((s) => ({...s, { value: 42 }}));
- * ```
+ * setState((s) => ({ ...s, { value: 42 } }));
  */
 export function useStateObject<T>(initialState?: T): UseStateObject<T> {
   const [internalState, setInternalState] = useState(initialState);

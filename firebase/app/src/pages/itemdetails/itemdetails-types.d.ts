@@ -25,4 +25,4 @@ export type ItemDetailPayload = {
   errorMessage: string;
 };
 
-export type ItemDetailDispatch = React.Dispatch<ItemDetailAction>;
+export type ItemDetailDispatch = Dispatch<ItemDetailAction>;
