@@ -39,25 +39,14 @@ export async function sendRequest<T>(
     ...(additionalHeaders || {})
   };
 
-  try {
-    const response = await axios.request<T>({
-      method: method || 'GET',
-      baseURL: baseUrl || process.env.REACT_APP_API_BASE_URL,
-      url,
-      data,
-      headers,
-      params
-    });
+  const response = await axios.request<T>({
+    method: method || 'GET',
+    baseURL: baseUrl || process.env.REACT_APP_API_BASE_URL,
+    url,
+    data,
+    headers,
+    params
+  });
 
-    return response;
-  } catch (error) {
-    throw error;
-    // const axiosError = error as AxiosError;
-
-    // if (!axiosError) {
-    // }
-
-    // // return the error status
-    // return { status: axiosError.response.status, errorMsg: axiosError.message };
-  }
+  return response;
 }
