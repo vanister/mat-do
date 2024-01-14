@@ -3,7 +3,7 @@ import './index.scss';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
-import { appSettings } from './appSettings1';
+import { appSettings } from './appSettings';
 import { FirebaseAppProvider } from 'reactfire';
 import App from './App';
 
