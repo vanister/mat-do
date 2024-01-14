@@ -1,7 +1,7 @@
+import './Home.scss';
+
 import React from 'react';
 import Title from '../../components/Title';
-
-import './Home.scss';
 
 export default function Home() {
   return (

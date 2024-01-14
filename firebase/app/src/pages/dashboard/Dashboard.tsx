@@ -25,6 +25,7 @@ export default function Dashboard() {
   const [state, setState] = useStateObject<DashboardState>(INITIAL_STATE);
   const { loading, items } = state;
 
+  // move to custom hook
   useEffect(() => {
     const load = async () => {
       try {

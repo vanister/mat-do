@@ -1,7 +1,7 @@
+import './Thankyou.scss';
+
 import React from 'react';
 import Title from '../../components/Title';
-
-import './Thankyou.scss';
 
 export default function Thankyou() {
   return (
