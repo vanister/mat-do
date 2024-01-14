@@ -9,6 +9,12 @@ import {
 } from './actions';
 import { ItemDetailState, ItemDetailAction } from './itemdetails-types';
 
+export const INITIAL_STATE: ItemDetailState = {
+  name: '',
+  description: '',
+  found: false
+};
+
 export function itemDetailReducer(baseState: ItemDetailState, action: ItemDetailAction) {
   const { type, payload } = action;
 

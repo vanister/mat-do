@@ -6,18 +6,9 @@ import Title from '../../components/Title';
 import Form from '../../components/form/Form';
 import FormInput from '../../components/form/FormInput';
 import FormAction from '../../components/form/FormAction';
-import { ScanState } from './scan-types';
-import { scanReducer } from './reducer';
+import { INITIAL_STATE, scanReducer } from './reducer';
 import { getUserLocation, initScan, updateComments, updateScan } from './actions';
 import { useThunkReducer } from '../../hooks/useThunkReducer';
-
-const INITIAL_STATE: ScanState = {
-  useCurrentLocation: false,
-  requestingUserLocation: false,
-  coordinateString: '',
-  comments: '',
-  loading: false
-};
 
 export default function Scan() {
   const { id: itemId } = useParams<{ id: string }>();

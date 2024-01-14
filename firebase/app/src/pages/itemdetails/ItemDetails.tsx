@@ -8,16 +8,9 @@ import Loading from '../../components/loading/Loading';
 import Form from '../../components/form/Form';
 import FormInput from '../../components/form/FormInput';
 import FormAction from '../../components/form/FormAction';
-import { ItemDetailState } from './itemdetails-types';
-import { itemDetailReducer } from './reducer';
+import { INITIAL_STATE, itemDetailReducer } from './reducer';
 import { getItemDetails, toggleFound, updateDescription, updateItem, updateName } from './actions';
 import { useThunkReducer } from '../../hooks/useThunkReducer';
-
-export const INITIAL_STATE: ItemDetailState = {
-  name: '',
-  description: '',
-  found: false
-};
 
 export default function ItemDetails() {
   const { data: user } = useUser();

@@ -11,6 +11,11 @@ import {
   VALIDATION_ERROR
 } from './actions';
 
+export const INITIAL_CREATE_STATE: CreateState = {
+  name: '',
+  description: ''
+};
+
 export function createReducer(baseState: CreateState, action: CreateAction): CreateState {
   const { type, payload } = action;
 

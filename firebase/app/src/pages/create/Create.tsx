@@ -3,17 +3,11 @@ import './Create.scss';
 import React, { useCallback, useLayoutEffect } from 'react';
 import Title from '../../components/Title';
 import QrCodeImage from '../../components/common/QrCodeImage';
-import { createReducer } from './reducer';
+import { INITIAL_CREATE_STATE, createReducer } from './reducer';
 import { createItemQrCode, init, updateDescription, updateName, validationFailed } from './actions';
-import { CreateState } from './create-types';
 import Form from '../../components/form/Form';
 import { useUser } from 'reactfire';
 import { useThunkReducer } from '../../hooks/useThunkReducer';
-
-const INITIAL_CREATE_STATE: CreateState = {
-  name: '',
-  description: ''
-};
 
 export default function Create() {
   const { data: user } = useUser();
