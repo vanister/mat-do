@@ -13,7 +13,7 @@ import ItemDetails from './pages/itemdetails/ItemDetails';
 import Login from './pages/login/Login';
 import { AuthProvider, useFirebaseApp } from 'reactfire';
 import { connectAuthEmulator, getAuth } from 'firebase/auth';
-import { appSettings } from './AppSettings';
+import { appSettings } from './appSettings1';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import Error from './components/error/Error';
 
