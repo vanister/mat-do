@@ -20,11 +20,9 @@ Add a `firestore.rules` file. You can get it from the firebase console.
 The default is to use the emulator so you will need to install that by running:
 - `npx firebase init`
 - The emulated services are:
-  - Cloud Firestore
   - Authentication
+  - Cloud Firestore
   - Cloud Functions
-
-// TODO - set up eslint...again.
 
 ### Running/Debugging
 
@@ -36,3 +34,5 @@ The default is to use the emulator so you will need to install that by running:
 ### Testing
 
 Use the [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner) extension to run/debug the tests in VS Code.
+
+
