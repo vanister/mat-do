@@ -1,7 +1,10 @@
 import { useCallback, useState } from 'react';
 
 export type StateObjectUpdater<T> = (state: T) => T;
-export type SetStateObjectAction<T> = (newState: Partial<T> | StateObjectUpdater<T>) => void;
+export type SetStateObjectAction<T> = (
+  newState: Partial<T> | StateObjectUpdater<T>,
+  merge?: boolean
+) => void;
 export type UseStateObject<T> = [state: T, setState: SetStateObjectAction<T>];
 
 /**
@@ -18,13 +21,19 @@ export type UseStateObject<T> = [state: T, setState: SetStateObjectAction<T>];
 export function useStateObject<T>(initialState?: T): UseStateObject<T> {
   const [internalState, setInternalState] = useState(initialState);
 
-  const setState = useCallback((newState: Partial<T> | StateObjectUpdater<T>) => {
+  const setState = useCallback((newState: Partial<T> | StateObjectUpdater<T>, merge = true) => {
     if (typeof newState === 'function') {
       setInternalState(newState);
       return;
     }
 
-    setInternalState((i) => ({ ...i, ...newState }));
+    setInternalState((i) => {
+      if (merge) {
+        return { ...i, ...newState };
+      }
+
+      return { ...newState } as T;
+    });
   }, []);
 
   return [internalState, setState];
