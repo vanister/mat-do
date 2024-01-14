@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './pages/Layout';
 import Create from './pages/create/Create';

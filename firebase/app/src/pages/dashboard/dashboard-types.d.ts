@@ -1,3 +1,5 @@
+import { Item } from '../../models/item';
+
 export type DashboardState = {
   items: Item[];
   loading: boolean;

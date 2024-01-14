@@ -1,6 +1,6 @@
 import './Login.scss';
 
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';
 import Title from '../../components/Title';

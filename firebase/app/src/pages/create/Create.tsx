@@ -1,6 +1,6 @@
 import './Create.scss';
 
-import React, { useCallback, useLayoutEffect } from 'react';
+import { useCallback, useLayoutEffect } from 'react';
 import Title from '../../components/Title';
 import QrCodeImage from '../../components/common/QrCodeImage';
 import { INITIAL_CREATE_STATE, createReducer } from './reducer';

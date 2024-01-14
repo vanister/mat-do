@@ -1,6 +1,5 @@
 import './Form.scss';
 
-import React from 'react';
 import FormInput from './FormInput';
 import FormAction from './FormAction';
 

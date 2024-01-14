@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import Loading from '../loading/Loading';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useSigninCheck } from 'reactfire';

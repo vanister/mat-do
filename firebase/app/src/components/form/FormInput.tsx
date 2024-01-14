@@ -1,4 +1,3 @@
-import React from 'react';
 import { AdditionalProps, FormInputChangeEventHander } from './Form';
 
 export type FormInputProps = {

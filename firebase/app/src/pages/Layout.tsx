@@ -1,6 +1,5 @@
 import './Layout.scss';
 
-import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import LogoutButton from '../components/auth/LogoutButton';
 import NavMenu from '../components/nav/NavMenu';

@@ -1,6 +1,6 @@
 import './ItemDetails.scss';
 
-import React, { useEffect, useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useUser } from 'reactfire';
 import Title from '../../components/Title';

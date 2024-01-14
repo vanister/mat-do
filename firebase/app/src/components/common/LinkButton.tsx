@@ -1,5 +1,3 @@
-import React from 'react';
-
 import './LinkButton.scss';
 
 export type LinkButtonProps = {
@@ -12,11 +10,7 @@ export type LinkButtonProps = {
 /**
  * A button styled to look like an anchor tag.
  */
-export default function LinkButton({
-  children,
-  type,
-  onClick
-}: LinkButtonProps) {
+export default function LinkButton({ children, type, onClick }: LinkButtonProps) {
   return (
     <button className="link-button" type={type ?? 'button'} onClick={onClick}>
       {children}

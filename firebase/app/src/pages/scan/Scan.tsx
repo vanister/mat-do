@@ -1,6 +1,6 @@
 import './Scan.scss';
 
-import React, { useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import Form from '../../components/form/Form';
