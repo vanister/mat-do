@@ -55,7 +55,7 @@ export default function ItemDetails() {
   };
 
   return (
-    <div className="item-page">
+    <section className="item-page">
       <Title>Item Details</Title>
 
       {loading ? (
@@ -94,6 +94,6 @@ export default function ItemDetails() {
           </FormAction>
         </Form>
       )}
-    </div>
+    </section>
   );
 }

@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import LogoutButton from '../components/auth/LogoutButton';
 import NavMenu from '../components/nav/NavMenu';
@@ -16,11 +16,7 @@ export default function PublicLayout() {
         <NavMenu>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/dashboard">Dashboard</NavLink>
-          {!data?.signedIn ? (
-            <NavLink to="/login">Login</NavLink>
-          ) : (
-            <LogoutButton />
-          )}
+          {!data?.signedIn ? <NavLink to="/login">Login</NavLink> : <LogoutButton />}
         </NavMenu>
       </header>
       <main className="main-content">

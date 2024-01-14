@@ -10,18 +10,16 @@ export default function Layout() {
     <div className="layout-content">
       <header>
         <h1>Mất đồ</h1>
-        <div className='nav-menu'>
-          <NavMenu>
-            <NavLink to="/home">Home</NavLink>
-            <NavLink to="/dashboard">Dashboard</NavLink>
-            <NavLink to="/create">Create</NavLink>
-            <LogoutButton />
-          </NavMenu>
-        </div>
+        <NavMenu>
+          <NavLink to="/home">Home</NavLink>
+          <NavLink to="/dashboard">Dashboard</NavLink>
+          <NavLink to="/create">Create</NavLink>
+          <LogoutButton />
+        </NavMenu>
       </header>
       <main className="main-content">
         <Outlet />
       </main>
-    </div >
+    </div>
   );
 }

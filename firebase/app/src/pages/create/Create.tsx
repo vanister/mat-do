@@ -42,9 +42,9 @@ export default function Create() {
   );
 
   return (
-    <div className="create-page">
+    <section className="create-page">
       <Title>Create an Item</Title>
-      <section className="create-page-content">
+      <div className="create-page-content">
         {qrCreated && <QrCodeImage dataUri={dataUri} />}
 
         <Form onSubmit={handleFormSubmit}>
@@ -80,7 +80,7 @@ export default function Create() {
             Clear
           </Form.Action>
         </Form>
-      </section>
-    </div>
+      </div>
+    </section>
   );
 }

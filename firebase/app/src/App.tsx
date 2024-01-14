@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './pages/Layout';
 import Create from './pages/create/Create';
@@ -21,9 +21,11 @@ export default function App() {
   const app = useFirebaseApp();
   const auth = getAuth(app);
 
-  if (!appSettings.isProduction) {
-    connectAuthEmulator(auth, 'http://localhost:9099');
-  }
+  useEffect(() => {
+    if (!appSettings.isProduction) {
+      connectAuthEmulator(auth, 'http://localhost:9099');
+    }
+  }, [auth]);
 
   function handleErrorBoundaryFallback({ error }: FallbackProps): ReactNode {
     return <Error />;

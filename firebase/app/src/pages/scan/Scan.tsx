@@ -46,7 +46,7 @@ export default function Scan() {
   );
 
   return (
-    <div className="scan-page">
+    <section className="scan-page">
       <Title>Scanned Item</Title>
       <Form id="commentForm" onSubmit={handleCommentFormSubmit}>
         <FormInput
@@ -87,6 +87,6 @@ export default function Scan() {
           Share
         </FormAction>
       </Form>
-    </div>
+    </section>
   );
 }

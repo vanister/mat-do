@@ -16,7 +16,7 @@ type LoginForm = {
 };
 
 export default function Login() {
-  const { state, setState } = useStateObject<LoginForm>({ username: '', password: '' });
+  const [state, setState] = useStateObject<LoginForm>({ username: '', password: '' });
   const navigate = useNavigate();
   const location = useLocation();
   const { status, data: signInCheckResult } = useSigninCheck();
@@ -46,7 +46,7 @@ export default function Login() {
   );
 
   return (
-    <div className="login-page">
+    <section className="login-page">
       <Title>Login</Title>
       <Form id="loginForm" onSubmit={handleFormSubmit}>
         <FormInput
@@ -66,6 +66,6 @@ export default function Login() {
           Login
         </FormAction>
       </Form>
-    </div>
+    </section>
   );
 }

@@ -50,7 +50,7 @@ export default function Dashboard() {
   }, [pageSize, resetBoundary, setState, showBoundary, user]);
 
   return (
-    <div className="dashboard-page">
+    <section className="dashboard-page">
       <Title>Dashboard</Title>
       <div className="list-container">
         {loading ? (
@@ -68,6 +68,6 @@ export default function Dashboard() {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 }
