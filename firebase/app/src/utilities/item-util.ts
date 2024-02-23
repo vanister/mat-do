@@ -23,7 +23,7 @@ export function toScannableItemUrl(item: Item, path = '/scan'): string {
 
   const encoded = toBase64(hashFrag);
 
-  // create a url with name and and desc embedded in the hash
+  // create a url with name and desc embedded in the hash
   // so we don't have to retrieve it when it is scanned
   return `${window.location.origin}${path}/${item.id}#${INFO_HASH_KEY}=${encoded}`;
 }
