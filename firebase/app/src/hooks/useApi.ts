@@ -2,7 +2,7 @@ import { AxiosError, HttpStatusCode, Method } from 'axios';
 import { useEffect } from 'react';
 import { useStateObject } from './useStateObject';
 import { Response, sendRequest, sendRequestWithAuth } from '../utilities/api';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from 'reactfire';
 
 export type UseApiOptions = {
@@ -40,6 +40,7 @@ export function useApi<T>(
   options: UseApiOptions = {}
 ): UseApiState<T> {
   const navigate = useNavigate();
+  const location = useLocation();
   const { data: user } = useUser();
   const [state, setState] = useStateObject<UseApiState<T>>({ fetching: false });
   const { withAuth, redirect401, returnUrl }: UseApiOptions = { ...DEFAULT_OPTIONS, ...options };
@@ -57,7 +58,7 @@ export function useApi<T>(
         setState({ response, data: response.data }, false);
       } catch (error) {
         if (error.response?.status === HttpStatusCode.Unauthorized && redirect401) {
-          navigate(LOGIN_URL, { replace: true, state: { from: returnUrl } });
+          navigate(LOGIN_URL, { replace: true, state: { from: returnUrl ?? location.pathname } });
 
           return;
         }
