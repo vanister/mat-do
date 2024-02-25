@@ -1,11 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
 import { Item } from '../models/item';
-
 import { getScanItemInfo } from './item-util';
 
 describe('Item Utilities', () => {
   const hash =
-    '#info=eyJuYW1lIjoiSnluJ3MgQmxhc3RlciIsImRlc2NyaXB0aW9uIjoiVGhlIG9uZSBzaGUgc3RvbGUgZnJvbSBDYXNzaWFuIn0=';
+    '#d=eyJuYW1lIjoiSnluJ3MgQmxhc3RlciIsImRlc2NyaXB0aW9uIjoiVGhlIG9uZSBzaGUgc3RvbGUgZnJvbSBDYXNzaWFuIn0=';
 
   const item: Partial<Item> = {
     name: `Jyn's Blaster`,
