@@ -17,7 +17,7 @@ export default function RequireAuth({ children }: RequireAuthProps) {
     if (status !== 'loading' && !isSignedIn) {
       navigate('/login', { state: { from: location.pathname } });
     }
-  }, [isSignedIn, status]);
+  }, [isSignedIn, location.pathname, navigate, status]);
 
   if (!isSignedIn || status === 'loading') {
     return <Loading />;
