@@ -1,22 +1,20 @@
+import { AxiosError } from 'axios';
 import { CreateAction, CreateDispatch } from './create-types';
 import { generateDataUri } from '../../utilities/qrcode-generator';
-import { toScannableItemUrl } from '../../utilities/item-util';
-import { User } from 'firebase/auth';
 import { Item } from '../../models/item';
 import { sendRequestWithAuth } from '../../utilities/api';
-import { AxiosError } from 'axios';
+import { toScannableItemUrl } from '../../utilities/item-util';
+import { User } from 'firebase/auth';
 
-export const INIT = 'INIT';
+export const CREATE_REQUEST_FAILED = 'CREATE_FAILED';
 export const CREATE_REQUEST = 'POSTING_REQUEST';
-export const CREATE_SUCCESS = 'CREATE_SUCCESS';
-export const CREATE_FAILED = 'CREATE_FAILED';
-
-export const QR_CODE_GENERATING = 'QR_CODE_GENERATING';
+export const CREATE_REQUEST_SUCCESS = 'CREATE_SUCCESS';
+export const INIT = 'INIT';
 export const QR_CODE_GENERATED = 'QR_CODE_GENERATED';
+export const QR_CODE_GENERATING = 'QR_CODE_GENERATING';
 export const QR_CODE_GENERATION_FAILED = 'QR_CODE_GENERATION_FAILED';
-
-export const UPDATE_NAME = 'UPDATE_NAME';
 export const UPDATE_DESC = 'UPDATE_DESC';
+export const UPDATE_NAME = 'UPDATE_NAME';
 export const VALIDATION_ERROR = 'VALIDATION_ERROR';
 
 export const init = () => ({ type: INIT });
@@ -51,7 +49,7 @@ export const createItemQrCode =
         data: item
       });
 
-      dispatch({ type: CREATE_SUCCESS, payload: { id } });
+      dispatch({ type: CREATE_REQUEST_SUCCESS, payload: { id } });
       dispatch({ type: QR_CODE_GENERATING });
 
       const qrData = toScannableItemUrl({ ...item, id } as Item);
@@ -64,7 +62,7 @@ export const createItemQrCode =
     } catch (error) {
       if (error instanceof AxiosError) {
         dispatch({
-          type: CREATE_FAILED,
+          type: CREATE_REQUEST_FAILED,
           payload: {
             errorMessage: error?.message
           }

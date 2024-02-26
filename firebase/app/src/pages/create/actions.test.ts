@@ -3,7 +3,16 @@ import { User } from 'firebase/auth';
 import { sendRequestWithAuth } from '../../utilities/api';
 import { generateDataUri } from '../../utilities/qrcode-generator';
 import { INFO_HASH_KEY, toScannableItemUrl } from '../../utilities/item-util';
-import { createItemQrCode } from './actions';
+import {
+  CREATE_REQUEST_FAILED,
+  CREATE_REQUEST,
+  CREATE_REQUEST_SUCCESS,
+  QR_CODE_GENERATED,
+  QR_CODE_GENERATING,
+  QR_CODE_GENERATION_FAILED,
+  createItemQrCode
+} from './actions';
+import { AxiosError } from 'axios';
 
 jest.mock('../../utilities/qrcode-generator');
 jest.mock('../../utilities/item-util');
@@ -31,6 +40,9 @@ describe('Create Actions', () => {
   };
 
   describe('WHEN creating an item', () => {
+    const name = 'Blaster';
+    const description = 'The one she stole from Cassian';
+
     beforeEach(() => {
       jest.clearAllMocks();
     });
@@ -41,11 +53,10 @@ describe('Create Actions', () => {
 
     test('should save the item and create a qr code data uri', async () => {
       const itemId = 'new-item-uuid';
-      const name = 'Blaster';
-      const description = 'The one she stole from Cassian';
+      const dataUri = 'data:image/png;base64,aBase64EncodedItem';
 
       mockSendRequestWithAuth.mockResolvedValueOnce({ data: itemId });
-      mockGenerateDatauri.mockResolvedValueOnce('data:image/png;base64,aBase64EncodedItem');
+      mockGenerateDatauri.mockResolvedValueOnce(dataUri);
       mockToScannableItemUrl.mockReturnValueOnce(
         `https://mat-do.com/scan/${itemId}#${INFO_HASH_KEY}=aBase64EncodedItem`
       );
@@ -55,6 +66,43 @@ describe('Create Actions', () => {
       expect(mockSendRequestWithAuth).toHaveBeenCalledWith('/items', accessToken, {
         method: 'POST',
         data: { name, description, userId: uid }
+      });
+
+      expect(mockDispatch).toHaveBeenCalledTimes(4);
+      expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_REQUEST });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: CREATE_REQUEST_SUCCESS,
+        payload: { id: itemId }
+      });
+      expect(mockDispatch).toHaveBeenCalledWith({ type: QR_CODE_GENERATING });
+      expect(mockDispatch).toHaveBeenCalledWith({ type: QR_CODE_GENERATED, payload: { dataUri } });
+    });
+
+    describe('AND there are errors', () => {
+      test('should handle AxiosErrors', async () => {
+        mockSendRequestWithAuth.mockRejectedValueOnce(new AxiosError('an api error'));
+
+        await createItemQrCode(mockUser as User, name, description)(mockDispatch);
+
+        expect(mockDispatch).toHaveBeenCalledTimes(2);
+        expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_REQUEST });
+        expect(mockDispatch).toHaveBeenCalledWith({
+          type: CREATE_REQUEST_FAILED,
+          payload: { errorMessage: 'an api error' }
+        });
+      });
+
+      test('should handle all other errors', async () => {
+        mockSendRequestWithAuth.mockRejectedValueOnce(new Error('an error'));
+
+        await createItemQrCode(mockUser as User, name, description)(mockDispatch);
+
+        expect(mockDispatch).toHaveBeenCalledTimes(2);
+        expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_REQUEST });
+        expect(mockDispatch).toHaveBeenCalledWith({
+          type: QR_CODE_GENERATION_FAILED,
+          payload: { errorMessage: 'an error' }
+        });
       });
     });
   });
