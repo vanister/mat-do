@@ -5,7 +5,7 @@ import { Response, sendRequest, sendRequestWithAuth } from '../utilities/api';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useUser } from 'reactfire';
 
-export type UseApiOptions = {
+export type ApiOptions = {
   /**
    * True, to Redirect to the login page when a 401 status code is returned, false otherwise.
    *
@@ -20,14 +20,14 @@ export type UseApiOptions = {
   withAuth?: boolean;
 };
 
-export type UseApiState<T> = {
+export type ApiState<T> = {
   data?: T;
   error?: Error | AxiosError;
   fetching: boolean;
   response?: Response<T>;
 };
 
-const DEFAULT_OPTIONS: UseApiOptions = {
+const DEFAULT_OPTIONS: ApiOptions = {
   redirect401: true
 };
 
@@ -37,13 +37,13 @@ export function useApi<T>(
   path: string,
   method: Method = 'GET',
   data?: any,
-  options: UseApiOptions = {}
-): UseApiState<T> {
+  options: ApiOptions = {}
+): ApiState<T> {
   const navigate = useNavigate();
   const location = useLocation();
   const { data: user } = useUser();
-  const [state, setState] = useStateObject<UseApiState<T>>({ fetching: false });
-  const { withAuth, redirect401, returnUrl }: UseApiOptions = { ...DEFAULT_OPTIONS, ...options };
+  const [state, setState] = useStateObject<ApiState<T>>({ fetching: false });
+  const { withAuth, redirect401, returnUrl }: ApiOptions = { ...DEFAULT_OPTIONS, ...options };
 
   useEffect(() => {
     const fetch = async () => {
