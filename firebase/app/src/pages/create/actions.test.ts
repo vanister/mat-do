@@ -7,20 +7,15 @@ import {
   CREATE_REQUEST_FAILED,
   CREATE_REQUEST,
   CREATE_REQUEST_SUCCESS,
-  QR_CODE_GENERATED,
-  QR_CODE_GENERATING,
-  QR_CODE_GENERATION_FAILED,
+  CREATE_QR_CODE_GENERATED,
+  CREATE_QR_CODE_GENERATING,
+  CREATE_QR_CODE_GENERATION_FAILED,
   createItemQrCode
 } from './actions';
 import { AxiosError } from 'axios';
 
 jest.mock('../../utilities/qrcode-generator');
 jest.mock('../../utilities/item-util');
-
-jest.mock('axios', () => ({
-  AxiosError: class AxiosError extends Error {}
-}));
-
 jest.mock('../../utilities/api', () => ({
   sendRequestWithAuth: jest.fn()
 }));
@@ -74,8 +69,11 @@ describe('Create Actions', () => {
         type: CREATE_REQUEST_SUCCESS,
         payload: { id: itemId }
       });
-      expect(mockDispatch).toHaveBeenCalledWith({ type: QR_CODE_GENERATING });
-      expect(mockDispatch).toHaveBeenCalledWith({ type: QR_CODE_GENERATED, payload: { dataUri } });
+      expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_QR_CODE_GENERATING });
+      expect(mockDispatch).toHaveBeenCalledWith({
+        type: CREATE_QR_CODE_GENERATED,
+        payload: { dataUri }
+      });
     });
 
     describe('AND there are errors', () => {
@@ -100,7 +98,7 @@ describe('Create Actions', () => {
         expect(mockDispatch).toHaveBeenCalledTimes(2);
         expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_REQUEST });
         expect(mockDispatch).toHaveBeenCalledWith({
-          type: QR_CODE_GENERATION_FAILED,
+          type: CREATE_QR_CODE_GENERATION_FAILED,
           payload: { errorMessage: 'an error' }
         });
       });

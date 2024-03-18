@@ -1,14 +1,14 @@
 import { produce } from 'immer';
 import { CreateAction, CreateState } from './create-types';
 import {
-  QR_CODE_GENERATION_FAILED,
-  QR_CODE_GENERATED,
-  QR_CODE_GENERATING,
-  INIT,
+  CREATE_QR_CODE_GENERATION_FAILED,
+  CREATE_QR_CODE_GENERATED,
+  CREATE_QR_CODE_GENERATING,
+  CREATE_INIT,
   CREATE_REQUEST,
-  UPDATE_DESC,
-  UPDATE_NAME,
-  VALIDATION_ERROR
+  CREATE_UPDATE_DESC,
+  CREATE_UPDATE_NAME,
+  CREATE_VALIDATION_ERROR
 } from './actions';
 
 export const INITIAL_CREATE_STATE: CreateState = {
@@ -21,24 +21,24 @@ export function createReducer(baseState: CreateState, action: CreateAction): Cre
 
   return produce(baseState, (state: CreateState) => {
     switch (type) {
-      case INIT:
+      case CREATE_INIT:
         return { name: '', description: '' };
 
       case CREATE_REQUEST:
-        state.errorMessage = null;
         state.isLoading = true;
         state.created = false;
-        state.dataUri = null;
-        state.id = null;
+        delete state.dataUri;
+        delete state.errorMessage;
+        delete state.id;
 
         return state;
 
-      case QR_CODE_GENERATING:
+      case CREATE_QR_CODE_GENERATING:
         state.isLoading = true;
 
         return state;
 
-      case QR_CODE_GENERATED:
+      case CREATE_QR_CODE_GENERATED:
         state.dataUri = payload.dataUri;
         state.id = payload.id;
         state.isLoading = false;
@@ -46,18 +46,18 @@ export function createReducer(baseState: CreateState, action: CreateAction): Cre
 
         return state;
 
-      case UPDATE_DESC:
+      case CREATE_UPDATE_DESC:
         state.description = payload.description;
 
         return state;
 
-      case UPDATE_NAME:
+      case CREATE_UPDATE_NAME:
         state.name = payload.name;
 
         return state;
 
-      case VALIDATION_ERROR:
-      case QR_CODE_GENERATION_FAILED:
+      case CREATE_VALIDATION_ERROR:
+      case CREATE_QR_CODE_GENERATION_FAILED:
         state.errorMessage = payload.errorMessage;
         state.isLoading = false;
         state.created = null;

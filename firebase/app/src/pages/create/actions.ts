@@ -9,28 +9,28 @@ import { User } from 'firebase/auth';
 export const CREATE_REQUEST_FAILED = 'CREATE_FAILED';
 export const CREATE_REQUEST = 'POSTING_REQUEST';
 export const CREATE_REQUEST_SUCCESS = 'CREATE_SUCCESS';
-export const INIT = 'INIT';
-export const QR_CODE_GENERATED = 'QR_CODE_GENERATED';
-export const QR_CODE_GENERATING = 'QR_CODE_GENERATING';
-export const QR_CODE_GENERATION_FAILED = 'QR_CODE_GENERATION_FAILED';
-export const UPDATE_DESC = 'UPDATE_DESC';
-export const UPDATE_NAME = 'UPDATE_NAME';
-export const VALIDATION_ERROR = 'VALIDATION_ERROR';
+export const CREATE_INIT = 'INIT';
+export const CREATE_QR_CODE_GENERATED = 'QR_CODE_GENERATED';
+export const CREATE_QR_CODE_GENERATING = 'QR_CODE_GENERATING';
+export const CREATE_QR_CODE_GENERATION_FAILED = 'QR_CODE_GENERATION_FAILED';
+export const CREATE_UPDATE_DESC = 'UPDATE_DESC';
+export const CREATE_UPDATE_NAME = 'UPDATE_NAME';
+export const CREATE_VALIDATION_ERROR = 'VALIDATION_ERROR';
 
-export const init = () => ({ type: INIT });
+export const init = () => ({ type: CREATE_INIT });
 
 export const validationFailed = (errorMsg: string): CreateAction => ({
-  type: VALIDATION_ERROR,
+  type: CREATE_VALIDATION_ERROR,
   payload: { errorMessage: errorMsg }
 });
 
 export const updateName = (name: string): CreateAction => ({
-  type: UPDATE_NAME,
+  type: CREATE_UPDATE_NAME,
   payload: { name }
 });
 
 export const updateDescription = (description: string): CreateAction => ({
-  type: UPDATE_DESC,
+  type: CREATE_UPDATE_DESC,
   payload: { description }
 });
 
@@ -50,13 +50,13 @@ export const createItemQrCode =
       });
 
       dispatch({ type: CREATE_REQUEST_SUCCESS, payload: { id } });
-      dispatch({ type: QR_CODE_GENERATING });
+      dispatch({ type: CREATE_QR_CODE_GENERATING });
 
       const qrData = toScannableItemUrl({ ...item, id } as Item);
       const dataUri = await generateDataUri(qrData);
 
       dispatch({
-        type: QR_CODE_GENERATED,
+        type: CREATE_QR_CODE_GENERATED,
         payload: { dataUri }
       });
     } catch (error) {
@@ -72,7 +72,7 @@ export const createItemQrCode =
       }
 
       dispatch({
-        type: QR_CODE_GENERATION_FAILED,
+        type: CREATE_QR_CODE_GENERATION_FAILED,
         payload: {
           errorMessage: error?.message
         }
