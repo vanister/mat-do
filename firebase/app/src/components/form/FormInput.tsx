@@ -1,15 +1,16 @@
 import { AdditionalProps, FormInputChangeEventHander } from './Form';
 
 export type FormInputProps = {
+  additionalProps?: AdditionalProps;
   id?: string;
   label: string;
-  value?: string;
-  readOnly?: boolean;
   multiline?: boolean;
-  type?: React.HTMLInputTypeAttribute;
   placeholder?: string;
+  readOnly?: boolean;
   required?: boolean;
-  additionalProps?: AdditionalProps;
+  type?: React.HTMLInputTypeAttribute;
+  value?: string;
+
   onChange?: FormInputChangeEventHander;
 };
 

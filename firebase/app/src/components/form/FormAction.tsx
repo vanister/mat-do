@@ -1,11 +1,12 @@
 import { AdditionalProps } from './Form';
 
 export type FormActionProps = {
-  id?: string;
-  children: string;
-  type: 'button' | 'submit';
-  disabled?: boolean;
   additionalProps?: AdditionalProps;
+  children: string;
+  disabled?: boolean;
+  id?: string;
+  type: 'button' | 'submit';
+
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 

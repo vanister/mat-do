@@ -17,7 +17,7 @@ export const CREATE_UPDATE_DESC = 'UPDATE_DESC';
 export const CREATE_UPDATE_NAME = 'UPDATE_NAME';
 export const CREATE_VALIDATION_ERROR = 'VALIDATION_ERROR';
 
-export const init = () => ({ type: CREATE_INIT });
+export const init = (): CreateAction => ({ type: CREATE_INIT });
 
 export const validationFailed = (errorMsg: string): CreateAction => ({
   type: CREATE_VALIDATION_ERROR,
