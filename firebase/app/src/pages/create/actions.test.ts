@@ -4,15 +4,11 @@ import { sendRequestWithAuth } from '../../utilities/api';
 import { generateDataUri } from '../../utilities/qrcode-generator';
 import { INFO_HASH_KEY, toScannableItemUrl } from '../../utilities/item-util';
 import {
-  CREATE_REQUEST_FAILED,
-  CREATE_REQUEST,
-  CREATE_REQUEST_SUCCESS,
   CREATE_QR_CODE_GENERATED,
   CREATE_QR_CODE_GENERATING,
   CREATE_QR_CODE_GENERATION_FAILED,
   createItemQrCode
 } from './actions';
-import { AxiosError } from 'axios';
 
 jest.mock('../../utilities/qrcode-generator');
 jest.mock('../../utilities/item-util');
@@ -63,40 +59,19 @@ describe('Create Actions', () => {
         data: { name, description, userId: uid }
       });
 
-      expect(mockDispatch).toHaveBeenCalledTimes(4);
-      expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_REQUEST });
-      expect(mockDispatch).toHaveBeenCalledWith({
-        type: CREATE_REQUEST_SUCCESS,
-        payload: { id: itemId }
-      });
       expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_QR_CODE_GENERATING });
       expect(mockDispatch).toHaveBeenCalledWith({
         type: CREATE_QR_CODE_GENERATED,
-        payload: { dataUri }
+        payload: { dataUri, id: itemId }
       });
     });
 
     describe('AND there are errors', () => {
-      test('should handle AxiosErrors', async () => {
-        mockSendRequestWithAuth.mockRejectedValueOnce(new AxiosError('an api error'));
-
-        await createItemQrCode(mockUser as User, name, description)(mockDispatch);
-
-        expect(mockDispatch).toHaveBeenCalledTimes(2);
-        expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_REQUEST });
-        expect(mockDispatch).toHaveBeenCalledWith({
-          type: CREATE_REQUEST_FAILED,
-          payload: { errorMessage: 'an api error' }
-        });
-      });
-
       test('should handle all other errors', async () => {
         mockSendRequestWithAuth.mockRejectedValueOnce(new Error('an error'));
 
         await createItemQrCode(mockUser as User, name, description)(mockDispatch);
 
-        expect(mockDispatch).toHaveBeenCalledTimes(2);
-        expect(mockDispatch).toHaveBeenCalledWith({ type: CREATE_REQUEST });
         expect(mockDispatch).toHaveBeenCalledWith({
           type: CREATE_QR_CODE_GENERATION_FAILED,
           payload: { errorMessage: 'an error' }

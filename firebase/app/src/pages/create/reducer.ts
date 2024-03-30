@@ -5,7 +5,6 @@ import {
   CREATE_QR_CODE_GENERATED,
   CREATE_QR_CODE_GENERATING,
   CREATE_INIT,
-  CREATE_REQUEST,
   CREATE_UPDATE_DESC,
   CREATE_UPDATE_NAME,
   CREATE_VALIDATION_ERROR
@@ -24,17 +23,12 @@ export function createReducer(baseState: CreateState, action: CreateAction): Cre
       case CREATE_INIT:
         return { name: '', description: '' };
 
-      case CREATE_REQUEST:
+      case CREATE_QR_CODE_GENERATING:
         state.isLoading = true;
         state.created = false;
         delete state.dataUri;
         delete state.errorMessage;
         delete state.id;
-
-        return state;
-
-      case CREATE_QR_CODE_GENERATING:
-        state.isLoading = true;
 
         return state;
 

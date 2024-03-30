@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { createReducer } from './reducer';
 import { CreateState } from './create-types';
-import { CREATE_INIT, CREATE_REQUEST, CREATE_REQUEST_SUCCESS } from './actions';
+import { CREATE_INIT, CREATE_QR_CODE_GENERATED, CREATE_QR_CODE_GENERATING } from './actions';
 
 describe('Create Page Reducer', () => {
   const initialState: CreateState = {
@@ -25,7 +25,7 @@ describe('Create Page Reducer', () => {
         created: false
       };
 
-      const newState = createReducer(initialState, { type: CREATE_REQUEST });
+      const newState = createReducer(initialState, { type: CREATE_QR_CODE_GENERATING });
 
       expect(newState).toEqual(expectedState);
     });
@@ -43,7 +43,7 @@ describe('Create Page Reducer', () => {
       };
 
       const newState = createReducer(initialState, {
-        type: CREATE_REQUEST_SUCCESS,
+        type: CREATE_QR_CODE_GENERATED,
         payload: { dataUri, id }
       });
 
