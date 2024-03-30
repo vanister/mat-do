@@ -12,6 +12,7 @@ export type FormInputChangeEventHander = (
 export type AdditionalProps = { [name: string]: unknown };
 
 export type FormProps = {
+  /** Explicit additional props */
   additionalProps?: AdditionalProps;
   children: ReactNode;
   id?: string;
@@ -20,7 +21,7 @@ export type FormProps = {
 };
 
 export default function Form(props: FormProps) {
-  const { children, onSubmit } = props;
+  const { children, additionalProps, onSubmit } = props;
 
   // todo - add in section containers to group and style form
   //        input and actions
@@ -28,7 +29,7 @@ export default function Form(props: FormProps) {
   // i.e. <Form.Actions>...</Form.Actions>
 
   return (
-    <form className="form" onSubmit={onSubmit}>
+    <form className="form" onSubmit={onSubmit} {...additionalProps}>
       {children}
     </form>
   );
