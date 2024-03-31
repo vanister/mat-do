@@ -11,6 +11,8 @@
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}"
     },
+    // Use the [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner)
+    // for better integration
     {
       "name": "Debug Tests - Current File",
       "type": "node",

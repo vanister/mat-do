@@ -16,8 +16,11 @@ describe('Form Tests', () => {
     expect(screen.getByRole('button')).toHaveTextContent('Ok');
   });
 
-  test.todo('should handle submit actions');
+  test('should handle submit actions', () => {});
+
   test.todo('should handle normal actions');
+
   test.todo('should render a single line input');
+
   test.todo('should render a multiline input');
 });
