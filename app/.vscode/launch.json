@@ -1,0 +1,34 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "msedge",
+      "request": "launch",
+      "name": "Debug app (MS Edge)",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
+    },
+    // Use the [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner)
+    // for better integration
+    {
+      "name": "Debug Tests - Current File",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/react-scripts",
+      "args": [
+        "test",
+        "${fileBasenameNoExtension}",
+        "--runInBand",
+        "--no-cache",
+        "--env=jsdom",
+        "--watchAll=false"
+      ],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}

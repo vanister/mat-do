@@ -1,0 +1,22 @@
+.scan-page {
+  #commentForm {
+    .form-field {
+      margin: 0.5rem 0;
+    }
+
+    .field-title {
+      font-weight: bold;
+    }
+
+    .field-input {
+      margin-top: 0.25rem;
+    }
+
+    #commentField {
+      width: 100%;
+      max-width: 500px;
+      min-height: 100px;
+      font-size: large;
+    }
+  }
+}
