@@ -1,4 +1,2 @@
 cd app
 npm run test:once
-
-exit 1
