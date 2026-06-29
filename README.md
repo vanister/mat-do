@@ -10,7 +10,7 @@ https://user-images.githubusercontent.com/7736967/234744160-aee3e29a-04e5-4ced-a
 
 ## Setup
 
-- Node LTS (18.x)
+- Node LTS (22.x)
   - React
 - Firebase
   - Firestore
