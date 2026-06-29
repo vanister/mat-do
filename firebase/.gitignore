@@ -6,7 +6,7 @@ firestore.rules
 .env*
 .env.*
 
-build/
+dist/
 lib/
 node_modules/
 emulator_data/
