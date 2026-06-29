@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach } from '@jest/globals';
+import { describe, expect, test, beforeEach, vi } from 'vitest';
 import { BaseError } from './base.error';
 import { handleError } from './handler';
 import { Response } from 'express';
@@ -10,17 +10,17 @@ describe('Error Handler', () => {
     }
   }
 
-  const mockConsole = { log: jest.fn() };
+  const mockConsole = { log: vi.fn(), error: vi.fn() };
 
-  const mockSend = jest.fn();
-  const mockStatus = jest.fn().mockReturnValue({ send: mockSend });
+  const mockSend = vi.fn();
+  const mockStatus = vi.fn().mockReturnValue({ send: mockSend });
   const mockResponse: Partial<Response> = {
     status: mockStatus,
-    sendStatus: jest.fn(),
+    sendStatus: vi.fn(),
   };
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should send a 400 Bad Request for BaseErrors', () => {

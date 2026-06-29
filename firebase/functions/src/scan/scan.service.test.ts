@@ -1,12 +1,12 @@
-import { describe, expect, test, beforeEach } from '@jest/globals';
+import { describe, expect, test, beforeEach, vi, type Mock } from 'vitest';
 import { list, scanned } from './scan.service';
 import { getCollection } from '../db';
 
-jest.mock('firebase-admin/firestore');
-jest.mock('../db');
+vi.mock('firebase-admin/firestore');
+vi.mock('../db');
 
 describe('ScanService', () => {
-  const mockGetCollection = getCollection as jest.Mock;
+  const mockGetCollection = getCollection as Mock;
 
   beforeEach(() => {
     mockGetCollection.mockClear();
