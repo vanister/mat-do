@@ -112,13 +112,48 @@ stay put.
 
 ## Follow-ups
 
-- **Dependency refresh (after Phase 1 / Vite migration).** Once the Vite migration
-  is complete and verified, circle back and update all dependencies — in both
-  `app/` and `firebase/functions/` — to as close to the latest functional versions
-  as possible. This includes triaging the outstanding `npm audit` vulnerabilities
-  and bumping deliberately-pinned-old packages (e.g. `typescript` 4.9,
-  `@types/react` 18, `firebase` 9, `react-router-dom` 6). Verify tests, build, and
-  the running app after each round of upgrades.
+### Dependency refresh (`app/`) — status
+
+Done after the Vite migration; build + 26 tests verified after each round:
+
+- **Bumped:** `react-router-dom` 6→7, `react-error-boundary` 4→6, `immer` 10→11,
+  `concurrently` 8→10, `@testing-library/react` 14→16 (+ `@testing-library/dom`),
+  `typescript` 5→6 (tsconfig `target` es5→ES2020), and `@types/node` 16→22 (during
+  the Vite work). `axios`, `classnames`, `qrcode`, `sass`, `vite`, `vitest`, etc.
+  were already current.
+
+- **Blocked by `reactfire` (unmaintained).** `reactfire@4.2.3` peer-requires
+  `firebase: ^9.0.0`, which pins:
+  - **`firebase` at 9** (can't go to 10–12), and
+  - the **7 `npm audit` vulnerabilities** (1 critical / 5 high / 1 moderate) that all
+    originate from `firebase@9 → @grpc/grpc-js → protobufjs` and are marked
+    "no fix available" at the firebase-9 level.
+
+  `npm audit fix --force` would install `firebase@12` and break reactfire, so it is
+  not safe. **React 19** (`react`/`react-dom`/`@types/react*` 18→19) is also
+  deferred — peer-allowed by reactfire but risky against an unmaintained library.
+
+  **Unblock:** these resolve together once **Phase 2** hides/removes reactfire
+  behind our own auth provider — at which point firebase can move to 12 (clearing
+  the CVEs) and React can move to 19.
+
+### Dependency refresh (`firebase/functions/`) — status
+
+- **Tests migrated Jest → Vitest.** Dropped `jest`, `ts-jest`, `@types/jest`; added
+  `vitest` (esbuild compiles TS natively, so `ts-jest` is unnecessary). Added
+  `vitest.config.ts` (node environment), removed `jest.config.js`, repointed the
+  `test`/`test:once` scripts. Suite is green (4 passed, 1 skipped, 3 todo).
+- **Safe bumps applied** via a clean reinstall (within existing `^` ranges):
+  `express` 4.18→4.22, `firebase-admin` 11.5→11.11, `firebase-functions` 4.2→4.9,
+  `firebase-functions-test` 3.0→3.5, `@types/express` patch.
+- **Deferred (breaking majors):** `express` 5, `firebase-admin` 14,
+  `firebase-functions` 7, and bumping the Node engine off 18 — each needs code
+  changes and is its own focused effort.
+- **Note:** `tsc --noEmit` surfaces pre-existing type errors in `src/scan/*`
+  (e.g. `unknown` catch vars passed to `handleError`, `string | undefined` args).
+  These predate this work — the functions `build` script is a no-op `echo`, so
+  `tsc` was never run on `src`, and Vitest (esbuild) doesn't type-check. Worth
+  cleaning up separately, ideally alongside the Phase 2 backend hardening.
 
 ## Guiding principle
 
