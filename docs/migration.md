@@ -137,10 +137,23 @@ Done after the Vite migration; build + 26 tests verified after each round:
   behind our own auth provider — at which point firebase can move to 12 (clearing
   the CVEs) and React can move to 19.
 
-### Dependency refresh (`firebase/functions/`) — TODO
+### Dependency refresh (`firebase/functions/`) — status
 
-Not yet done. Bump `firebase-admin` 11, `firebase-functions` 4, and `express` 4 to
-current, and bump the Node engine from 18. Verify the functions' Jest suite after.
+- **Tests migrated Jest → Vitest.** Dropped `jest`, `ts-jest`, `@types/jest`; added
+  `vitest` (esbuild compiles TS natively, so `ts-jest` is unnecessary). Added
+  `vitest.config.ts` (node environment), removed `jest.config.js`, repointed the
+  `test`/`test:once` scripts. Suite is green (4 passed, 1 skipped, 3 todo).
+- **Safe bumps applied** via a clean reinstall (within existing `^` ranges):
+  `express` 4.18→4.22, `firebase-admin` 11.5→11.11, `firebase-functions` 4.2→4.9,
+  `firebase-functions-test` 3.0→3.5, `@types/express` patch.
+- **Deferred (breaking majors):** `express` 5, `firebase-admin` 14,
+  `firebase-functions` 7, and bumping the Node engine off 18 — each needs code
+  changes and is its own focused effort.
+- **Note:** `tsc --noEmit` surfaces pre-existing type errors in `src/scan/*`
+  (e.g. `unknown` catch vars passed to `handleError`, `string | undefined` args).
+  These predate this work — the functions `build` script is a no-op `echo`, so
+  `tsc` was never run on `src`, and Vitest (esbuild) doesn't type-check. Worth
+  cleaning up separately, ideally alongside the Phase 2 backend hardening.
 
 ## Guiding principle
 
