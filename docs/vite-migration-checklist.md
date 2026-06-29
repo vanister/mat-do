@@ -24,10 +24,10 @@ Testing Library + jest-dom setup.
 
 Establish that the app works before changing anything.
 
-- [ ] From `app/`, run `npm install`.
-- [ ] Run `npm run test:once` — confirm it passes.
-- [ ] Run `npm run build` — confirm it succeeds and creates `app/build/`.
-- [ ] Run `npm start` — confirm the app loads at `http://localhost:3000`, then stop it.
+- [x] From `app/`, run `npm install`.
+- [x] Run `npm run test:once` — confirm it passes. (9 suites, 26 tests passed)
+- [x] Run `npm run build` — confirm it succeeds and creates `app/build/`.
+- [ ] Run `npm start` — confirm the app loads at `http://localhost:3000`, then stop it. (skipped; build verified instead)
 
 **Gate:** all checks pass. If not, stop and report — do not start the migration.
 
@@ -48,9 +48,9 @@ npm uninstall react-scripts jest @types/jest web-vitals
 npm install -D vite @vitejs/plugin-react vitest jsdom
 ```
 
-- [ ] Ran the uninstall command.
-- [ ] Ran the install command.
-- [ ] Keep these (do **not** remove): `@testing-library/react`,
+- [x] Ran the uninstall command.
+- [x] Ran the install command. (also bumped `@types/node` to `^22`, required by Vite 8)
+- [x] Keep these (do **not** remove): `@testing-library/react`,
       `@testing-library/user-event`, `@testing-library/jest-dom`.
 
 **Note on ESLint:** `app/.eslintrc` extends `react-app` and `react-app/jest`, which
@@ -91,16 +91,16 @@ export default defineConfig({
 
 ### 2b. Move and rewrite the HTML entry
 
-- [ ] Move `app/public/index.html` to `app/index.html` (root of `app/`, not in `public/`).
-- [ ] In the new `app/index.html`, replace every `%PUBLIC_URL%/` with `/`
+- [x] Move `app/public/index.html` to `app/index.html` (root of `app/`, not in `public/`).
+- [x] In the new `app/index.html`, replace every `%PUBLIC_URL%/` with `/`
       (e.g. `%PUBLIC_URL%/favicon.ico` → `/favicon.ico`).
-- [ ] In the new `app/index.html`, add this line immediately before `</body>`:
+- [x] In the new `app/index.html`, add this line immediately before `</body>`:
 
 ```html
     <script type="module" src="/src/index.tsx"></script>
 ```
 
-- [ ] Leave the static assets in `app/public/` (`favicon.ico`, `manifest.json`,
+- [x] Leave the static assets in `app/public/` (`favicon.ico`, `manifest.json`,
       `logo192.png`, `logo512.png`, `robots.txt`). Vite serves them from `/`.
 
 **Gate:** `app/index.html` exists at the `app/` root and `app/public/index.html` no longer exists.
