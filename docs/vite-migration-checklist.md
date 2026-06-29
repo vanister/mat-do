@@ -318,10 +318,13 @@ After:  "public": "app/dist",
 
 ### 5c. Ignore the new output dir
 
-- [ ] In `firebase/.gitignore`, change `build/` to `dist/`.
-- [ ] In `app/.gitignore`, if it ignores `/build`, change it to `/dist` (add `/dist` if missing).
+- [x] In `firebase/.gitignore`, change `build/` to `dist/`.
+- [x] In `app/.gitignore`, if it ignores `/build`, change it to `/dist` (add `/dist` if missing).
 
 **Gate:** see Phase 6.
+_Done: scripts + hosting + gitignores updated. Also bumped `typescript` 4.9 → ^5
+(required by `moduleResolution: "bundler"` in the `tsc` build step). `npm run build`
+(`tsc && vite build`) and `npm run test:once` (`vitest run`) both pass._
 
 ---
 
