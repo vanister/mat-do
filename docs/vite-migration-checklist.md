@@ -161,9 +161,10 @@ After:  baseURL: baseUrl || import.meta.env.VITE_API_BASE_URL,
 
 ### 3d. Env files
 
-- [ ] In any `.env` / `.env.*` files, rename every `REACT_APP_` prefix to `VITE_`
+- [x] In any `.env` / `.env.*` files, rename every `REACT_APP_` prefix to `VITE_`
       (e.g. `REACT_APP_API_BASE_URL` → `VITE_API_BASE_URL`). Values stay the same.
-- [ ] Create `app/.env.example` listing the required keys (no secret values):
+      (No `.env*` files present in the repo; they are supplied at runtime.)
+- [x] Create `app/.env.example` listing the required keys (no secret values):
 
 ```
 VITE_API_BASE_URL=
@@ -192,6 +193,7 @@ Add a `types` entry (insert this line inside `compilerOptions`, e.g. after the
 ```
 
 **Gate:** none yet (the app is verified at the end of Phase 5).
+_Done: 3a–3e applied. Sanity `vite build` succeeded (178 modules → `dist/`)._
 
 ---
 
