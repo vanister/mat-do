@@ -110,6 +110,16 @@ After Phase 2, this collapses to writing new adapters that satisfy the existing
 ports. Controllers, middleware, errors, validation, ownership checks, and tests
 stay put.
 
+## Follow-ups
+
+- **Dependency refresh (after Phase 1 / Vite migration).** Once the Vite migration
+  is complete and verified, circle back and update all dependencies — in both
+  `app/` and `firebase/functions/` — to as close to the latest functional versions
+  as possible. This includes triaging the outstanding `npm audit` vulnerabilities
+  and bumping deliberately-pinned-old packages (e.g. `typescript` 4.9,
+  `@types/react` 18, `firebase` 9, `react-router-dom` 6). Verify tests, build, and
+  the running app after each round of upgrades.
+
 ## Guiding principle
 
 Ports & adapters / anti-corruption layer. Keep business logic and UI dependent on
