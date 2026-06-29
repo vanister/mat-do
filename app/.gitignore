@@ -1,5 +1,5 @@
 # folders
-/build
+/dist
 /coverage
 
 # files
@@ -17,7 +17,7 @@
 /coverage
 
 # production
-/build
+/dist
 
 # misc
 .DS_Store

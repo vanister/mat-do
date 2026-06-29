@@ -1,4 +1,4 @@
-import { describe } from '@jest/globals';
+import { describe, vi, type Mock } from 'vitest';
 import { sendRequestWithAuth } from '../../utilities/api';
 import {
   ITEM_DETAILS_FAILED,
@@ -7,12 +7,12 @@ import {
   getItemDetails
 } from './actions';
 
-jest.mock('../../utilities/api', () => ({
-  sendRequestWithAuth: jest.fn()
+vi.mock('../../utilities/api', () => ({
+  sendRequestWithAuth: vi.fn()
 }));
 
-const mockDispatch = jest.fn();
-const mockSendRequestWithAuth = sendRequestWithAuth as jest.Mock;
+const mockDispatch = vi.fn();
+const mockSendRequestWithAuth = sendRequestWithAuth as Mock;
 
 describe('getItemDetails Thunk', () => {
   const itemId = '123';

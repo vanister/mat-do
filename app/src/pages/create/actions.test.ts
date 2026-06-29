@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach } from '@jest/globals';
+import { describe, expect, test, beforeEach, vi, type Mock } from 'vitest';
 import { User } from 'firebase/auth';
 import { sendRequestWithAuth } from '../../utilities/api';
 import { generateDataUri } from '../../utilities/qrcode-generator';
@@ -10,20 +10,20 @@ import {
   createItemQrCode
 } from './actions';
 
-jest.mock('../../utilities/qrcode-generator');
-jest.mock('../../utilities/item-util');
-jest.mock('../../utilities/api', () => ({
-  sendRequestWithAuth: jest.fn()
+vi.mock('../../utilities/qrcode-generator');
+vi.mock('../../utilities/item-util');
+vi.mock('../../utilities/api', () => ({
+  sendRequestWithAuth: vi.fn()
 }));
 
 describe('Create Actions', () => {
   const uid = 'unique-user-id';
   const accessToken = 'an.access.token';
-  const mockSendRequestWithAuth = sendRequestWithAuth as jest.Mock;
-  const mockGenerateDatauri = generateDataUri as jest.Mock;
-  const mockToScannableItemUrl = toScannableItemUrl as jest.Mock;
-  const mockDispatch = jest.fn();
-  const mockGetIdToken = jest.fn();
+  const mockSendRequestWithAuth = sendRequestWithAuth as Mock;
+  const mockGenerateDatauri = generateDataUri as Mock;
+  const mockToScannableItemUrl = toScannableItemUrl as Mock;
+  const mockDispatch = vi.fn();
+  const mockGetIdToken = vi.fn();
 
   const mockUser: Partial<User> = {
     uid,
@@ -35,7 +35,7 @@ describe('Create Actions', () => {
     const description = 'The one she stole from Cassian';
 
     beforeEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     beforeEach(() => {

@@ -41,7 +41,7 @@ export async function sendRequest<T>(
 
   const response = await axios.request<T>({
     method: method || 'GET',
-    baseURL: baseUrl || process.env.REACT_APP_API_BASE_URL,
+    baseURL: baseUrl || import.meta.env.VITE_API_BASE_URL,
     url,
     data,
     headers,

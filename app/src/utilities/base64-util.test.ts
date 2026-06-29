@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test } from 'vitest';
 import { toBase64, fromBase64 } from './base64-util';
 
 describe('Base64 Utilities', () => {

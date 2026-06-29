@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test } from 'vitest';
 import { createReducer } from './reducer';
 import { CreateState } from './create-types';
 import { CREATE_INIT, CREATE_QR_CODE_GENERATED, CREATE_QR_CODE_GENERATING } from './actions';
