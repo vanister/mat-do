@@ -1,13 +1,13 @@
-import { describe, expect, test, beforeEach } from '@jest/globals';
+import { describe, expect, test, beforeEach, afterEach, vi, type Mock } from 'vitest';
 import axios from 'axios';
 import { sendRequestWithAuth } from './api';
 
-jest.mock('axios', () => ({
-  request: jest.fn()
+vi.mock('axios', () => ({
+  default: { request: vi.fn() }
 }));
 
 describe('API Utility', () => {
-  const mockAxiosRequest = axios.request as jest.Mock;
+  const mockAxiosRequest = axios.request as Mock;
   const accessToken = 'base64encodedaccesstoken';
   const baseUrl = 'http://localhost:3000/unittest';
 
@@ -43,14 +43,12 @@ describe('API Utility', () => {
   });
 
   describe('WHEN sending requests with default values', () => {
-    const originalEnvs = { ...process.env };
-
     beforeEach(() => {
-      process.env = { REACT_APP_API_BASE_URL: `${baseUrl}/defaults` } as any;
+      vi.stubEnv('VITE_API_BASE_URL', `${baseUrl}/defaults`);
     });
 
     afterEach(() => {
-      process.env = originalEnvs;
+      vi.unstubAllEnvs();
     });
 
     test('should default to GET method', async () => {
@@ -61,7 +59,7 @@ describe('API Utility', () => {
       );
     });
 
-    test('should default to process.env.REACT_APP_API_BASE_URL for baseUrl', async () => {
+    test('should default to import.meta.env.VITE_API_BASE_URL for baseUrl', async () => {
       await sendRequestWithAuth('/unittest/env', accessToken);
 
       expect(mockAxiosRequest).toHaveBeenCalledWith(

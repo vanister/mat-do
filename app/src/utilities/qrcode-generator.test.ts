@@ -1,11 +1,11 @@
-import { beforeEach, describe, expect, test } from '@jest/globals';
+import { beforeEach, describe, expect, test, vi, type Mock } from 'vitest';
 import { generateDataUri, QrCodeOptions } from './qrcode-generator';
 import { toDataURL } from 'qrcode';
 
-jest.mock('qrcode');
+vi.mock('qrcode');
 
 describe('QrCode Generator', () => {
-  const mockToDataUrl = toDataURL as jest.Mock;
+  const mockToDataUrl = toDataURL as Mock;
 
   beforeEach(() => {
     mockToDataUrl.mockReturnValue('somedata-uri-for-a-qr-code');

@@ -1,9 +1,9 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test, beforeEach, vi } from 'vitest';
 import { getCurrentLocation, getLatLongString } from './geolocation-util';
 
 describe('Geolocation Utility', () => {
   describe('WHEN getting the current position', () => {
-    const mockGetCurrentPosition = jest.fn((_, errorCb) => {
+    const mockGetCurrentPosition = vi.fn((_, errorCb) => {
       errorCb(new GeolocationPositionError());
     });
 
@@ -12,7 +12,7 @@ describe('Geolocation Utility', () => {
     };
 
     beforeEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('should get the lat, long, accuracy and altitude', async () => {
@@ -42,7 +42,7 @@ describe('Geolocation Utility', () => {
 
     describe('AND there is an error', () => {
       beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
       });
 
       test('should reject with a error', async () => {

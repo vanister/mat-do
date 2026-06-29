@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test } from 'vitest';
 import { Item } from '../models/item';
 import { getScanItemInfo } from './item-util';
 

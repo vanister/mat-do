@@ -2,9 +2,10 @@
 // allows you to do things like:
 // expect(element).toHaveTextContent(/react/i)
 // learn more: https://github.com/testing-library/jest-dom
+import { vi } from 'vitest';
 import '@testing-library/jest-dom';
 
 // these are global mocks
-jest.mock('axios', () => ({
+vi.mock('axios', () => ({
   AxiosError: class AxiosError extends Error {}
 }));

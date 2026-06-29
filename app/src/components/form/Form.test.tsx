@@ -17,7 +17,7 @@ describe('Form Tests', () => {
   });
 
   test('should handle submit actions', () => {
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
 
     render(
       <Form onSubmit={handleSubmit} additionalProps={{ 'aria-label': 'test-form' }}>
@@ -32,7 +32,7 @@ describe('Form Tests', () => {
   });
 
   test('should handle normal actions', () => {
-    const handleAction = jest.fn();
+    const handleAction = vi.fn();
 
     render(
       <Form additionalProps={{ 'aria-label': 'test-form' }}>
