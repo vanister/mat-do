@@ -112,13 +112,35 @@ stay put.
 
 ## Follow-ups
 
-- **Dependency refresh (after Phase 1 / Vite migration).** Once the Vite migration
-  is complete and verified, circle back and update all dependencies — in both
-  `app/` and `firebase/functions/` — to as close to the latest functional versions
-  as possible. This includes triaging the outstanding `npm audit` vulnerabilities
-  and bumping deliberately-pinned-old packages (e.g. `typescript` 4.9,
-  `@types/react` 18, `firebase` 9, `react-router-dom` 6). Verify tests, build, and
-  the running app after each round of upgrades.
+### Dependency refresh (`app/`) — status
+
+Done after the Vite migration; build + 26 tests verified after each round:
+
+- **Bumped:** `react-router-dom` 6→7, `react-error-boundary` 4→6, `immer` 10→11,
+  `concurrently` 8→10, `@testing-library/react` 14→16 (+ `@testing-library/dom`),
+  `typescript` 5→6 (tsconfig `target` es5→ES2020), and `@types/node` 16→22 (during
+  the Vite work). `axios`, `classnames`, `qrcode`, `sass`, `vite`, `vitest`, etc.
+  were already current.
+
+- **Blocked by `reactfire` (unmaintained).** `reactfire@4.2.3` peer-requires
+  `firebase: ^9.0.0`, which pins:
+  - **`firebase` at 9** (can't go to 10–12), and
+  - the **7 `npm audit` vulnerabilities** (1 critical / 5 high / 1 moderate) that all
+    originate from `firebase@9 → @grpc/grpc-js → protobufjs` and are marked
+    "no fix available" at the firebase-9 level.
+
+  `npm audit fix --force` would install `firebase@12` and break reactfire, so it is
+  not safe. **React 19** (`react`/`react-dom`/`@types/react*` 18→19) is also
+  deferred — peer-allowed by reactfire but risky against an unmaintained library.
+
+  **Unblock:** these resolve together once **Phase 2** hides/removes reactfire
+  behind our own auth provider — at which point firebase can move to 12 (clearing
+  the CVEs) and React can move to 19.
+
+### Dependency refresh (`firebase/functions/`) — TODO
+
+Not yet done. Bump `firebase-admin` 11, `firebase-functions` 4, and `express` 4 to
+current, and bump the Node engine from 18. Verify the functions' Jest suite after.
 
 ## Guiding principle
 
