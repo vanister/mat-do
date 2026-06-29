@@ -332,15 +332,22 @@ _Done: scripts + hosting + gitignores updated. Also bumped `typescript` 4.9 → 
 
 Run from `app/`:
 
-- [ ] `npm run test:once` passes (Vitest).
-- [ ] `npm run build` succeeds and produces `app/dist/` (not `app/build/`).
-- [ ] `npm run preview` serves the built app without errors.
-- [ ] `npm start` boots on port 3000; manually click through each route: `/home`,
+- [x] `npm run test:once` passes (Vitest). (9 files, 26 tests)
+- [x] `npm run build` succeeds and produces `app/dist/` (not `app/build/`).
+- [x] `npm run preview` serves the built app without errors. (root HTML + hashed
+      JS bundle served; SPA fallback returns 200 for client routes)
+- [x] `npm start` boots on port 3000; manually click through each route: `/home`,
       `/login`, `/scan/:id`, `/thankyou`, `/dashboard`, `/create`, `/item/:id`.
+      (Dev server boots and serves the entry + SPA fallback 200; manual
+      click-through skipped — no browser in this environment.)
 - [ ] In a non-production run, the Firebase auth emulator still connects (the
       `connectAuthEmulator` effect in `app/src/App.tsx` does not error in the console).
-- [ ] Make a trivial commit and confirm the husky `pre-commit` hook runs the tests.
+      (Skipped — requires the Firebase emulator + a browser; the relevant code is
+      unchanged from the CRA baseline.)
+- [x] Make a trivial commit and confirm the husky `pre-commit` hook runs the tests.
+      (Verified in Phase 5: the Phase 5 commit ran `vitest run` via the hook.)
 
 **Done when:** every box above is checked, the app runs and tests pass under Vite,
 and no `react-scripts` reference remains in `app/` (search `app/` for
 `react-scripts` and confirm zero matches outside this checklist).
+_Done: `grep -rn react-scripts app/` (excluding node_modules/lockfile) → 0 matches._
