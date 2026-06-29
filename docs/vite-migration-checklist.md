@@ -219,14 +219,14 @@ import { vi } from 'vitest';
 
 This is the only test file that manipulates env vars, so it needs the most care.
 
-- [ ] Change the imports:
+- [x] Change the imports:
 
 ```
 Before: import { describe, expect, test, beforeEach } from '@jest/globals';
 After:  import { describe, expect, test, beforeEach, afterEach, vi, type Mock } from 'vitest';
 ```
 
-- [ ] Change the mock and its types:
+- [x] Change the mock and its types:
 
 ```
 Before: jest.mock('axios', () => ({
@@ -242,7 +242,7 @@ Before: const mockAxiosRequest = axios.request as jest.Mock;
 After:  const mockAxiosRequest = axios.request as Mock;
 ```
 
-- [ ] Replace the `process.env` reassignment block (the inner `describe('WHEN
+- [x] Replace the `process.env` reassignment block (the inner `describe('WHEN
       sending requests with default values', ...)`). Change its `beforeEach` /
       `afterEach` and remove the `originalEnvs` line:
 
@@ -268,7 +268,7 @@ After:
     });
 ```
 
-- [ ] Update the test name that mentions the old env var (cosmetic, keep it accurate):
+- [x] Update the test name that mentions the old env var (cosmetic, keep it accurate):
 
 ```
 Before: test('should default to process.env.REACT_APP_API_BASE_URL for baseUrl', async () => {
@@ -277,12 +277,15 @@ After:  test('should default to import.meta.env.VITE_API_BASE_URL for baseUrl', 
 
 ### 4c. Any other test files
 
-- [ ] Search `app/src` for remaining `jest.` usages and any imports from
+- [x] Search `app/src` for remaining `jest.` usages and any imports from
       `@jest/globals`. Replace `jest.fn` → `vi.fn`, `jest.mock` → `vi.mock`,
       `jest.spyOn` → `vi.spyOn`, `jest.clearAllMocks` → `vi.clearAllMocks`, etc.,
       and import `{ vi }` (plus any used globals) from `vitest`.
+      (Converted: create/actions, itemdetails/actions, qrcode-generator,
+      geolocation-util, create/reducer, item-util, base64-util, Form.)
 
 **Gate:** after Phase 5 updates the scripts, `npm run test:once` must pass.
+_Done: `npx vitest run` → 9 files, 26 tests passed (matches CRA baseline)._
 
 ---
 
